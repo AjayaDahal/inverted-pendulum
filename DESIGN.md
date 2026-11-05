@@ -112,7 +112,7 @@ SC8UU blocks stop on the bumpers first.
   (y −162 to −144) and the tip clears the desk by 64 mm when it hangs (gate: `pendulum`).
 - **Pivot friction** decides how still it balances. While the pivot's bearings stick, the pendulum
   moves with the cart, so a balanced pendulum hunts: about 2.9° and 36 mm peak to peak per mN m
-  of friction, whatever the controller does (REPORT.md, P16). The swing-up copes with up to
+  of friction, and the controller can do little about it (REPORT.md, P16). The swing-up copes with up to
   2.5 mN m; the goal is 0.5 mN m (1.2° and 14 mm). Two KP08 inserts with rubber seals are often
   1-2 mN m, so before the first run:
   - free the inserts: pry the seals off (a small screwdriver under the lip), wash the grease out
