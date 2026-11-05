@@ -69,9 +69,11 @@ def _area(poly):
 
 
 def _rot(pts, deg):
+    """Turn about z, rounded to 1e-6 mm: cos/sin and FMA differ in the last bit between platforms,
+    and the layout must not (round parts have exactly tied orientations, e.g. 45 and 135 deg)."""
     a = np.radians(deg)
     c, s = np.cos(a), np.sin(a)
-    return pts @ np.array([[c, s], [-s, c]])
+    return np.round(pts @ np.array([[c, s], [-s, c]]), 6)
 
 
 @lru_cache(maxsize=None)
@@ -101,7 +103,7 @@ def _inside(poly, cx, cy, grow=0.0):
         e = q - p
         n = np.array([e[1], -e[0]]) / np.hypot(*e)
         d = np.maximum(d, (cx - p[0]) * n[0] + (cy - p[1]) * n[1])
-    return d <= grow
+    return np.round(d, 9) <= grow     # rounded: a point exactly `grow` away counts the same on every platform
 
 
 def placed_hull(name, x, y, angle):
@@ -172,7 +174,8 @@ def layout(plate):
                 continue
             top = np.where(ok, hi[1] + ty, np.inf)
             j = np.lexsort((tx.ravel(), top.ravel()))[0]
-            cand = (top.ravel()[j], pref, tx.ravel()[j], angle, tx.ravel()[j], ty.ravel()[j], poly)
+            # compared rounded, so exact ties (symmetric parts) go to the preferred turn on every platform
+            cand = (round(float(top.ravel()[j]), 4), pref, tx.ravel()[j], angle, tx.ravel()[j], ty.ravel()[j], poly)
             if best is None or cand[:3] < best[:3]:
                 best = cand
         if best is None:

@@ -4178,15 +4178,15 @@
   {
    "name": "petg_2_pulleys_pivot",
    "material": "petg",
-   "grams": 64.4,
-   "minutes": 179.7,
+   "grams": 64.5,
+   "minutes": 181.0,
    "items": [
     {
      "part": "idler_pulley",
      "k": 1,
      "x": 37.0,
      "y": 108.497,
-     "angle": 135.0,
+     "angle": 45.0,
      "url": "../parts/print_ready/idler_pulley.stl"
     },
     {
@@ -4202,7 +4202,7 @@
      "k": 1,
      "x": 97.0,
      "y": 108.497,
-     "angle": 135.0,
+     "angle": 45.0,
      "url": "../parts/print_ready/motor_pulley.stl"
     },
     {
@@ -4218,7 +4218,7 @@
      "k": 1,
      "x": 157.0,
      "y": 108.497,
-     "angle": 135.0,
+     "angle": 45.0,
      "url": "../parts/print_ready/pulley_flange.stl"
     },
     {

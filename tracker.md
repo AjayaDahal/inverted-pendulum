@@ -24,7 +24,7 @@ one plate per job), slice, send. Masses and times are the slicer's. Edit only th
 | 5 | `pla_3_arm` | PLA | pendulum_arm, pendulum_tip (pendulum arm (diagonal) and tip cap) | 41 g | 1.7 h | to print |
 | 6 | `petg_3_option_encoder` | PETG | coupler (only for a 600 P/R optical encoder instead of the AS5600) | 4 g | 0.3 h | optional |
 
-**Totals** (without the optional encoder coupler): PLA 404 g, 16.1 h; PETG 201 g, 8.3 h; 24.4 h in all.
+**Totals** (without the optional encoder coupler): PLA 404 g, 16.1 h; PETG 201 g, 8.3 h; 24.5 h in all.
 
 ## Reminders for print time
 
