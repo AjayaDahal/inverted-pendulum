@@ -44,6 +44,14 @@ RESULTS = []
 def report(name, ok, detail):
     RESULTS.append((name, ok, detail))
     print(f"[{'PASS' if ok else 'FAIL'}] {name}: {detail}", flush=True)
+    if not ok and os.environ.get("GITHUB_ACTIONS") == "true":
+        _annotate(f"gate {name}", detail)
+
+
+def _annotate(title, text):
+    """A GitHub Actions error annotation: shown on the run's page and readable without its log."""
+    msg = text.replace("%", "%25").replace("\r", "").replace("\n", "%0A")[:3000]
+    print(f"::error title={title}::{msg}", flush=True)
 
 
 def bb(s):
@@ -415,4 +423,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        import traceback
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            _annotate("gate crashed", traceback.format_exc())
+        raise
