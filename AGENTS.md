@@ -29,5 +29,10 @@
   GIF has more than one frame: Pillow merges identical frames into one.
 - When a finding is fixed or a new one is found, update `REPORT.md` (status table and text) in
   the same commit.
+- CI runs the gate on Linux; it was built on Windows. Anything the gate recomputes and compares
+  exactly (plate layouts and their stamps, the tracker, the manifest) must come out the same on
+  both: round floats before comparing or hashing, and break exact ties (round parts turned 45°
+  or 135°) by a fixed preference, not by float noise (`plates.py`, `_rot`). The gate prints a
+  GitHub error annotation for each failed check, readable without the run's log.
 - Pushing to GitHub over HTTPS: very large packs get reset on this network. Push in commits of
   about 20 MB or less (the G-code folders are the large part).
