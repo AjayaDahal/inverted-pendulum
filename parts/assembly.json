@@ -1,0 +1,3484 @@
+{
+ "units": "mm",
+ "items": [
+  {
+   "name": "carriage_plate",
+   "part": "carriage_plate",
+   "kind": "printed",
+   "file": "assembly/carriage_plate.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "carriage plate on the four SC8UU blocks",
+   "qty": 1
+  },
+  {
+   "name": "pivot_bridge",
+   "part": "pivot_bridge",
+   "kind": "printed",
+   "file": "assembly/pivot_bridge.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "pivot bridge: both KP08s in line, pendulum in front of the frame, sensor tower",
+   "qty": 1
+  },
+  {
+   "name": "as5600_mount",
+   "part": "as5600_mount",
+   "kind": "printed",
+   "file": "assembly/as5600_mount.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "AS5600 adapter on the sensor tower",
+   "qty": 1
+  },
+  {
+   "name": "belt_clamp",
+   "part": "belt_clamp",
+   "kind": "printed",
+   "file": "assembly/belt_clamp.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "belt clamp: stiff column from the carriage down to the belt's upper run",
+   "qty": 1
+  },
+  {
+   "name": "clamp_jaw",
+   "part": "clamp_jaw",
+   "kind": "printed",
+   "file": "assembly/clamp_jaw.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "clamp jaw: HTD 5M tooth seats under the belt",
+   "qty": 1
+  },
+  {
+   "name": "motor_mount",
+   "part": "motor_mount",
+   "kind": "printed",
+   "file": "assembly/motor_mount.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "motor mount: NEMA 17 under the -x top end bar, pulley on the belt plane",
+   "qty": 1
+  },
+  {
+   "name": "motor_pulley",
+   "part": "motor_pulley",
+   "kind": "printed",
+   "file": "assembly/motor_pulley.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    -270.0,
+    10.0,
+    226.0,
+    1.0
+   ],
+   "group": "motor_pulley",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "HTD 5M 30T pulley on the motor shaft (set screw on the flat)",
+   "qty": 1
+  },
+  {
+   "name": "idler_pulley",
+   "part": "idler_pulley",
+   "kind": "printed",
+   "file": "assembly/idler_pulley.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    272.0,
+    10.0,
+    226.0,
+    1.0
+   ],
+   "group": "idler_pulley",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "HTD 5M 30T idler on its sleeve",
+   "qty": 1
+  },
+  {
+   "name": "pulley_flange_1",
+   "part": "pulley_flange",
+   "kind": "printed",
+   "file": "assembly/pulley_flange.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    -270.0,
+    -8.5,
+    226.0,
+    1.0
+   ],
+   "group": "pulleys_m",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "front flange, pressed on each pulley's boss",
+   "qty": 2
+  },
+  {
+   "name": "pulley_flange_2",
+   "part": "pulley_flange",
+   "kind": "printed",
+   "file": "assembly/pulley_flange.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    272.0,
+    -8.5,
+    226.0,
+    1.0
+   ],
+   "group": "pulleys_i",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "front flange, pressed on each pulley's boss",
+   "qty": 2
+  },
+  {
+   "name": "idler_mount",
+   "part": "idler_mount",
+   "kind": "printed",
+   "file": "assembly/idler_mount.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "idler mount: saddle on the +x top end bar, cheeks with slider windows",
+   "qty": 1
+  },
+  {
+   "name": "idler_slider_1",
+   "part": "idler_slider",
+   "kind": "printed",
+   "file": "assembly/idler_slider.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "axle slider: tension screw pulls it out, flange locks it",
+   "qty": 2
+  },
+  {
+   "name": "idler_slider_2",
+   "part": "idler_slider",
+   "kind": "printed",
+   "file": "assembly/idler_slider.stl",
+   "matrix": [
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    544.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "axle slider: tension screw pulls it out, flange locks it",
+   "qty": 2
+  },
+  {
+   "name": "idler_sleeve",
+   "part": "idler_sleeve",
+   "kind": "printed",
+   "file": "assembly/idler_sleeve.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "sleeve the idler turns on",
+   "qty": 1
+  },
+  {
+   "name": "rod_bumper_1",
+   "part": "rod_bumper",
+   "kind": "printed",
+   "file": "assembly/rod_bumper.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "rod collar: hard stop for the SC8UU blocks",
+   "qty": 4
+  },
+  {
+   "name": "rod_bumper_2",
+   "part": "rod_bumper",
+   "kind": "printed",
+   "file": "assembly/rod_bumper.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    640.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "rod collar: hard stop for the SC8UU blocks",
+   "qty": 4
+  },
+  {
+   "name": "rod_bumper_3",
+   "part": "rod_bumper",
+   "kind": "printed",
+   "file": "assembly/rod_bumper.stl",
+   "matrix": [
+    -1.0,
+    0.0,
+    -0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    640.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "rod collar: hard stop for the SC8UU blocks",
+   "qty": 4
+  },
+  {
+   "name": "rod_bumper_4",
+   "part": "rod_bumper",
+   "kind": "printed",
+   "file": "assembly/rod_bumper.stl",
+   "matrix": [
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "rod collar: hard stop for the SC8UU blocks",
+   "qty": 4
+  },
+  {
+   "name": "switch_mount_1",
+   "part": "switch_mount",
+   "kind": "printed",
+   "file": "assembly/switch_mount.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "limit-switch block on each top end bar",
+   "qty": 2
+  },
+  {
+   "name": "switch_mount_2",
+   "part": "switch_mount",
+   "kind": "printed",
+   "file": "assembly/switch_mount.stl",
+   "matrix": [
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    -0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    100.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "limit-switch block on each top end bar",
+   "qty": 2
+  },
+  {
+   "name": "pendulum_hub",
+   "part": "pendulum_hub",
+   "kind": "printed",
+   "file": "assembly/pendulum_hub.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "pendulum hub: clamps the shaft, holds the arm",
+   "qty": 1
+  },
+  {
+   "name": "pendulum_arm",
+   "part": "pendulum_arm",
+   "kind": "printed",
+   "file": "assembly/pendulum_arm.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "pendulum arm, 300 mm from the pivot to the tip",
+   "qty": 1
+  },
+  {
+   "name": "pendulum_tip",
+   "part": "pendulum_tip",
+   "kind": "printed",
+   "file": "assembly/pendulum_tip.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "tip cap (room for washers as tip mass)",
+   "qty": 1
+  },
+  {
+   "name": "magnet_cap",
+   "part": "magnet_cap",
+   "kind": "printed",
+   "file": "assembly/magnet_cap.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "magnet cap: AS5600 magnet on the shaft's axis",
+   "qty": 1
+  },
+  {
+   "name": "coupler",
+   "part": "coupler",
+   "kind": "printed",
+   "file": "assembly/coupler.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum_opt",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "option: flexible coupling to a 600 P/R optical encoder (instead of the magnet cap)",
+   "qty": 1
+  },
+  {
+   "name": "electronics_tray",
+   "part": "electronics_tray",
+   "kind": "printed",
+   "file": "assembly/electronics_tray.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "electronics tray behind the frame",
+   "qty": 1
+  },
+  {
+   "name": "cable_clip_1",
+   "part": "cable_clip",
+   "kind": "printed",
+   "file": "assembly/cable_clip.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "cable clip for any slot of the frame",
+   "qty": 3
+  },
+  {
+   "name": "cable_clip_2",
+   "part": "cable_clip",
+   "kind": "printed",
+   "file": "assembly/cable_clip.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    150.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "cable clip for any slot of the frame",
+   "qty": 3
+  },
+  {
+   "name": "cable_clip_3",
+   "part": "cable_clip",
+   "kind": "printed",
+   "file": "assembly/cable_clip.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    -150.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "material": "petg",
+   "colour": "#2f6db5",
+   "label": "cable clip for any slot of the frame",
+   "qty": 3
+  },
+  {
+   "name": "post_mf",
+   "part": "post_mf",
+   "kind": "vitamin",
+   "file": "vitamins/post_mf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "post_mb",
+   "part": "post_mb",
+   "kind": "vitamin",
+   "file": "vitamins/post_mb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "top_bar_m",
+   "part": "top_bar_m",
+   "kind": "vitamin",
+   "file": "vitamins/top_bar_m.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "bottom_bar_m",
+   "part": "bottom_bar_m",
+   "kind": "vitamin",
+   "file": "vitamins/bottom_bar_m.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "post_pf",
+   "part": "post_pf",
+   "kind": "vitamin",
+   "file": "vitamins/post_pf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "post_pb",
+   "part": "post_pb",
+   "kind": "vitamin",
+   "file": "vitamins/post_pb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "top_bar_p",
+   "part": "top_bar_p",
+   "kind": "vitamin",
+   "file": "vitamins/top_bar_p.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "bottom_bar_p",
+   "part": "bottom_bar_p",
+   "kind": "vitamin",
+   "file": "vitamins/bottom_bar_p.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "long_f",
+   "part": "long_f",
+   "kind": "vitamin",
+   "file": "vitamins/long_f.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "long_b",
+   "part": "long_b",
+   "kind": "vitamin",
+   "file": "vitamins/long_b.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "2020 / 2040 aluminium profile"
+  },
+  {
+   "name": "rod_f",
+   "part": "rod_f",
+   "kind": "vitamin",
+   "file": "vitamins/rod_f.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#9aa3ad",
+   "label": "8 mm rod"
+  },
+  {
+   "name": "sk8_mf",
+   "part": "sk8_mf",
+   "kind": "vitamin",
+   "file": "vitamins/sk8_mf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "SK8 rod support"
+  },
+  {
+   "name": "sc8uu_mf",
+   "part": "sc8uu_mf",
+   "kind": "vitamin",
+   "file": "vitamins/sc8uu_mf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#c7ccd2",
+   "label": "SC8UU bearing block"
+  },
+  {
+   "name": "sk8_pf",
+   "part": "sk8_pf",
+   "kind": "vitamin",
+   "file": "vitamins/sk8_pf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "SK8 rod support"
+  },
+  {
+   "name": "sc8uu_pf",
+   "part": "sc8uu_pf",
+   "kind": "vitamin",
+   "file": "vitamins/sc8uu_pf.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#c7ccd2",
+   "label": "SC8UU bearing block"
+  },
+  {
+   "name": "rod_b",
+   "part": "rod_b",
+   "kind": "vitamin",
+   "file": "vitamins/rod_b.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#9aa3ad",
+   "label": "8 mm rod"
+  },
+  {
+   "name": "sk8_mb",
+   "part": "sk8_mb",
+   "kind": "vitamin",
+   "file": "vitamins/sk8_mb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "SK8 rod support"
+  },
+  {
+   "name": "sc8uu_mb",
+   "part": "sc8uu_mb",
+   "kind": "vitamin",
+   "file": "vitamins/sc8uu_mb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#c7ccd2",
+   "label": "SC8UU bearing block"
+  },
+  {
+   "name": "sk8_pb",
+   "part": "sk8_pb",
+   "kind": "vitamin",
+   "file": "vitamins/sk8_pb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#c7ccd2",
+   "label": "SK8 rod support"
+  },
+  {
+   "name": "sc8uu_pb",
+   "part": "sc8uu_pb",
+   "kind": "vitamin",
+   "file": "vitamins/sc8uu_pb.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#c7ccd2",
+   "label": "SC8UU bearing block"
+  },
+  {
+   "name": "kp08_front",
+   "part": "kp08_front",
+   "kind": "vitamin",
+   "file": "vitamins/kp08_front.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#3a3d42",
+   "label": "KP08 pillow block"
+  },
+  {
+   "name": "kp08_rear",
+   "part": "kp08_rear",
+   "kind": "vitamin",
+   "file": "vitamins/kp08_rear.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#3a3d42",
+   "label": "KP08 pillow block"
+  },
+  {
+   "name": "pivot_shaft",
+   "part": "pivot_shaft",
+   "kind": "vitamin",
+   "file": "vitamins/pivot_shaft.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "colour": "#9aa3ad",
+   "label": "8 mm pivot shaft, 115 mm"
+  },
+  {
+   "name": "magnet",
+   "part": "magnet",
+   "kind": "vitamin",
+   "file": "vitamins/magnet.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "colour": "#b0473a",
+   "label": "6 x 2.5 mm diametric magnet"
+  },
+  {
+   "name": "as5600",
+   "part": "as5600",
+   "kind": "vitamin",
+   "file": "vitamins/as5600.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "colour": "#5b2a86",
+   "label": "AS5600 magnetic encoder board"
+  },
+  {
+   "name": "lpd3806",
+   "part": "lpd3806",
+   "kind": "vitamin",
+   "file": "vitamins/lpd3806.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart_opt",
+   "colour": "#3a3d42",
+   "label": "optional: 600 P/R optical encoder"
+  },
+  {
+   "name": "nema17",
+   "part": "nema17",
+   "kind": "vitamin",
+   "file": "vitamins/nema17.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#26282b",
+   "label": "NEMA 17 stepper"
+  },
+  {
+   "name": "endstop_m",
+   "part": "endstop_m",
+   "kind": "vitamin",
+   "file": "vitamins/endstop_m.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#b8202a",
+   "label": "mechanical endstop"
+  },
+  {
+   "name": "endstop_p",
+   "part": "endstop_p",
+   "kind": "vitamin",
+   "file": "vitamins/endstop_p.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#b8202a",
+   "label": "mechanical endstop"
+  },
+  {
+   "name": "driver_board",
+   "part": "driver_board",
+   "kind": "vitamin",
+   "file": "vitamins/driver_board.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#1f5fbf",
+   "label": "stepper driver carrier (A4988 / DRV8825)"
+  },
+  {
+   "name": "controller",
+   "part": "controller",
+   "kind": "vitamin",
+   "file": "vitamins/controller.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "colour": "#127a4a",
+   "label": "controller (your Arduino / ESP32 / STM32)"
+  },
+  {
+   "name": "belt",
+   "part": "belt",
+   "kind": "belt",
+   "file": "vitamins/belt.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "belt",
+   "colour": "#1d1f22",
+   "label": "HTD 5M belt, 15 mm"
+  }
+ ],
+ "bolts": [
+  {
+   "name": "sc8uu_screw_1",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -69.0,
+    -102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_2",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -69.0,
+    -78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_3",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -51.0,
+    -102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_4",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -51.0,
+    -78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_5",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -69.0,
+    78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_6",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -69.0,
+    102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_7",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -51.0,
+    78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_8",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    -51.0,
+    102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_9",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    51.0,
+    -102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_10",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    51.0,
+    -78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_11",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    69.0,
+    -102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_12",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    69.0,
+    -78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_13",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    51.0,
+    78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_14",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    51.0,
+    102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_15",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    69.0,
+    78.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "sc8uu_screw_16",
+   "size": "M4",
+   "length": 10.0,
+   "p0": [
+    69.0,
+    102.0,
+    334.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "carriage_plate",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "SC8UU",
+   "note": "M4 x 10 into the SC8UU's thread (the old plate's screws)"
+  },
+  {
+   "name": "bridge_bolt_1",
+   "size": "M5",
+   "length": 20.0,
+   "p0": [
+    -39.0,
+    -95.0,
+    345.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 14.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 20 + washer, nut in the plate's pocket"
+  },
+  {
+   "name": "bridge_bolt_2",
+   "size": "M5",
+   "length": 20.0,
+   "p0": [
+    -39.0,
+    -45.0,
+    345.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 14.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 20 + washer, nut in the plate's pocket"
+  },
+  {
+   "name": "bridge_bolt_3",
+   "size": "M5",
+   "length": 20.0,
+   "p0": [
+    39.0,
+    -95.0,
+    345.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 14.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 20 + washer, nut in the plate's pocket"
+  },
+  {
+   "name": "bridge_bolt_4",
+   "size": "M5",
+   "length": 20.0,
+   "p0": [
+    39.0,
+    -45.0,
+    345.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 14.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 20 + washer, nut in the plate's pocket"
+  },
+  {
+   "name": "clamp_bolt_1",
+   "size": "M3",
+   "length": 16.0,
+   "p0": [
+    -25.0,
+    -9.0,
+    335.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "belt_clamp",
+   "stack": 10.8,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 16, nut under the clamp's flange"
+  },
+  {
+   "name": "clamp_bolt_2",
+   "size": "M3",
+   "length": 16.0,
+   "p0": [
+    -25.0,
+    9.0,
+    335.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "belt_clamp",
+   "stack": 10.8,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 16, nut under the clamp's flange"
+  },
+  {
+   "name": "clamp_bolt_3",
+   "size": "M3",
+   "length": 16.0,
+   "p0": [
+    25.0,
+    -9.0,
+    335.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "belt_clamp",
+   "stack": 10.8,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 16, nut under the clamp's flange"
+  },
+  {
+   "name": "clamp_bolt_4",
+   "size": "M3",
+   "length": 16.0,
+   "p0": [
+    25.0,
+    9.0,
+    335.8
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "belt_clamp",
+   "stack": 10.8,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 16, nut under the clamp's flange"
+  },
+  {
+   "name": "kp08_bolt_fl",
+   "size": "M5",
+   "length": 16.0,
+   "p0": [
+    -21.0,
+    -133.0,
+    356.5
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 11.5,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 16, nut in the bridge's pocket"
+  },
+  {
+   "name": "kp08_bolt_fr",
+   "size": "M5",
+   "length": 16.0,
+   "p0": [
+    21.0,
+    -133.0,
+    356.5
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 11.5,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 16, nut in the bridge's pocket"
+  },
+  {
+   "name": "kp08_bolt_rl",
+   "size": "M5",
+   "length": 16.0,
+   "p0": [
+    -21.0,
+    -63.0,
+    356.5
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 11.5,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 16, nut in the bridge's pocket"
+  },
+  {
+   "name": "kp08_bolt_rr",
+   "size": "M5",
+   "length": 16.0,
+   "p0": [
+    21.0,
+    -63.0,
+    356.5
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "cart",
+   "part": "pivot_bridge",
+   "stack": 11.5,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 16, nut in the bridge's pocket"
+  },
+  {
+   "name": "jaw_screw_lf",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -26.0,
+    -13.0,
+    238.1417414637843
+   ],
+   "u": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "part": "clamp_jaw",
+   "stack": 9.399999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the clamp's side slot"
+  },
+  {
+   "name": "jaw_screw_lb",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -26.0,
+    13.0,
+    238.1417414637843
+   ],
+   "u": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "part": "clamp_jaw",
+   "stack": 9.399999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the clamp's side slot"
+  },
+  {
+   "name": "jaw_screw_rf",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    26.0,
+    -13.0,
+    238.1417414637843
+   ],
+   "u": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "part": "clamp_jaw",
+   "stack": 9.399999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the clamp's side slot"
+  },
+  {
+   "name": "jaw_screw_rb",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    26.0,
+    13.0,
+    238.1417414637843
+   ],
+   "u": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "cart",
+   "part": "clamp_jaw",
+   "stack": 9.399999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the clamp's side slot"
+  },
+  {
+   "name": "motor_screw_lb",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -285.5,
+    14.2,
+    210.5
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "NEMA 17",
+   "note": "M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"
+  },
+  {
+   "name": "motor_screw_lt",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -285.5,
+    14.2,
+    241.5
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "NEMA 17",
+   "note": "M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"
+  },
+  {
+   "name": "motor_screw_rb",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -254.5,
+    14.2,
+    210.5
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "NEMA 17",
+   "note": "M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"
+  },
+  {
+   "name": "motor_screw_rt",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -254.5,
+    14.2,
+    241.5
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 3.8,
+   "nut": false,
+   "tnut": false,
+   "into": "NEMA 17",
+   "note": "M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"
+  },
+  {
+   "name": "motor_saddle_in_1",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -256.0,
+    22.0,
+    270.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "motor_saddle_in_2",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -256.0,
+    40.0,
+    290.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "motor_saddle_out_1",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -284.0,
+    22.0,
+    270.0
+   ],
+   "u": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "motor_saddle_out_2",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -284.0,
+    40.0,
+    290.0
+   ],
+   "u": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "motor_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_in_1",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    256.0,
+    -19.0,
+    270.0
+   ],
+   "u": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_in_2",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    256.0,
+    19.0,
+    270.0
+   ],
+   "u": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_out_1",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    284.0,
+    -19.0,
+    270.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_out_2",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    284.0,
+    19.0,
+    270.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "set_screw",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -257.0,
+    0.0,
+    226.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "motor_pulley",
+   "part": "motor_pulley",
+   "stack": 1.8000000000000007,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12 set screw, head sunk below the teeth, captive nut"
+  },
+  {
+   "name": "idler_axle",
+   "size": "M5",
+   "length": 40.0,
+   "p0": [
+    272.0,
+    -18.0,
+    226.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_slider",
+   "stack": 36.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M5 x 40 axle + nut: clamps sliders and sleeve"
+  },
+  {
+   "name": "tension_screw_f",
+   "size": "M3",
+   "length": 30.0,
+   "p0": [
+    296.2,
+    -13.5,
+    236.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 18.19999999999999,
+   "nut": false,
+   "tnut": false,
+   "into": "slider",
+   "note": "M3 x 30 through the lug into the slider (tapped)"
+  },
+  {
+   "name": "tension_screw_b",
+   "size": "M3",
+   "length": 30.0,
+   "p0": [
+    296.2,
+    13.5,
+    236.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 18.19999999999999,
+   "nut": false,
+   "tnut": false,
+   "into": "slider",
+   "note": "M3 x 30 through the lug into the slider (tapped)"
+  },
+  {
+   "name": "bumper_screw_1",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    258.0,
+    102.0,
+    325.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "rod_bumper",
+   "stack": 9.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12 + nut: clamps the collar"
+  },
+  {
+   "name": "bumper_screw_2",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    258.0,
+    -102.00000000000004,
+    315.0
+   ],
+   "u": [
+    0.0,
+    1.2246467991473532e-16,
+    1.0
+   ],
+   "group": "frame",
+   "part": "rod_bumper",
+   "stack": 9.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12 + nut: clamps the collar"
+  },
+  {
+   "name": "bumper_screw_3",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -257.99999999999994,
+    102.0,
+    314.99999999999994
+   ],
+   "u": [
+    -1.2246467991473532e-16,
+    0.0,
+    1.0
+   ],
+   "group": "frame",
+   "part": "rod_bumper",
+   "stack": 9.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12 + nut: clamps the collar"
+  },
+  {
+   "name": "bumper_screw_4",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -258.0,
+    -101.99999999999997,
+    325.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "rod_bumper",
+   "stack": 9.0,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12 + nut: clamps the collar"
+  },
+  {
+   "name": "switch_bolt_1",
+   "size": "M5",
+   "length": 12.0,
+   "p0": [
+    270.0,
+    50.0,
+    306.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 6.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 12 into a T-nut in the bar's top slot"
+  },
+  {
+   "name": "endstop_screw_l_1",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    264.5,
+    50.0,
+    328.6
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 1.6,
+   "nut": false,
+   "tnut": false,
+   "into": "switch_mount",
+   "note": "M3 x 8 self-tapped into the block"
+  },
+  {
+   "name": "endstop_screw_r_1",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    283.5,
+    50.0,
+    328.6
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 1.6,
+   "nut": false,
+   "tnut": false,
+   "into": "switch_mount",
+   "note": "M3 x 8 self-tapped into the block"
+  },
+  {
+   "name": "switch_bolt_2",
+   "size": "M5",
+   "length": 12.0,
+   "p0": [
+    -270.0,
+    50.000000000000036,
+    306.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 6.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 12 into a T-nut in the bar's top slot"
+  },
+  {
+   "name": "endstop_screw_l_2",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -264.5,
+    50.000000000000036,
+    328.6
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 1.6,
+   "nut": false,
+   "tnut": false,
+   "into": "switch_mount",
+   "note": "M3 x 8 self-tapped into the block"
+  },
+  {
+   "name": "endstop_screw_r_2",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    -283.5,
+    50.000000000000036,
+    328.6
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "switch_mount",
+   "stack": 1.6,
+   "nut": false,
+   "tnut": false,
+   "into": "switch_mount",
+   "note": "M3 x 8 self-tapped into the block"
+  },
+  {
+   "name": "hub_pinch",
+   "size": "M3",
+   "length": 20.0,
+   "p0": [
+    -7.0,
+    -153.0,
+    357.0
+   ],
+   "u": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "group": "pendulum",
+   "part": "pendulum_hub",
+   "stack": 16.4,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 20 + nut: clamps the hub on the shaft"
+  },
+  {
+   "name": "arm_screw_1",
+   "size": "M3",
+   "length": 20.0,
+   "p0": [
+    0.0,
+    -162.0,
+    387.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "pendulum",
+   "part": "pendulum_hub",
+   "stack": 15.299999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 20 + nut through the hub and the arm"
+  },
+  {
+   "name": "arm_screw_2",
+   "size": "M3",
+   "length": 20.0,
+   "p0": [
+    0.0,
+    -162.0,
+    397.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "pendulum",
+   "part": "pendulum_hub",
+   "stack": 15.299999999999999,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 20 + nut through the hub and the arm"
+  },
+  {
+   "name": "tip_pin",
+   "size": "M3",
+   "length": 20.0,
+   "p0": [
+    0.0,
+    -160.4,
+    654.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "pendulum",
+   "part": "pendulum_tip",
+   "stack": 14.8,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 20 + nut: pins the tip cap"
+  },
+  {
+   "name": "cap_set_screw",
+   "size": "M3",
+   "length": 8.0,
+   "p0": [
+    0.0,
+    -48.5,
+    375.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "pendulum",
+   "part": "magnet_cap",
+   "stack": 1.6,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 8 set screw onto the shaft"
+  },
+  {
+   "name": "as5600_mount_1",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    -16.0,
+    -33.0,
+    360.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "cart",
+   "part": "as5600_mount",
+   "stack": 5.3,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the tower's back"
+  },
+  {
+   "name": "as5600_mount_2",
+   "size": "M3",
+   "length": 12.0,
+   "p0": [
+    16.0,
+    -33.0,
+    360.0
+   ],
+   "u": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "group": "cart",
+   "part": "as5600_mount",
+   "stack": 5.3,
+   "nut": true,
+   "tnut": false,
+   "into": null,
+   "note": "M3 x 12, nut in the tower's back"
+  },
+  {
+   "name": "tray_bolt_l",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -50.0,
+    142.2,
+    10.0
+   ],
+   "u": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "electronics_tray",
+   "stack": 2.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the long member"
+  },
+  {
+   "name": "tray_bolt_r",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    50.0,
+    142.2,
+    10.0
+   ],
+   "u": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "electronics_tray",
+   "stack": 2.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the long member"
+  },
+  {
+   "name": "clip_bolt_1",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -7.0,
+    130.0,
+    24.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "cable_clip",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut"
+  },
+  {
+   "name": "clip_bolt_2",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    143.0,
+    130.0,
+    24.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "cable_clip",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut"
+  },
+  {
+   "name": "clip_bolt_3",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    -157.0,
+    130.0,
+    24.0
+   ],
+   "u": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "group": "frame",
+   "part": "cable_clip",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut"
+  }
+ ],
+ "hardware": {
+  "M3 nut": 20,
+  "M3 x 12": 11,
+  "M3 x 16": 4,
+  "M3 x 20": 4,
+  "M3 x 30": 2,
+  "M3 x 8": 9,
+  "M4 x 10": 16,
+  "M5 nut": 9,
+  "M5 x 10": 13,
+  "M5 x 12": 2,
+  "M5 x 16": 4,
+  "M5 x 20": 4,
+  "M5 x 40": 1,
+  "T-nut M5 (20-series)": 15
+ },
+ "v0": [
+  {
+   "name": "old_plate",
+   "file": "as_built/old_plate.stl",
+   "group": "cart",
+   "colour": "#2b2d30",
+   "label": "old carriage plate (printed)"
+  },
+  {
+   "name": "old_kp08_front",
+   "file": "as_built/old_kp08_front.stl",
+   "group": "cart",
+   "colour": "#3a3d42",
+   "label": "KP08, old position"
+  },
+  {
+   "name": "old_kp08_rear",
+   "file": "as_built/old_kp08_rear.stl",
+   "group": "cart",
+   "colour": "#3a3d42",
+   "label": "KP08, old position"
+  },
+  {
+   "name": "old_bar",
+   "file": "as_built/old_bar.stl",
+   "group": "cart",
+   "colour": "#22252a",
+   "label": "old belt link: hollow ladder bar"
+  },
+  {
+   "name": "hex_key",
+   "file": "as_built/hex_key.stl",
+   "group": "cart",
+   "colour": "#c0c4c9",
+   "label": "hex key used as the belt pin"
+  },
+  {
+   "name": "old_motor_bracket",
+   "file": "as_built/old_motor_bracket.stl",
+   "group": "frame",
+   "colour": "#8e959c",
+   "label": "old motor bracket + spacers on the back post"
+  },
+  {
+   "name": "old_motor",
+   "file": "as_built/old_motor.stl",
+   "group": "frame",
+   "colour": "#26282b",
+   "label": "NEMA 17 (old position)"
+  },
+  {
+   "name": "old_motor_pulley",
+   "file": "as_built/old_motor_pulley.stl",
+   "group": "frame",
+   "colour": "#2b2d30",
+   "label": "old pulley, one flange"
+  },
+  {
+   "name": "old_idler_pulley",
+   "file": "as_built/old_idler_pulley.stl",
+   "group": "frame",
+   "colour": "#2b2d30",
+   "label": "old idler, one flange"
+  },
+  {
+   "name": "old_idler_bracket",
+   "file": "as_built/old_idler_bracket.stl",
+   "group": "frame",
+   "colour": "#22252a",
+   "label": "old idler bracket: row of holes"
+  },
+  {
+   "name": "old_idler_rod",
+   "file": "as_built/old_idler_rod.stl",
+   "group": "frame",
+   "colour": "#4a4e54",
+   "label": "old idler axle: thin rod, held at one end"
+  },
+  {
+   "name": "old_belt",
+   "file": "as_built/old_belt.stl",
+   "group": "frame",
+   "colour": "#1d1f22",
+   "label": "belt (old run)"
+  },
+  {
+   "name": "old_switch_arm",
+   "file": "as_built/old_switch_arm.stl",
+   "group": "frame",
+   "colour": "#22252a",
+   "label": "old limit-switch arm"
+  },
+  {
+   "name": "old_wedge",
+   "file": "as_built/old_wedge.stl",
+   "group": "frame",
+   "colour": "#22252a",
+   "label": "wedge part (kept as is)"
+  }
+ ],
+ "findings": [
+  {
+   "id": "A1",
+   "at": [
+    262.0,
+    60.0,
+    224.0
+   ],
+   "text": "Idler axle is a thin rod held at one end, ~140 mm from its bracket: belt tension bends and tilts it, so the belt walks"
+  },
+  {
+   "id": "A2",
+   "at": [
+    240.0,
+    118.0,
+    238.0
+   ],
+   "text": "Idler position set by a row of holes: tension only in 6 mm steps, no lock, no squaring"
+  },
+  {
+   "id": "A3",
+   "at": [
+    -246.0,
+    60.0,
+    263.0
+   ],
+   "text": "Motor and idler each located from a different post with spacers: nothing puts both pulleys and the clamp in one plane"
+  },
+  {
+   "id": "A4",
+   "at": [
+    -246.0,
+    -20.0,
+    208.0
+   ],
+   "text": "Pulleys have one flange each; the two pulleys sit at different heights, so the runs slope"
+  },
+  {
+   "id": "A5",
+   "at": [
+    0.0,
+    -40.0,
+    238.0
+   ],
+   "text": "Belt link: hollow ladder bar and a hex key through a slot. No teeth engaged: it slips and has backlash"
+  },
+  {
+   "id": "A6",
+   "at": [
+    0.0,
+    45.0,
+    371.0
+   ],
+   "text": "Pivot over the middle of the cart: a pendulum there hangs inside the frame, cannot pass the plate or rails, so it cannot swing up"
+  },
+  {
+   "id": "A7",
+   "at": [
+    0.0,
+    105.0,
+    351.0
+   ],
+   "text": "No shaft, hub, arm or angle-sensor mount yet"
+  },
+  {
+   "id": "A8",
+   "at": [
+    -270.0,
+    105.0,
+    350.0
+   ],
+   "text": "One limit switch on a separate arm; no hard stops: the SC8UU blocks run into the SK8 supports"
+  },
+  {
+   "id": "A9",
+   "at": [
+    0.0,
+    140.0,
+    60.0
+   ],
+   "text": "Electronics and leads loose on the desk; no strain relief on the moving cart"
+  }
+ ],
+ "layout": {
+  "z_shaft": 366.0,
+  "y_pivot": [
+   -159.5,
+   -44.5
+  ],
+  "x_motor": -270.0,
+  "x_idler": 272.0,
+  "z_pulley": 226.0,
+  "pd": 47.7464829275686,
+  "x_stop": 178.0,
+  "x_switch": 174.0,
+  "x_soft": 168.0,
+  "arm_l": 300.0,
+  "y_arm": -153.0,
+  "frame": [
+   560.0,
+   280.0,
+   300.0
+  ],
+  "z_rod": 320.0,
+  "belt_loop": 1234.0,
+  "belt_loop_range": [
+   1214.0,
+   1254.0
+  ],
+  "belt_open_cut": 1244.0,
+  "idler_travel": [
+   262.0,
+   282.0
+  ],
+  "z_run_land": 249.3017414637843
+ }
+}
