@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inverted pendulum — 3-D viewer</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; background: #f4f6f8; color: #1f2328; }
+  #app { position: fixed; inset: 0; }
+  #overlay { position: fixed; inset: 0; pointer-events: none; }
+  #panel { position: fixed; top: 10px; left: 10px; width: 300px; max-height: calc(100% - 20px); overflow: auto; background: rgba(255,255,255,.94); border: 1px solid #d0d7de; border-radius: 8px; padding: 10px 12px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+  #panel h1 { font-size: 15px; margin: 0 0 2px; }
+  #panel .sub { color: #57606a; margin-bottom: 8px; }
+  #panel fieldset { border: 0; border-top: 1px solid #e6e9ed; margin: 8px 0 0; padding: 6px 0 0; }
+  #panel legend { font-weight: 600; color: #57606a; padding: 0 4px 0 0; }
+  button { font: inherit; padding: 3px 7px; margin: 2px 2px 2px 0; border: 1px solid #c4cbd3; background: #fff; border-radius: 5px; cursor: pointer; }
+  button.on { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  input[type=range] { width: 100%; }
+  .row { display: flex; justify-content: space-between; gap: 6px; }
+  .key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+  #findings { margin: 4px 0 0; padding-left: 18px; color: #3d444d; }
+  #findings li { margin: 2px 0; }
+  #tip { position: fixed; pointer-events: none; background: #1f2328; color: #fff; padding: 4px 7px; border-radius: 4px; font-size: 12px; display: none; max-width: 320px; }
+  #status { position: fixed; right: 10px; bottom: 8px; color: #57606a; font-size: 12px; }
+  body.capture #panel, body.capture #status { display: none; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="app"></div>
+<canvas id="overlay"></canvas>
+<div id="panel">
+  <h1>Inverted pendulum</h1>
+  <div class="sub">belt-driven cart, 2020 frame, printed parts (v1)</div>
+  <div><span class="key" style="background:#e2873a"></span>PLA &nbsp;<span class="key" style="background:#2f6db5"></span>PETG &nbsp;<span class="key" style="background:#9aa3ad"></span>your hardware</div>
+  <fieldset><legend>View</legend>
+    <button data-view="iso">3-D</button><button data-view="front">front</button><button data-view="side">end</button><button data-view="top">top</button>
+    <button data-view="motor">motor end</button><button data-view="idler">idler end</button><button data-view="cart">carriage</button><button data-view="sensor">sensor</button>
+  </fieldset>
+  <fieldset><legend>Move it</legend>
+    <div class="row"><span>cart</span><span id="xv">0 mm</span></div>
+    <input id="x" type="range" min="-178" max="178" step="1" value="0">
+    <div class="row"><span>pendulum (0 = up)</span><span id="tv">0°</span></div>
+    <input id="t" type="range" min="-180" max="180" step="1" value="0">
+    <button id="play">▶ simulated swing-up</button><button id="hang">hang down</button>
+  </fieldset>
+  <fieldset><legend>Look inside</legend>
+    <button id="burst">burst</button><button id="xray">x-ray frame</button><button id="section">belt plane cut</button>
+    <button id="labels">labels</button><button id="bolts" class="on">bolts</button><button id="opt">optical encoder</button>
+  </fieldset>
+  <fieldset><legend>Compare and print</legend>
+    <button id="v0">as built (v0) and findings</button><button id="plates">print plates</button>
+    <ol id="findings" hidden></ol>
+  </fieldset>
+  <div id="info" class="sub" style="margin-top:8px"></div>
+</div>
+<div id="tip"></div>
+<div id="status">loading…</div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const $ = id => document.getElementById(id);
+const qs = new URLSearchParams(location.search);
+const capture = qs.get('capture');
+if (capture) document.body.classList.add('capture');
+const CW = 1600, CH = 1000;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(capture ? 1 : window.devicePixelRatio);
+renderer.localClippingEnabled = true;
+$('app').appendChild(renderer.domElement);
+const overlay = $('overlay'), octx = overlay.getContext('2d');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf4f6f8);
+const camera = new THREE.PerspectiveCamera(30, 1, 5, 20000);
+camera.up.set(0, 0, 1);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = !capture;
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c0c8, 1.6));
+const key = new THREE.DirectionalLight(0xffffff, 1.9); key.position.set(500, -900, 1200); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(-900, 600, 400); scene.add(fill);
+const desk = new THREE.Mesh(new THREE.PlaneGeometry(1800, 1100), new THREE.MeshStandardMaterial({ color: 0xe9ecef, roughness: 0.95 }));
+desk.position.set(0, 60, -0.5); scene.add(desk);
+const grid = new THREE.GridHelper(1800, 36, 0xc9d0d8, 0xdde2e7); grid.rotation.x = Math.PI / 2; grid.position.set(0, 60, -0.3); scene.add(grid);
+
+const status = $('status');
+const man = await (await fetch('manifest.json', { cache: 'no-store' })).json();
+const L = man.layout;
+const loader = new STLLoader();
+const geoCache = new Map();
+async function geo(url) {
+  if (!geoCache.has(url)) geoCache.set(url, (async () => {
+    for (let k = 0; k < 4; k++) {
+      try { const g = await loader.loadAsync(url); g.deleteAttribute('normal'); return toCreasedNormals(g, Math.PI / 6); }
+      catch (e) { if (k === 3) throw e; await new Promise(r => setTimeout(r, 300 * (k + 1))); }
+    }
+  })());
+  return geoCache.get(url);
+}
+const section = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+const allMats = [];
+function mat(colour, metal = false, opts = {}) {
+  const m = new THREE.MeshStandardMaterial({ color: new THREE.Color(colour), roughness: metal ? 0.45 : 0.62, metalness: metal ? 0.35 : 0.02, side: THREE.DoubleSide, ...opts });
+  allMats.push(m); return m;
+}
+
+// ---- scene graph: frame, cart (moves in x), pendulum (turns about the pivot), pulleys (turn)
+const root = new THREE.Group(); scene.add(root);
+const v1 = new THREE.Group(); root.add(v1);
+const shared = new THREE.Group(); root.add(shared);
+const frameG = new THREE.Group(); v1.add(frameG);
+const cartG = new THREE.Group(); v1.add(cartG);
+const pendPivot = new THREE.Group(); pendPivot.position.set(0, 0, L.z_shaft); cartG.add(pendPivot);
+const pendG = new THREE.Group(); pendG.position.set(0, 0, -L.z_shaft); pendPivot.add(pendG);
+const sharedCart = new THREE.Group(); shared.add(sharedCart);
+function pivotAt(x, z) {
+  const p = new THREE.Group(); p.position.set(x, 0, z); frameG.add(p);
+  const g = new THREE.Group(); g.position.set(-x, 0, -z); p.add(g); return [p, g];
+}
+const [motorPivot, motorG] = pivotAt(L.x_motor, L.z_pulley);
+const [idlerPivot, idlerG] = pivotAt(L.x_idler, L.z_pulley);
+const optional = [];
+const groupOf = { frame: frameG, cart: cartG, cart_opt: cartG, pendulum: pendG, pendulum_opt: pendG,
+                  motor_pulley: motorG, pulleys_m: motorG, idler_pulley: idlerG, pulleys_i: idlerG, belt: frameG };
+const movers = [];      // holders that move out in the burst view
+const pickable = [];
+
+function holder(parent, burst) {
+  const h = new THREE.Group(); h.userData.burst = new THREE.Vector3(...(burst || [0, 0, 0])); parent.add(h); movers.push(h); return h;
+}
+const metalish = n => /^(rod_|pivot_shaft|sk8|sc8uu|post_|top_bar|bottom_bar|long_)/.test(n);
+await Promise.all(man.items.map(async it => {
+  const g = await geo(it.url);
+  const m = new THREE.Mesh(g, mat(it.colour, metalish(it.name)));
+  m.matrixAutoUpdate = false; m.matrix.fromArray(it.matrix);
+  m.userData = it;
+  const parent = it.shared ? (it.group === 'cart' ? sharedCart : shared) : groupOf[it.group] || frameG;
+  holder(parent, it.burst).add(m);
+  if (it.group.endsWith('_opt')) { optional.push(m); m.visible = false; }
+  pickable.push(m);
+}));
+
+// bolts: shank, head and nut
+const boltMat = mat(0x6e7681, true), nutMat = mat(0x8c959f, true);
+const boltG = { frame: new THREE.Group(), cart: new THREE.Group(), pendulum: new THREE.Group(), motor_pulley: new THREE.Group() };
+frameG.add(boltG.frame); cartG.add(boltG.cart); pendG.add(boltG.pendulum); motorG.add(boltG.motor_pulley);
+const Y = new THREE.Vector3(0, 1, 0);
+for (const b of man.bolts) {
+  const u = new THREE.Vector3(...b.u), p0 = new THREE.Vector3(...b.p0), d = parseFloat(b.size.slice(1));
+  const g = new THREE.Group(); g.position.copy(p0); g.quaternion.setFromUnitVectors(Y, u);
+  const shank = new THREE.Mesh(new THREE.CylinderGeometry(d / 2, d / 2, b.length, 14), boltMat); shank.position.y = b.length / 2; g.add(shank);
+  const head = new THREE.Mesh(new THREE.CylinderGeometry(0.83 * d, 0.83 * d, d, 18), boltMat); head.position.y = -d / 2; g.add(head);
+  if (b.nut) { const n = new THREE.Mesh(new THREE.CylinderGeometry(d, d, 0.8 * d, 6), nutMat); n.position.y = b.stack + 0.4 * d; g.add(n); }
+  if (b.tnut) { const n = new THREE.Mesh(new THREE.BoxGeometry(10, 4, 6), nutMat); n.position.y = b.length - 1; g.add(n); }
+  g.userData = { label: `${b.size} x ${b.length} — ${b.note}`, name: b.name };
+  shank.userData = head.userData = g.userData; pickable.push(shank, head);
+  (boltG[b.group] || boltG.frame).add(g);
+}
+
+// v0, as built, with the audit's findings
+const v0 = new THREE.Group(); v0.visible = false; root.add(v0);
+await Promise.all(man.v0.map(async it => {
+  const m = new THREE.Mesh(await geo(it.url), mat(it.colour, it.name === 'hex_key'));
+  m.userData = it; v0.add(m); pickable.push(m);
+}));
+const findingMarks = [];
+for (const f of man.findings) {
+  const s = new THREE.Mesh(new THREE.SphereGeometry(7, 20, 14), new THREE.MeshStandardMaterial({ color: 0xd1242f, emissive: 0x5a0a10 }));
+  s.position.set(...f.at); s.userData = { label: `${f.id}: ${f.text}` }; v0.add(s); findingMarks.push([s, f.id]); pickable.push(s);
+  const li = document.createElement('li'); li.textContent = `${f.id}: ${f.text}`; $('findings').appendChild(li);
+}
+
+// print plates on their beds
+const platesG = new THREE.Group(); platesG.visible = false; root.add(platesG);
+const plateLabels = [];
+{
+  const cols = 3, gap = 70;
+  await Promise.all(man.plates.map(async (pl, i) => {
+    const ox = (i % cols) * (man.bed + gap) - (cols - 1) * (man.bed + gap) / 2 - man.bed / 2, oy = -Math.floor(i / cols) * (man.bed + gap) + 40;
+    const bed = new THREE.Mesh(new THREE.BoxGeometry(man.bed, man.bed, 4), new THREE.MeshStandardMaterial({ color: 0x30363d, roughness: 0.9 }));
+    bed.position.set(ox + man.bed / 2, oy + man.bed / 2, -2); platesG.add(bed);
+    const colour = pl.material === 'pla' ? '#e2873a' : '#2f6db5';
+    for (const it of pl.items) {
+      const m = new THREE.Mesh(await geo(it.url), mat(colour));
+      m.rotation.z = THREE.MathUtils.degToRad(it.angle); m.position.set(ox + it.x, oy + it.y, 0); platesG.add(m);
+    }
+    const t = pl.grams ? `${Math.round(pl.grams)} g, ${(pl.minutes / 60).toFixed(1)} h` : 'not sliced';
+    plateLabels.push([new THREE.Vector3(ox + man.bed / 2, oy + man.bed + 12, 0), `${i + 1}. ${pl.name}${pl.option ? ' (option)' : ''} — ${t}`]);
+  }));
+}
+
+// ---- state
+const S = { x: 0, t: 0, burst: 0, burstTo: 0, play: false, playT: 0, labels: false, xray: false, section: false, v0: false, plates: false };
+function setPose(x, t) {
+  S.x = x; S.t = t;
+  cartG.position.x = x; sharedCart.position.x = x;
+  pendPivot.rotation.y = THREE.MathUtils.degToRad(t);
+  const a = x / (L.pd / 2);
+  motorPivot.rotation.y = a; idlerPivot.rotation.y = a;
+  $('x').value = x; $('t').value = t; $('xv').textContent = `${x.toFixed(0)} mm`; $('tv').textContent = `${t.toFixed(0)}°`;
+}
+function applyBurst() { for (const h of movers) h.position.copy(h.userData.burst).multiplyScalar(S.burst); }
+function applyLook() {
+  for (const m of allMats) { m.clippingPlanes = S.section ? [section] : []; m.needsUpdate = true; }
+  frameG.traverse(o => {
+    if (!o.isMesh || !o.userData.name) return;
+    const frameish = /^(post_|top_bar|bottom_bar|long_)/.test(o.userData.name);
+    o.material.transparent = S.xray && frameish; o.material.opacity = S.xray && frameish ? 0.18 : 1; o.material.depthWrite = !(S.xray && frameish);
+  });
+  shared.traverse(o => { if (o.isMesh) { const f = /^(post_|top_bar|bottom_bar|long_)/.test(o.userData.name || ''); o.material.transparent = S.xray && f; o.material.opacity = S.xray && f ? 0.18 : 1; o.material.depthWrite = !(S.xray && f); } });
+}
+function showMode() {
+  v1.visible = !S.v0 && !S.plates; v0.visible = S.v0 && !S.plates; shared.visible = !S.plates; platesG.visible = S.plates;
+  desk.visible = grid.visible = !S.plates;
+  $('findings').hidden = !S.v0;
+  for (const id of ['v0', 'plates', 'burst', 'xray', 'section', 'labels']) $(id).classList.toggle('on', !!S[id === 'burst' ? 'burstTo' : id]);
+}
+
+// ---- views
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const VIEWS = {
+  iso: { dir: V(0.62, -0.72, 0.42), c: V(0, -10, 230), r: 470 },
+  front: { dir: V(0, -1, 0.1), c: V(0, -40, 230), r: 430 },
+  side: { dir: V(1, -0.02, 0.12), c: V(0, -30, 250), r: 320 },
+  top: { dir: V(0, -0.001, 1), up: V(0, 1, 0), c: V(0, -10, 200), r: 420 },
+  belt: { dir: V(0, -1, 0.02), c: V(0, 0, 255), r: 360 },
+  motor: { dir: V(-0.62, -0.62, 0.48), c: V(-262, 10, 238), r: 95 },
+  idler: { dir: V(0.62, -0.62, 0.48), c: V(270, 0, 238), r: 90 },
+  cart: { dir: V(0.55, -0.72, 0.5), c: V(0, -45, 320), r: 175 },
+  sensor: { dir: V(0.75, 0.45, 0.42), c: V(0, -40, 366), r: 62 },
+  plates: { dir: V(0, -0.35, 1), up: V(0, 1, 0), c: V(0, -110, 0), r: 470 },
+};
+function frameView(v, aspect) {
+  const f = 1 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+  const dist = v.r * f * Math.max(1, 1 / aspect) * 1.02;
+  camera.up.copy(v.up || V(0, 0, 1));
+  camera.position.copy(v.c).addScaledVector(v.dir.clone().normalize(), dist);
+  controls.target.copy(v.c); camera.lookAt(v.c); controls.update();
+}
+
+// ---- labels (overlay, and drawn into captures)
+const LABELS = { carriage_plate: 'carriage plate', pivot_bridge: 'pivot bridge + sensor tower', belt_clamp: 'belt clamp',
+  clamp_jaw: 'belt jaw', motor_mount: 'motor mount', motor_pulley: '30T HTD 5M pulley', idler_mount: 'idler mount (tensioner)',
+  idler_pulley: 'idler', pendulum_hub: 'hub', pendulum_arm: 'pendulum arm', pendulum_tip: 'tip cap', kp08_front: 'KP08',
+  nema17: 'NEMA 17', belt: 'HTD 5M belt', as5600: 'AS5600', switch_mount_1: 'limit switch', rod_bumper_1: 'bumper',
+  electronics_tray: 'electronics tray', sc8uu_pf: 'SC8UU', rod_f: '8 mm rod' };
+function labelList() {
+  if (S.plates) return plateLabels.map(([p, t]) => [p, t]);
+  if (S.v0) return findingMarks.map(([s, id]) => [s.getWorldPosition(new THREE.Vector3()), id]);
+  if (!S.labels) return [];
+  const out = [];
+  for (const m of pickable) {
+    const n = m.userData && m.userData.name; if (!n || !LABELS[n] || !m.visible) continue;
+    const b = new THREE.Box3().setFromObject(m); out.push([b.getCenter(new THREE.Vector3()), LABELS[n]]);
+  }
+  return out;
+}
+function drawLabels(ctx, w, h, s = 1, clear = true) {
+  if (clear) ctx.clearRect(0, 0, w, h);
+  ctx.font = `${12 * s}px system-ui, "Segoe UI", sans-serif`; ctx.textBaseline = 'middle';
+  const placed = [];
+  for (const [p, text] of labelList()) {
+    const q = p.clone().project(camera); if (q.z > 1) continue;
+    let x = (q.x + 1) / 2 * w, y = (1 - q.y) / 2 * h;
+    const tw = ctx.measureText(text).width + 10 * s, th = 18 * s;
+    let bx = x + 10 * s, by = y - th - 8 * s;
+    for (let k = 0; k < 12 && placed.some(r => bx < r[0] + r[2] && r[0] < bx + tw && by < r[1] + r[3] && r[1] < by + th); k++) by -= th + 2 * s;
+    placed.push([bx, by, tw, th]);
+    ctx.strokeStyle = 'rgba(31,35,40,.55)'; ctx.lineWidth = s; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(bx, by + th / 2); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.93)'; ctx.fillRect(bx, by, tw, th); ctx.strokeRect(bx, by, tw, th);
+    ctx.fillStyle = S.v0 ? '#b31d28' : '#1f2328'; ctx.fillText(text, bx + 5 * s, by + th / 2);
+    ctx.fillStyle = S.v0 ? '#d1242f' : '#1f6feb'; ctx.beginPath(); ctx.arc(x, y, 2.5 * s, 0, 7); ctx.fill();
+  }
+}
+
+// ---- sim playback
+const tr = man.sim.trajectory;
+function simAt(t) {
+  const i = Math.min(tr.t.length - 1, Math.max(0, Math.round(t * tr.fps)));
+  return [tr.x_mm[i], tr.theta_deg[i]];
+}
+
+// ---- interaction
+function resize() {
+  const w = capture ? CW : innerWidth, h = capture ? CH : innerHeight;
+  renderer.setSize(w, h, !capture); camera.aspect = w / h; camera.updateProjectionMatrix();
+  overlay.width = w; overlay.height = h;
+  if (capture) { renderer.domElement.style.width = overlay.style.width = '100%'; }
+}
+addEventListener('resize', resize); resize();
+for (const b of document.querySelectorAll('[data-view]')) b.onclick = () => frameView(VIEWS[b.dataset.view], camera.aspect);
+$('x').oninput = e => { S.play = false; setPose(+e.target.value, S.t); };
+$('t').oninput = e => { S.play = false; setPose(S.x, +e.target.value); };
+$('play').onclick = () => { S.play = !S.play; S.playT = 0; $('play').classList.toggle('on', S.play); };
+$('hang').onclick = () => { S.play = false; setPose(S.x, 180); };
+$('burst').onclick = () => { S.burstTo = S.burstTo ? 0 : 1; showMode(); };
+$('xray').onclick = () => { S.xray = !S.xray; applyLook(); showMode(); };
+$('section').onclick = () => { S.section = !S.section; applyLook(); showMode(); };
+$('labels').onclick = () => { S.labels = !S.labels; showMode(); };
+$('bolts').onclick = () => { const on = !boltG.frame.visible; for (const g of Object.values(boltG)) g.visible = on; $('bolts').classList.toggle('on', on); };
+$('opt').onclick = () => { const on = !optional[0].visible; for (const m of optional) m.visible = on;
+  for (const m of pickable) if (m.userData.name === 'magnet_cap' || m.userData.name === 'magnet' || m.userData.name === 'as5600' || m.userData.name === 'as5600_mount') m.visible = !on;
+  $('opt').classList.toggle('on', on); };
+$('v0').onclick = () => { S.v0 = !S.v0; S.plates = false; showMode(); frameView(VIEWS.iso, camera.aspect); };
+$('plates').onclick = () => { S.plates = !S.plates; S.v0 = false; showMode(); frameView(S.plates ? VIEWS.plates : VIEWS.iso, camera.aspect); };
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), tip = $('tip');
+renderer.domElement.addEventListener('pointermove', e => {
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObjects(pickable.filter(m => { for (let o = m; o; o = o.parent) if (!o.visible) return false; return true; }), false)[0];
+  if (hit) { const u = hit.object.userData; tip.style.display = 'block'; tip.style.left = e.clientX + 14 + 'px'; tip.style.top = e.clientY + 10 + 'px';
+    tip.textContent = (u.label || u.name) + (u.material ? ` — ${u.material.toUpperCase()}` : '') + (u.grams ? `, ${u.grams} g` : '') + (u.qty > 1 ? ` (x${u.qty})` : ''); }
+  else tip.style.display = 'none';
+});
+$('info').innerHTML = `Swing-up in the model: ${man.sim.swing_up_s} s, cart within ±${Math.round(man.sim.x_max_m * 1000)} mm of ±${L.x_soft} mm. ` +
+  `Travel ±${L.x_stop} mm. Hover a part for its name.`;
+
+setPose(0, 0); applyBurst(); showMode(); frameView(VIEWS.iso, camera.aspect);
+status.textContent = `${man.items.length} parts, ${man.bolts.length} fasteners`;
+
+// ---- capture mode: named stills and animations, POSTed to serve_viewer.py
+async function post(path, blob) { await fetch(path, { method: 'POST', body: blob }); }
+function still() {
+  renderer.render(scene, camera);
+  const c = document.createElement('canvas'); c.width = CW; c.height = CH;
+  const ctx = c.getContext('2d'); ctx.drawImage(renderer.domElement, 0, 0, CW, CH);
+  drawLabels(ctx, CW, CH, 1.5, false);
+  return new Promise(r => c.toBlob(r, 'image/png'));
+}
+function reset() { S.v0 = S.plates = S.labels = S.xray = S.section = false; S.burst = S.burstTo = 0; applyBurst(); applyLook(); showMode(); setPose(0, 0); }
+async function shot(name, fn) { reset(); fn(); await post(`/__capture__/${name}.png`, await still()); }
+async function movie(name, n, ms, fn, w = 760) {
+  reset();
+  for (let i = 0; i < n; i++) { fn(i / n, i); await post(`/__frame__/${name}/${i}.png?ms=${ms}`, await still()); }
+  await fetch(`/__movie__/${name}.gif?w=${w}`, { method: 'POST' });
+}
+if (capture) {
+  resize();
+  const A = camera.aspect;
+  if (capture !== 'gif') {
+    await shot('01_iso', () => frameView(VIEWS.iso, A));
+    await shot('02_front', () => frameView(VIEWS.front, A));
+    await shot('03_end', () => frameView(VIEWS.side, A));
+    await shot('04_top', () => frameView(VIEWS.top, A));
+    await shot('05_belt_plane_cut', () => { S.section = true; applyLook(); frameView(VIEWS.belt, A); });
+    await shot('06_motor_end', () => { setPose(-120, 0); frameView(VIEWS.motor, A); });
+    await shot('07_idler_end', () => { setPose(120, 0); frameView(VIEWS.idler, A); });
+    await shot('08_carriage', () => frameView(VIEWS.cart, A));
+    await shot('09_sensor', () => frameView(VIEWS.sensor, A));
+    await shot('10_hanging', () => { setPose(-110, 180); frameView(VIEWS.iso, A); });
+    await shot('11_labelled', () => { S.labels = true; setPose(60, 12); frameView(VIEWS.iso, A); });
+    await shot('12_burst', () => { S.burst = S.burstTo = 1; applyBurst(); frameView({ ...VIEWS.iso, r: 560 }, A); });
+    await shot('13_as_built_v0', () => { S.v0 = true; showMode(); frameView(VIEWS.iso, A); });
+    await shot('14_v0_belt_cut', () => { S.v0 = true; S.section = false; showMode(); frameView({ dir: V(0.25, -1, 0.3), c: V(0, 0, 270), r: 380 }, A); });
+    await shot('15_print_plates', () => { S.plates = true; showMode(); frameView(VIEWS.plates, A); });
+  }
+  await movie('anim_turntable', 48, 90, (f) => { frameView({ ...VIEWS.iso, dir: V(Math.cos(f * 2 * Math.PI - 0.86) * 0.95, Math.sin(f * 2 * Math.PI - 0.86) * 0.95, 0.42) }, A); setPose(0, 0); });
+  { const n = Math.min(tr.t.length, Math.round(8 * tr.fps)); const step = Math.max(1, Math.round(tr.fps / 10));
+    await movie('anim_swingup', Math.floor(n / step), Math.round(1000 * step / tr.fps), (f, i) => { const [x, t] = simAt(i * step / tr.fps); setPose(x, t); frameView(VIEWS.iso, A); }, 640); }
+  await movie('anim_burst', 30, 70, (f) => { const k = f < 0.5 ? f * 2 : 2 - f * 2; S.burst = k * k * (3 - 2 * k); applyBurst(); frameView({ ...VIEWS.iso, r: 560 }, A); });
+  await fetch('/__done__', { method: 'POST' });
+  status.textContent = 'capture done';
+} else {
+  const clock = new THREE.Clock();
+  renderer.setAnimationLoop(() => {
+    const dt = Math.min(0.05, clock.getDelta());
+    if (S.burst !== S.burstTo) { S.burst += Math.sign(S.burstTo - S.burst) * Math.min(Math.abs(S.burstTo - S.burst), dt * 1.6); applyBurst(); }
+    if (S.play) { S.playT += dt; if (S.playT > tr.t[tr.t.length - 1]) S.playT = 0; const [x, t] = simAt(S.playT); setPose(x, t); }
+    controls.update(); renderer.render(scene, camera); drawLabels(octx, overlay.width, overlay.height, 1);
+  });
+}
+</script>
+</body>
+</html>

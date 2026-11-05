@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.tmp
+git_ignore_this/
+renders/.capture_done

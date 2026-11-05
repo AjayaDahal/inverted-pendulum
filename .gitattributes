@@ -1,0 +1,8 @@
+# Meshes and slicer projects are binary; G-code, STEP and the generated JSON are not worth diffing.
+*.stl binary
+*.3mf binary
+*.step -diff
+*.gcode -diff linguist-generated
+viewer/manifest.json linguist-generated
+parts/assembly.json linguist-generated
+parts/sim.json linguist-generated

@@ -1,0 +1,7 @@
+# Python packages for scripts/ (versions the gate passes with). The slicer, Anycubic Slicer Next
+# 2.0.0.3, is a separate install: only build_all.py, slice_all.py and make_projects.py --verify
+# need it; capture.py needs Microsoft Edge or Chrome.
+build123d==0.13.0
+numpy==2.4.6
+pillow==13.0.0
+matplotlib==3.11.2
