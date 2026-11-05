@@ -1677,7 +1677,7 @@
    ],
    "group": "frame",
    "colour": "#127a4a",
-   "label": "controller (your Arduino / ESP32 / STM32)"
+   "label": "controller (Arduino Uno / Nano or ESP32)"
   },
   {
    "name": "belt",
@@ -3100,7 +3100,7 @@
    "length": 12.0,
    "p0": [
     -16.0,
-    -33.0,
+    -29.4,
     360.0
    ],
    "u": [
@@ -3122,7 +3122,7 @@
    "length": 12.0,
    "p0": [
     16.0,
-    -33.0,
+    -29.4,
     360.0
    ],
    "u": [

@@ -36,11 +36,11 @@ VIT_NOTES = {
     "AS5600 magnetic encoder board": "corner holes 18-26 mm apart",
     "optional: 600 P/R optical encoder": f"instead of the AS5600: {P.LPD3806['d']:.0f} mm body, "
                                          f"{P.LPD3806['shaft']:.0f} mm shaft, M3 on a 28-32 mm circle",
-    "NEMA 17 stepper": f"{P.NEMA17['torque']:.2f} N m holding or more, 1/16 microstepping",
+    "NEMA 17 stepper": f"{P.NEMA17['torque']:.2f} N m holding or more (17HS4401 class), 1/16 microstepping",
     "mechanical endstop": f"lever switch on a {P.ENDSTOP['pcb'][0]:.0f} x {P.ENDSTOP['pcb'][1]:.0f} mm board, "
-                          f"holes {P.ENDSTOP['hole_dx']:.0f} mm apart",
-    "stepper driver carrier (A4988 / DRV8825)": "any step/dir driver",
-    "controller (your Arduino / ESP32 / STM32)": "200 Hz loop; I2C for the AS5600 (or two interrupt pins for the encoder)",
+                          f"holes {P.ENDSTOP['hole_dx']:.0f} mm apart; wired normally closed",
+    "stepper driver carrier (A4988 / DRV8825)": f"step/dir driver set to {P.DRIVE['i_set']:g} A, with its heatsink",
+    "controller (Arduino Uno / Nano or ESP32)": "runs firmware/pendulum (FastAccelStepper: not an STM32)",
 }
 
 EXTRA = """
@@ -50,7 +50,9 @@ EXTRA = """
 - M3 screws or standoffs for the driver carrier and the controller on the tray (their slots take M3).
 - Optical-encoder option: 3 x M3 x 6 into the encoder's face.
 - CA glue (pulley flanges, the magnet in its cap), zip ties (sensor lead, tray), medium thread
-  locker for the pulley's set screw (optional).
+  locker for the pulley's set screw (optional), a drop of grease or oil for the idler's sleeve.
+- A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
+- Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
 **To confirm before printing:** the frame's size and the belt (`tracker.md`, "Before the first
 print"), and that the drawer holds the {TNUTS} T-nuts, the M5 x 40 idler axle and an 8 mm x

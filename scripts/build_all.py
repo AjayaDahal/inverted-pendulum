@@ -1,7 +1,7 @@
 """Regenerate everything in order: parts, print orientation, assembly and STEP, slicing (every part
 and plate as a 3MF project and its G-code), the complete projects (each plate sliced again and
-checked), the simulation (it weighs the sliced parts), the tracker, the BOM, the viewer manifest,
-then the gate. Renders: scripts/capture.py (headless Edge) after a geometry change.
+checked), the simulation (it weighs the sliced parts), the firmware's config, the tracker, the BOM,
+the viewer manifest, then the gate. Renders: scripts/capture.py (headless Edge) after a geometry change.
 
 Usage: python scripts/build_all.py [--no-slice]
 """
@@ -12,6 +12,7 @@ import sys
 import asbuilt
 import assembly
 import make_bom
+import make_firmware
 import make_print_ready
 import make_tracker
 import make_viewer
@@ -36,6 +37,7 @@ def main():
             projects_ok = make_projects.main(check=True)
     finally:
         sim.run()
+        make_firmware.main()
         make_tracker.main()
         make_bom.main()
         make_viewer.main()

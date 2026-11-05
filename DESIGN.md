@@ -15,12 +15,14 @@ frame's footprint.
 | Travel | ±178 mm to the bumpers (356 mm), limit switches trip at ±174, firmware keeps to ±168 |
 | Belt | HTD 5M, 15 mm; both pulleys 30 teeth (pitch Ø 47.75 mm, 150 mm per turn), axles 226 mm up, 542 mm apart |
 | Belt length | closed loop 1234 mm at the nominal idler, 1214–1254 mm within the tensioner's travel; open belt: cut 1244 mm |
-| Motor | your NEMA 17: 0.4 N m holding, half of it relied on: 8.4 N at the cart; 21.33 steps/mm at 1/16 microstep |
+| Motor | your NEMA 17 at 1.5 A and 19 V: 10.4 N at the cart up to 1 m/s (torque-speed model), 80 % of it relied on; 21.33 steps/mm at 1/16 microstep |
+| Friction | rails 0.8 N, belt 0.3 N, greased idler 0.7 N at 15 N belt tension: 1.8 N at the cart; pivot: goal 0.5 mN m |
 | Pivot | 8 mm × 115 mm shaft in 2 × KP08, 70 mm apart, axis 366 mm up; the arm turns 8 mm in front of the frame |
 | Pendulum | 20 × 10 mm PLA arm, 300 mm from the axis to the tip; 112 g turning, CG 70 mm out, 1.71 × 10⁻³ kg m² about the axis |
-| Sensor | AS5600 (12 bit) with a diametric magnet on the shaft's end, or a 600 P/R optical encoder |
-| Control (model) | swings up in 4.9 s (≤ 5.9 s with ±20 % model error), cart within ±84 mm; LQR K = [−22.4, −16.0, −57.5, −8.6] |
-| Prints | 21 part files, 6 plates: PLA 404 g / 16.1 h, PETG 201 g / 8.3 h |
+| Sensor | AS5600 (12 bit) with a diametric magnet held 5 mm off the steel shaft's end, or a 600 P/R optical encoder |
+| Control (model) | kick, swing-up, catch, LQR with integral action: upright in 5.7 s (≤ 8.3 s over 48 robustness runs), cart within ±129 mm; balanced, it hunts 1.2° at the pivot's goal friction |
+| Firmware | `firmware/pendulum`: Arduino Uno / Nano or ESP32, FastAccelStepper, 200 Hz |
+| Prints | 21 part files, 6 plates: PLA 405 g / 16.2 h, PETG 202 g / 8.4 h |
 
 ## Measure first
 
@@ -64,8 +66,11 @@ two cheeks either side of the idler. Each cheek has a window in which a slider r
 M5 × 40 axle passes slider – sleeve – slider. An M3 × 30 from an outboard lug into each slider
 pulls it out:
 
-1. Leave the axle nut finger-tight. Turn both tension screws evenly until the upper span deflects
-   about 6–8 mm when you press its middle with about 200 g (about 35–40 N of tension).
+1. Grease the sleeve (a drop of any grease or oil: it is a plain bearing). Leave the axle nut
+   finger-tight. Turn both tension screws evenly until the lower run sags about 9 mm when you hang
+   100 g from its middle (200 g: 18 mm). That is 15 N: enough, as the belt only has to stay
+   taut under the motor's largest pull (~4 N each side); more only loads the idler's plain
+   bearing, which the motor then has to drag (REPORT.md, P2).
 2. Run the cart by hand from end to end. If the belt creeps towards one flange, give that side's
    screw a quarter turn more (the axle squares itself to the belt) and repeat.
 3. Tighten the axle nut: it clamps the sliders' flanges against the cheeks. The sleeve takes the
@@ -105,16 +110,34 @@ SC8UU blocks stop on the bumpers first.
   with the new mass).
 - It turns a full circle at every cart position: the hub, arm and tip stay in front of the frame
   (y −162 to −144) and the tip clears the desk by 64 mm when it hangs (gate: `pendulum`).
+- **Pivot friction** decides how still it balances. While the pivot's bearings stick, the pendulum
+  moves with the cart, so a balanced pendulum hunts: about 2.9° and 36 mm peak to peak per mN m
+  of friction, whatever the controller does (REPORT.md, P16). The swing-up copes with up to
+  2.5 mN m; the goal is 0.5 mN m (1.2° and 14 mm). Two KP08 inserts with rubber seals are often
+  1-2 mN m, so before the first run:
+  - free the inserts: pry the seals off (a small screwdriver under the lip), wash the grease out
+    with isopropyl alcohol, one drop of light oil;
+  - loosen the KP08 bolts and re-tighten them with the shaft turning (the two blocks in line);
+    the set screws must not push the shaft off-centre;
+  - measure with the firmware's `f` test (lift the pendulum 30-40°, let go): it prints the
+    friction and the hunting to expect, and re-centres hanging on the true vertical. By eye,
+    0.5 mN m is about 20 full swings from 30° before it stops; 2.5 mN m, 4.
+- **Keep clear:** the arm sweeps a 600 mm circle in front of the frame at any cart position: x
+  ±480 mm, 63 to 670 mm above the desk, and its tip reaches 4 m/s. Nothing in that disc while it
+  runs; keep the power switch in reach.
 
 ## Angle sensor
 
 <img src="renders/09_sensor.png" alt="Sensor tower: the AS5600 board on its adapter, facing the magnet cap on the shaft's end">
 
 **AS5600 (default).** `magnet_cap` (PETG) goes on the shaft's back end (M3 × 8 set screw) with the
-6 × 2.5 mm diametric magnet glued in its pocket, on the axis. `as5600_mount` (PLA) bolts to the
+6 × 2.5 mm diametric magnet glued in its pocket, on the axis, 5 mm of plastic away from the
+shaft's end: steel close behind the magnet pulls its field in, and the reading gets weaker and
+less linear (REPORT.md, P7). `as5600_mount` (PLA) bolts to the
 tower's front face (2 × M3 × 12, nuts in the tower's back) and carries the board on four raised,
 slotted pads (M2.5 self-tapping, or M3, in the board's corner holes, 18–26 mm apart), chip
-towards the magnet, 1.5 mm air gap. Solder its header facing forward (or use the side pads).
+towards the magnet, 1.5 mm air gap. Solder its header facing forward (or use the side pads), and
+tie its DIR pin to GND: left floating on some boards, it flips the angle's direction at random.
 
 **600 P/R optical encoder (option).** Leave out the cap and the adapter; bolt the encoder to the
 tower's back face (3 × M3 into its holes on a 28–32 mm circle, its boss through the tower's
@@ -135,36 +158,89 @@ back-off); then centre. Keep the controller within ±168 mm.
 
 The model (`scripts/sim.py`) is the cart-pole of this machine: cart 0.72 kg + belt 0.08 kg + motor
 rotor and pulleys 0.03 kg reflected = 0.83 kg; pendulum 112 g with its CG 70 mm from the axis and
-1.71 × 10⁻³ kg m² about it (sliced masses, steel shaft, screws). Natural frequency 6.7 rad/s.
+1.71 × 10⁻³ kg m² about it (sliced masses, steel shaft, screws). Natural frequency 6.7 rad/s. The
+firmware runs the same controller (`firmware/pendulum/controller.h`, line for line: the gate
+replays simulated runs through it and requires the same commands).
 
-- **Input = cart acceleration.** A stepper sets motion, not force; the force it takes is checked
-  against half the holding torque at the pulley (8.4 N): peak 7.5 N on the model, 8.6 N in its
-  worst variant (3 % over; the gate allows 15 %, and the full holding torque gives 16.8 N). The
-  cart never goes faster than 0.53 m/s (210 rpm), where a NEMA 17 keeps most of its torque.
-  Acceleration limit 7.1 m/s², speed 1.5 m/s.
-- **Balance:** LQR on [x, ẋ, θ, θ̇] (θ = 0 up, positive towards +x), Q = diag(1000, 80, 60, 2),
-  R = 2: **u = 22.36 x + 16.05 ẋ + 57.52 θ + 8.62 θ̇** (SI units, u in m/s²). Closed-loop poles
-  −9.5, −5.6, −4.1 ± 1.5i.
-- **Swing-up:** energy pumping, u = −2.59 tanh(3 (E_ref − E)/(m g l)) tanh(2 θ̇ cos θ / ω₀) − 2.68 x −
-  1.92 ẋ, aiming at E_ref = 0.172 m g l above the upright rest energy; switch to the LQR when
-  |θ| < 11.2° and |θ̇| < 4 rad/s, back to swing-up if |θ| > 45°.
-- **Result:** from hanging still, upright in 4.9 s; the cart stays within ±80 mm; balanced, the
-  pendulum holds within 0.04° RMS (AS5600 resolution 0.088°); a 1 rad/s kick is absorbed. Over ±20 %
-  error in the pendulum's mass, inertia and CG and +20 % cart mass: every variant swings up and
-  holds, the cart within ±84 mm.
-- **Firmware:** 200 Hz loop; read the AS5600 over I²C (or count the optical encoder's edges);
-  unwrap the angle; θ̇ from successive readings through a first-order filter (α ≈ 0.35);
-  steps/mm = 3200 / 150 = 21.33.
+- **Input = cart acceleration,** at most 4.68 m/s², speed at most 1 m/s. A stepper sets motion,
+  not force: the force each run needs (the motion plus 1.8 N of friction at the cart) is checked
+  at every step against the motor's torque-speed curve at 1.5 A and 19 V (10.4 N up to 1 m/s),
+  80 % of it relied on. The margin never falls below 0.30 N.
+- **Start:** when the pendulum has rested near hanging for 0.25 s, a kick: 3.0 m/s² for 65 ms one
+  way, then the other.
+- **Swing-up:** the cart's speed is set to
+  v = −0.222 tanh(53 (E − E_ref)/(m g l)) tanh(15.3 sin(θ + 0.037 θ̇)) m/s, fading to nothing
+  near the travel ends, and tracked with u = 31.8 (v − ẋ) − 3.7 x. Its acceleration then pumps
+  energy in like the classic law (it follows −θ̇ cos θ), while the cart's speed and travel stay
+  bounded. E_ref is 0.128 m g l above the upright rest energy, to make up for pivot friction.
+- **Catch:** within 39° of upright while θ + θ̇/ω₀ is under 0.133 rad: the pendulum is coasting
+  into the top, so little is left to correct and the cart does not saturate.
+- **Balance:** LQR with integral action on [x, ẋ, θ, θ̇, ∫x] (θ = 0 up, positive towards +x),
+  Q = diag(2580, 10.1, 109, 4.68, 25.6), R = 1.39: **u = −K s, K = [−45.5, −23.9, −71.7, −10.8,
+  −4.30]** (SI units, u in m/s²). The integral takes up an error in the upright calibration.
+  Back to the swing-up past 45°.
+- **Rate:** θ̇ from successive readings through a first-order filter (α = 0.9 per 5 ms). One
+  AS5600 count in a period reads as 0.31 rad/s, so the command ripples while it balances (about
+  1 m/s² RMS, 2 N peak to peak at the belt): a hum, inside the force budget (the plot below).
+- **Pivot friction:** balanced, the pendulum hunts by an amount set by the pivot's stick-slip:
+  2.9° and 36 mm peak to peak per mN m (0.15° and 1 mm without friction). Other weights, a
+  model-based observer and friction compensation were tried; none changes it by more than about
+  10 %. So the pivot has a goal, 0.5 mN m (1.2° and 14 mm), the gate holds the hunting there, and
+  the firmware's `f` test measures the real pivot ("Pendulum").
+- **Result:** from hanging still at the goal friction, upright in 5.7 s, the cart within ±122 mm.
+  It must work on 48 robustness runs: pendulum mass and inertia ±20 %, CG ±15 %, cart +20 %; delay
+  from the angle reading to the motor 8–20 ms; pivot friction 0–2.5 mN m; upright error ±1°;
+  AS5600 or the 600 P/R encoder; each run from hanging still, with a 0.7 rad/s push once it
+  balances. Every run swings up by 8.3 s, holds and recovers, the cart within ±129 mm. On 260
+  random scenarios it was not tuned on, 258 did.
 
-<img src="renders/52_sim_swingup.png" alt="Simulated swing-up: pendulum angle, cart position and motor force over 13 s">
+<img src="renders/52_sim_swingup.png" alt="Simulated run from hanging still: kick, swing-up, catch, push; pendulum angle, cart position, force needed and available">
 
-## Electronics and leads
+## Electronics and firmware
 
 `electronics_tray` (PLA) lies on the desk behind the frame, hooked to the back long member (2 ×
 M5 into T-nuts in its outer slot), with M3 slots for the stepper-driver carrier and the
 controller and zip-tie slots. Run the motor and switch leads along the frame in `cable_clip`s
 (M5 + T-nut into any slot). Take the sensor lead from the carriage's zip-tie bridges up and over in
 a loose loop to the tray: allow 400 mm of slack for the full travel.
+
+| Wiring | Arduino Uno / Nano | ESP32 |
+|---|---|---|
+| Driver STEP / DIR / EN | 9 / 8 / 7 (STEP on 9 or 10 only) | 25 / 26 / 27 |
+| Limit switches −x / +x, normally closed to GND | 4 / 5 | 32 / 33 |
+| AS5600 SDA / SCL | A4 / A5 (board on 5 V) | 21 / 22 (board on 3.3 V) |
+| or the 600 P/R encoder A / B | 2 / 3 | 18 / 19 |
+
+- **Driver:** 1.5 A, 1/16 microstepping (A4988: MS1-MS3 high), its heatsink on, and a 47-100 µF
+  capacitor across its motor supply if the carrier has none. Set the current with Vref: A4988
+  Vref = 8 × R_sense × 1.5 A, so 0.82 V with 0.068 Ω sense resistors and 1.2 V with 0.1 Ω (read
+  yours); DRV8825 0.75 V. Below about 1.3 A the motor runs short of force (REPORT.md, P1).
+- **Supply:** the 19 V laptop brick. At 12 V the motor loses force above ~0.8 m/s.
+- **Switches** wired normally closed: a broken wire then reads as pressed and stops the cart.
+- **Sensor lead:** SDA and SCL each twisted with a ground, away from the motor wires; over about
+  30 cm, set `I2C_HZ` to 100000 at the top of `pendulum.ino`.
+- **Firmware:** `firmware/pendulum` (Arduino IDE or arduino-cli; library FastAccelStepper from the
+  Library Manager). It builds for the Uno, Nano and ESP32. `config.h` is generated from this
+  design (`scripts/make_firmware.py`); your wiring and the two direction settings are at the top
+  of `pendulum.ino`. An STM32 board does not run FastAccelStepper.
+
+**First power-on** (serial monitor at 115200; one letter per command, `?` lists them):
+
+1. `i`: both switches read ok; press each by hand and it reads PRESSED.
+2. `m`: the sensor report: magnet found, AGC mid-range; turn the pendulum by hand and the angle
+   follows. Any key stops the report.
+3. Clamp the frame to the desk (REPORT.md, P11). Pendulum hanging, nothing in its circle.
+4. `h`: homes slowly to the −x switch. If it heads for +x instead, it stops at that switch and
+   tells you to set `DIR_HIGH_MOVES_PLUS` to false.
+5. `c`: with the pendulum hanging still: this is its zero, every session.
+6. `d`: nudges the cart and checks the angle's direction; if it is reversed it says so (set
+   `ANGLE_SIGN` to -1) and uses the right one until reset.
+7. `f`: lift the pendulum 30-40° and let go. It prints the pivot's friction (goal 0.5 mN m) and the
+   hunting to expect, and re-centres hanging on the true vertical. Over 2.5 mN m, free the pivot
+   first ("Pendulum").
+8. `r`: kicks, swings up and balances. `s` stops; `t` streams telemetry (ms, x mm, v mm/s, angle,
+   command, mode) to plot. It stops by itself on a limit switch, past the soft limit, or when
+   the sensor fails to answer.
 
 ## Assembly order
 
@@ -176,7 +252,9 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
 4. **Idler end.** Saddle on the +x bar as above. Idler: sleeve into the pulley, front flange on,
    then slider – sleeve – slider on the M5 × 40, nut finger-tight; tension screws in from the lugs.
 5. **Carriage.** SC8UU blocks on the rods; plate on them (M4 × 10, loose), slide the cart end to end
-   and tighten the screws with the blocks parallel. Bumpers on the rods against the SK8s.
+   and tighten the screws with the blocks parallel. It must then run end to end with a light push
+   and not tighten anywhere: if it binds near one end, the rods are not parallel; move an SK8
+   (REPORT.md, P13). Bumpers on the rods against the SK8s.
 6. **Clamp.** Nuts into the column's flange pockets and side slots; column under the plate (4 × M3 ×
    16 from the top). Belt round both pulleys, its upper run into the channel; jaw up from below
    (4 × M3 × 12). An open belt: both ends in the channel, teeth in the seats.
@@ -185,5 +263,6 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
    washers), slid so the arm will turn 8 mm in front of the frame. Shaft through both KP08s, hub on
    its front end, magnet cap on its back end; KP08 set screws, then the hub's pinch screw. Arm into
    the hub (2 × M3 × 20), tip on.
-9. **Sensor.** AS5600 on the adapter, adapter on the tower, 1.5 mm from the magnet.
-10. **Switches, tray, clips, leads.** Then home, check the travel by hand, and run.
+9. **Sensor.** AS5600 on the adapter, adapter on the tower, 1.5 mm from the magnet. Free the pivot
+   ("Pendulum", pivot friction).
+10. **Switches, tray, clips, leads.** Then the first power-on ("Electronics and firmware").

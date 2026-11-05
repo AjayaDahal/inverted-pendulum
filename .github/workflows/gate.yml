@@ -1,5 +1,6 @@
 # Runs the verification gate (scripts/check_parts.py) on the committed parts, G-code, 3MF projects,
-# simulation, viewer manifest, tracker and BOM. It does not re-slice anything: the slicer is not
+# simulation, firmware (config.h, and the controller's C++ replayed against the simulation with the
+# runner's g++), viewer manifest, tracker and BOM. It does not re-slice anything: the slicer is not
 # installed here, and the G-code's hash stamps tie every file to the STL it was sliced from.
 name: gate
 

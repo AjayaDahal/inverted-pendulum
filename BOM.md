@@ -46,10 +46,10 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | 6 x 2.5 mm diametric magnet | 1 | diametrically magnetised; most AS5600 boards come with one |
 | AS5600 magnetic encoder board | 1 | corner holes 18-26 mm apart |
 | optional: 600 P/R optical encoder | 1 | instead of the AS5600: 38 mm body, 6 mm shaft, M3 on a 28-32 mm circle |
-| NEMA 17 stepper | 1 | 0.40 N m holding or more, 1/16 microstepping |
-| mechanical endstop | 2 | lever switch on a 40 x 16 mm board, holes 19 mm apart |
-| stepper driver carrier (A4988 / DRV8825) | 1 | any step/dir driver |
-| controller (your Arduino / ESP32 / STM32) | 1 | 200 Hz loop; I2C for the AS5600 (or two interrupt pins for the encoder) |
+| NEMA 17 stepper | 1 | 0.40 N m holding or more (17HS4401 class), 1/16 microstepping |
+| mechanical endstop | 2 | lever switch on a 40 x 16 mm board, holes 19 mm apart; wired normally closed |
+| stepper driver carrier (A4988 / DRV8825) | 1 | step/dir driver set to 1.5 A, with its heatsink |
+| controller (Arduino Uno / Nano or ESP32) | 1 | runs firmware/pendulum (FastAccelStepper: not an STM32) |
 | HTD 5M belt, 15 mm wide | 1 | closed loop 1214-1254 mm (the tensioner's range), or an open belt: cut 1244 mm, both ends in the clamp |
 
 ## Fasteners
@@ -80,7 +80,9 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - M3 screws or standoffs for the driver carrier and the controller on the tray (their slots take M3).
 - Optical-encoder option: 3 x M3 x 6 into the encoder's face.
 - CA glue (pulley flanges, the magnet in its cap), zip ties (sensor lead, tray), medium thread
-  locker for the pulley's set screw (optional).
+  locker for the pulley's set screw (optional), a drop of grease or oil for the idler's sleeve.
+- A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
+- Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
 **To confirm before printing:** the frame's size and the belt (`tracker.md`, "Before the first
 print"), and that the drawer holds the 15 T-nuts, the M5 x 40 idler axle and an 8 mm x

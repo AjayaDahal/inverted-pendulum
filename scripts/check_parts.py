@@ -11,10 +11,15 @@ Rebuilds every part from the scripts and checks, with build123d solids and the c
   belt       pulleys and clamp on one plane and one height; the jaw's seats in phase with the
              belt's teeth; the lower run clears the jaw; the tension range covers the belt
   bolts      every screw is long enough to engage its nut or thread and not much longer
-  sim        the cart-pole model swings up and balances inside the soft limits, within the
-             motor's force, on +-20 % model error (sim.py)
+  sim        from hanging still, the controller swings up, holds and takes a push on every
+             robustness run (model error, delay 8-20 ms, pivot friction, upright error, AS5600
+             or encoder), inside the soft limits, within the motor's force at speed less friction;
+             balanced at the pivot's goal friction, its hunting stays small
+  firmware   firmware/pendulum/config.h is current; controller.h, compiled, gives the simulated
+             controller's commands on replayed runs, and its f test finds the pivot's friction
+             on simulated free swings (needs a C++ compiler: CI has one)
   files      G-code and 3MF stamps match the current STLs, presets and brims are what the print
-             table says, the complete projects, tracker, manifest and sim.json are current
+             table says, the complete projects, tracker, BOM, manifest and sim.json are current
 Usage: python check_parts.py [--no-gcode]
 """
 import glob
@@ -304,27 +309,59 @@ def check_sim():
     r = res["robust"]
     bad = []
     if not r["all_ok"]:
-        bad.append("swing-up or balance fails on a model variant")
-    if r["x_max_m"] * 1000 > P.X_SOFT:
+        bad.append(f"fails {len(r['fails'])} of {r['runs']} runs (plant, corner): {r['fails'][:8]}")
+    if r["x_max_m"] > P.X_SOFT / 1000.0 - sim.X_MARGIN:
         bad.append(f"cart runs to {r['x_max_m'] * 1000:.0f} mm, soft limit {P.X_SOFT:.0f}")
-    if r["f_peak_N"] > 1.15 * res["limits"]["f_max_N"]:
-        bad.append(f"needs {r['f_peak_N']:.1f} N, motor gives {res['limits']['f_max_N']:.1f} N at half torque")
-    if r["v_max_m_s"] > P.V_MAX:
-        bad.append(f"speed {r['v_max_m_s']:.2f} m/s")
+    if r["force_margin_N"] < 0.0:
+        bad.append(f"needs {-r['force_margin_N']:.2f} N more than the motor gives at {P.DRIVE['i_set']} A, "
+                   f"{P.DRIVE['volts']:.0f} V, with {res['limits']['friction_N']} N of friction")
+    if r["v_max_m_s"] > P.V_MAX or r["step_rate_hz"] > P.STEP_RATE_MAX:
+        bad.append(f"speed {r['v_max_m_s']:.2f} m/s, {r['step_rate_hz']} steps/s")
+    hunt = res["hunting"]
+    goal = hunt["at_goal"]
+    if (goal["theta_pp_deg"] > sim.HUNT_LIMIT["theta_pp_deg"] or goal["cart_pp_mm"] > sim.HUNT_LIMIT["cart_pp_mm"]
+            or not all(row["balanced"] for row in hunt["table"])):
+        bad.append(f"balanced at the pivot's goal ({goal['pivot_mNm']} mN m) it hunts {goal['theta_pp_deg']} deg and "
+                   f"{goal['cart_pp_mm']} mm peak to peak (at most {sim.HUNT_LIMIT['theta_pp_deg']} and "
+                   f"{sim.HUNT_LIMIT['cart_pp_mm']}), or falls at some friction up to {P.PIVOT_FRICTION * 1000:g}")
     path = os.path.join(G.PARTS_DIR, "sim.json")
     if os.path.exists(path):
         with open(path) as f:
             old = json.load(f)
-        k_old, k_new = np.array(old.get("lqr_K", [0] * 4)), np.array(res["lqr_K"])
-        if np.abs(k_old - k_new).max() > 0.02 or abs((old.get("swing_up_s") or 0) - (res["swing_up_s"] or 0)) > 0.1:
+        k_old, k_new = np.array(old.get("lqr_K", [0] * 5)), np.array(res["lqr_K"])
+        g_old = old.get("hunting", {}).get("at_goal", {})
+        if (k_old.shape != k_new.shape or np.abs(k_old - k_new).max() > 0.02 or "firmware" not in old
+                or g_old.get("pivot_mNm") != goal["pivot_mNm"]
+                or abs(g_old.get("theta_pp_deg", -9) - goal["theta_pp_deg"]) > 0.1
+                or abs(g_old.get("cart_pp_mm", -99) - goal["cart_pp_mm"]) > 2.0
+                or abs((old.get("swing_up_s") or 0) - (res["swing_up_s"] or 0)) > 0.1):
             bad.append("parts/sim.json is stale: run sim.py")
     else:
         bad.append("no parts/sim.json")
+    lim = res["limits"]
     report("sim", not bad, "; ".join(bad) or
-           f"swings up in {res['swing_up_s']} s (worst {r['swing_up_s']} s over {r['plants']} model variants), cart "
-           f"within +-{r['x_max_m'] * 1000:.0f} mm of +-{P.X_SOFT:.0f}, peak force {res['f_peak_N']:.1f} N "
-           f"(worst {r['f_peak_N']:.1f} N; budget {res['limits']['f_max_N']:.1f} N at half the holding torque, "
-           f"15 % over allowed), holds after a 1 rad/s kick; LQR K = {res['lqr_K']}")
+           f"from hanging still: kicked, caught at {res['swing_up_s']} s (worst {r['swing_up_s']} s), holds and takes a "
+           f"{res['push_rad_s']:g} rad/s push on all {r['runs']} runs ({len(sim.PLANTS)} model variants x "
+           f"{len(sim.CORNERS)} corners, and random ones: delay {P.ACT_DELAY[0] * 1000:.0f}-"
+           f"{P.ACT_DELAY[1] * 1000:.0f} ms, pivot friction 0-{P.PIVOT_FRICTION * 1000:g} mN m, upright error "
+           f"+-{P.ANGLE_OFFSET:g} deg, AS5600 or encoder); cart within +-{r['x_max_m'] * 1000:.0f} mm of "
+           f"+-{P.X_SOFT:.0f}; force margin {r['force_margin_N']:.2f} N ({P.DRIVE['i_set']} A, "
+           f"{P.DRIVE['volts']:.0f} V, friction {lim['friction_N']} N, a_max {lim['a_max']} m/s^2); balanced, it hunts "
+           f"{goal['theta_pp_deg']} deg / {goal['cart_pp_mm']} mm peak to peak at the pivot's goal "
+           f"{goal['pivot_mNm']} mN m ({hunt['deg_per_mNm']} deg / {hunt['mm_per_mNm']} mm per mN m); "
+           f"K = {res['lqr_K']}")
+
+
+# ------------------------------------------------------------------ firmware
+def check_firmware():
+    import make_firmware as MF
+    bad = []
+    if MF.render() != MF.current():
+        bad.append("firmware/pendulum/config.h is stale: run make_firmware.py")
+    status, detail = MF.controller_test()
+    if status == "fail":
+        bad.append("controller.h: " + detail)
+    report("firmware", not bad, "; ".join(bad) or "config.h current; " + detail)
 
 
 # ------------------------------------------------------------------ files
@@ -415,6 +452,7 @@ def main():
     check_belt(parts)
     check_bolts()
     check_sim()
+    check_firmware()
     check_files(no_gcode)
     failed = [n for n, ok, _ in RESULTS if not ok]
     print(f"\n{len(RESULTS) - len(failed)}/{len(RESULTS)} checks pass ({time.time() - t0:.0f} s)"

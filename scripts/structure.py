@@ -331,7 +331,8 @@ def idler_sleeve():
     """The idler turns on this sleeve; the axle bolt clamps the sliders against its ends, not
     against the pulley."""
     ya, yb = -P.CHEEK_Y[0], P.CHEEK_Y[0]
-    return cyl_y(3.9, P.X_IDLER, P.Z_PULLEY, ya, yb) - cyl_y((P.AXLE_D + 0.4) / 2, P.X_IDLER, P.Z_PULLEY, ya - 1, yb + 1)
+    return (cyl_y(P.IDLER_JOURNAL_R, P.X_IDLER, P.Z_PULLEY, ya, yb)
+            - cyl_y((P.AXLE_D + 0.4) / 2, P.X_IDLER, P.Z_PULLEY, ya - 1, yb + 1))
 
 
 # ================================================================== travel ends

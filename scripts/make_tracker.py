@@ -36,6 +36,8 @@ one plate per job), slice, send. Masses and times are the slicer's. Edit only th
       or use it as an open belt (cut it once, both ends in the clamp).
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
+- [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
+      T-nuts go in from the side; slide-in ones mean loosening one end of each bar.
 
 ## Plates
 
@@ -86,6 +88,10 @@ def render():
   fitting the set-screw nut (motor pulley) and the sleeve (idler).
 - Before assembly: test-fit an M5 T-nut bolt through a saddle cheek, the 8 mm shaft in the hub,
   and an M3 nut in the pulley's nut slot. Ream or file printed holes rather than forcing.
+- Grease (or oil) the idler's sleeve before the pulley goes on: it is a plain bearing, and dry it
+  takes a share of the motor's force (REPORT.md, P2).
+- Free the KP08 inserts before fitting them (seals off, grease out, a drop of light oil) and run
+  the firmware's `f` test: the pivot's friction decides how still it balances (REPORT.md, P16).
 """
     return head + "\n".join(table) + "\n" + totals + tail
 

@@ -202,7 +202,7 @@ def tray_boards():
     drv = box(-70, -20, y0 + 20, y0 + 70, z0 + 5, z0 + 6.6) + box(-62, -28, y0 + 30, y0 + 60, z0 + 6.6, z0 + 18)
     ctl = box(5, 60, y0 + 30, y0 + 58, z0 + 5, z0 + 6.6) + box(12, 50, y0 + 34, y0 + 54, z0 + 6.6, z0 + 13)
     return [("driver_board", drv, "#1f5fbf", "stepper driver carrier (A4988 / DRV8825)"),
-            ("controller", ctl, "#127a4a", "controller (your Arduino / ESP32 / STM32)")]
+            ("controller", ctl, "#127a4a", "controller (Arduino Uno / Nano or ESP32)")]
 
 
 # ---------------------------------------------------------------- belt (HTD 5M), as a mesh

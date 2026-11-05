@@ -87,6 +87,7 @@ Y_MOTOR_FACE = MOTOR_PLATE_Y[1]
 
 # idler mount: cheeks either side of the pulley with windows for the axle sliders
 AXLE_D = 5.0                             # M5 bolt; 4.0 for an M4
+IDLER_JOURNAL_R = 3.9                    # the idler turns on its PETG sleeve: a plain bearing of this radius
 CHEEK_T = 6.0
 CHEEK_Y = (PULLEY_W / 2 + 0.5, PULLEY_W / 2 + 0.5 + CHEEK_T)   # 10.5..16.5
 SLIDER = dict(x=12.0, z=22.0, axle_dz=-4.0, screw_dz=6.0)       # axle 4 below, screw 6 above its centre
@@ -112,16 +113,17 @@ Z_BRIDGE1 = Z_PLATE1 + BRIDGE_T                     # 351
 Z_SHAFT = Z_BRIDGE1 + KP08["h"]                     # 366: pivot axis
 SHAFT_D = 8.0
 TOWER_T = 5.0
-Y_TOWER = Y_KP_R + 33.0                             # -31: sensor tower's front face
-Y_BRIDGE = (Y_KP_F - KP08["a"] / 2 - 1.5, Y_TOWER + TOWER_T)   # -142..-26
-BRIDGE_SLIDE = 10.0                                 # the bridge slides +-10 in y: frames 260..300 wide fit
-Y_SHAFT_END = Y_TOWER - 14.5                        # -45.5
+Y_SHAFT_END = Y_KP_R + KP08["ring_w"] / 2 + 9.0      # -45.5: 9 mm behind the rear KP08 for the cap's grip
 SHAFT_L = 115.0
 Y_SHAFT_START = Y_SHAFT_END - SHAFT_L               # -160.5
 ARM_L = 300.0                                       # pivot axis to the arm's tip
 TIP = dict(len=24.0, wall=2.4)                      # tip cap over the arm's end
 AS5600 = dict(board=23.0, pcb=1.6, chip=1.5, standoff=6.0, magnet_d=6.0, magnet_t=2.5, gap=1.5)   # adapter 3 + pads 3
-Y_MAGNET = Y_TOWER - AS5600["standoff"] - AS5600["pcb"] - AS5600["chip"] - AS5600["gap"]   # magnet face
+MAGNET_SPACER = 5.0                                 # plastic between the steel shaft's end and the magnet
+Y_MAGNET = Y_SHAFT_END + MAGNET_SPACER + AS5600["magnet_t"]                                   # magnet face
+Y_TOWER = Y_MAGNET + AS5600["gap"] + AS5600["chip"] + AS5600["pcb"] + AS5600["standoff"]   # -27.4
+Y_BRIDGE = (Y_KP_F - KP08["a"] / 2 - 1.5, Y_TOWER + TOWER_T)   # -142..-22.4
+BRIDGE_SLIDE = 10.0                                 # the bridge slides +-10 in y: frames 260..300 wide fit
 CAP = dict(y0=Y_SHAFT_END - 8.0, y1=Y_MAGNET, r=9.0)                # magnet cap on the shaft end
 LPD3806 = dict(d=38.0, length=35.5, shaft=6.0, shaft_len=13.0, boss_d=20.0, boss_h=5.0, pcd=(28.0, 32.0))
 COUPLER = dict(y0=Y_SHAFT_END - 8.0, y1=Y_TOWER - 1.0, r=9.0)
@@ -142,8 +144,28 @@ DENSITY = {"pla": 1.24, "petg": 1.27}    # g/cm^3, solid
 
 # ---------------------------------------------------------------- dynamics (sim.py)
 G_ACC = 9.81
-MOTOR_TORQUE_USE = 0.5                   # fraction of the holding torque relied on at speed
-V_MAX = 1.5                              # m/s cart speed limit (stepper ~600 rpm)
+CTRL_HZ = 200                            # control loop
+# motor: a typical 0.40 N m NEMA 17 (17HS4401 class: 1.7 A, 1.5 ohm, 2.8 mH). Check your motor's label.
+MOTOR = dict(i_rated=1.7, r=1.5, l=2.8e-3, pole_pairs=50)
+# driver current (A, set with the driver's Vref), supply (V: the laptop brick in the photos gives 19),
+# and the fraction of that torque relied on (microstep ripple, resonance)
+DRIVE = dict(i_set=1.5, volts=19.0, safety=0.8)
+BELT_TENSION = 15.0                      # N per run (DESIGN.md, "How the belt runs now")
+# Coulomb friction at the cart, N: four SC8UU (seals), the belt flexing round the pulleys; idler
+# journal friction coefficient, PETG on PETG with a drop of grease (dry: ~0.3, twice the drag)
+FRICTION = dict(rails=0.8, belt=0.3, idler_mu=0.15)
+A_MAX = 5.0                              # m/s^2: the most a controller may ask for; the force budget decides
+V_MAX = 1.0                              # m/s cart speed limit (400 rpm)
 STEPS_PER_REV = 200 * 16                 # 1/16 microstepping
+STEP_RATE_MAX = 40000.0                  # steps/s: FastAccelStepper on an ATmega328P manages ~50k
+# What the controller must survive (sim.py, CORNERS): delay from reading the angle to the motor moving
+# (the step generator plans 10 ms ahead, plus the loop), Coulomb friction at the pivot (two KP08s:
+# the firmware's f test measures it), upright calibration error (sensor non-linearity)
+ACT_DELAY = (0.008, 0.020)               # s
+PIVOT_FRICTION = 0.0025                  # N m: the swing-up is checked up to this
+# Balanced, the pivot's stick-slip makes the pendulum hunt (about 3 deg and 37 mm peak to peak per
+# mN m): the goal for the pivot, and the sim's nominal run (DESIGN.md, "Pendulum")
+PIVOT_FRICTION_GOAL = 0.0005             # N m
+ANGLE_OFFSET = 1.0                       # deg
 MASS_VITAMINS_CART = dict(sc8uu=4 * 0.040, kp08=2 * 0.065, screws=0.040, as5600=0.004)
 STEEL = 7.85                             # g/cm^3
