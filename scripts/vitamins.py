@@ -1,6 +1,6 @@
 """The owner's hardware, modelled for the assembly, the clash checks and the viewer: the 2020/2040
 frame, rods, SK8 and SC8UU, KP08 pillow blocks, NEMA 17, pivot shaft, sensors, limit switches,
-boards and the HTD 5M belt. Catalogue sizes; envelopes where the detail does not matter.
+boards and the HTD belt. Catalogue sizes; envelopes where the detail does not matter.
 
 Each item is built in the assembly frame at the home pose (cart at x = 0, pendulum upright).
 `items()` lists them with their motion group, colour and label.
@@ -205,7 +205,7 @@ def tray_boards():
             ("controller", ctl, "#127a4a", "controller (Arduino Uno / Nano or ESP32)")]
 
 
-# ---------------------------------------------------------------- belt (HTD 5M), as a mesh
+# ---------------------------------------------------------------- belt (HTD), as a mesh
 def belt_path(x_motor=P.X_MOTOR, x_idler=P.X_IDLER, z=P.Z_PULLEY, r=P.R_TIP, n_arc=160, step=0.4):
     """Points along the belt's land (tooth-side face) loop and the outward normal at each, by arc
     length: upper run motor -> idler, round the idler, lower run back, round the motor pulley."""
@@ -282,5 +282,5 @@ def items(belt=True):
         out.append((n, s, "frame", c, lab))
     if belt:
         b, _ = belt_solid()
-        out.append(("belt", b, "belt", "#1d1f22", "HTD 5M belt, 15 mm"))
+        out.append(("belt", b, "belt", "#1d1f22", f"HTD {P.BELT['pitch']:.0f}M belt, {P.BELT['width']:.0f} mm"))
     return out

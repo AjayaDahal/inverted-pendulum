@@ -1,13 +1,14 @@
 # Notes for agents
 
 - The owner's rule: **nothing new to buy**. Design around the parts on his machine (2020/2040
-  frame, 8 mm rods on SK8s, SC8UU blocks, KP08s, NEMA 17, HTD 5M 15 mm belt, AS5600 or a 600 P/R
+  frame, 8 mm rods on SK8s, SC8UU blocks, KP08s, NEMA 17, a closed HTD 8M 20 mm belt, AS5600 or a 600 P/R
   optical encoder, his own driver and controller) and plain M3/M4/M5 screws with 20-series
   T-nuts. Everything else is printed. `BOM.md` lists it all.
 - His photos are in `git_ignore_this/` and stay private: the folder is in `.gitignore`; never
   commit or publish them, or any picture taken from them.
-- The frame's size is an estimate from the photos (`REPORT.md`, O1). When he measures it, put the
-  numbers in `scripts/params.py` (`FRAME_L`, `FRAME_W`, `FRAME_H`, `ROD_SPACING`, `ROD_L`) and run
+- The frame's length and width, the rods' spacing and the belt come from his measuring photos;
+  the frame's height and the belt's tooth count are still open (`REPORT.md`, O1, O2). When he
+  measures them, put the numbers in `scripts/params.py` (`FRAME_H`, `BELT_TEETH`) and run
   `python scripts/build_all.py`. Every other dimension follows from them.
 - After any change to `scripts/` or `slicer_profiles/`, run `python scripts/build_all.py`
   (rebuild, re-slice, re-simulate, verify; `--no-slice` without the slicer).
@@ -37,13 +38,19 @@
   drive current, friction) are in `params.py`; each one is a premortem finding, so loosen none
   without the check on the machine that justifies it.
 - "Balanced" is not "still": a candidate that passes every run can still hunt. The pivot's
-  stick-slip sets the hunting (`sim.hunting`, REPORT.md P16), and gains, an observer and friction
-  compensation barely move it, so the fix is the pivot (`PIVOT_FRICTION_GOAL`, the firmware's `f`
-  test, whose estimator `PivotTest` the C++ test checks on simulated swings). The gate bounds the
-  hunting at the goal: keep it passing rather than raising `sim.HUNT_LIMIT`.
+  stick-slip sets the hunting (`sim.hunting`, REPORT.md P16): an observer and friction compensation
+  barely move it, but stiff angle and speed gains (large q on v and theta, small on x) delay its
+  onset, so `tune_controller.py` ranks passing candidates by it. The rest is the pivot
+  (`PIVOT_FRICTION_GOAL`, the firmware's `f` test, whose estimator `PivotTest` the C++ test checks on
+  simulated swings). The gate bounds the hunting at the goal: keep it passing rather than raising
+  `sim.HUNT_LIMIT`.
+- The machine's numbers come from the owner's measuring photos (REPORT.md, M1-M4), except the
+  frame's height and the closed belt's tooth count (`FRAME_H`, `BELT_TEETH`: O1, O2). `BELT_TEETH`
+  sets the pulleys' spacing, and the travel stops follow it.
 - Firmware compile check (not in CI): arduino-cli with the `arduino:avr` and `esp32:esp32` cores and
   FastAccelStepper; it builds for `arduino:avr:uno`, `arduino:avr:nano` and `esp32:esp32:esp32`
-  with both sensors (`USE_ENCODER` 0 and 1) and no warnings in its own files.
+  with both sensors (`USE_ENCODER` 0 and 1) and no warnings in its own files. The Nano (old
+  bootloader) build with the AS5600 uses 98 % of its flash: keep new firmware text short.
 - Renders: after a geometry change, `python scripts/capture.py` (headless Edge, a few minutes)
   re-renders `renders/*.png` and the README's GIFs; `--gif` redoes only the animations. Check a
   GIF has more than one frame: Pillow merges identical frames into one.

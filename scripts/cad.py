@@ -109,7 +109,7 @@ def screw_hole_z(d, x, y, z0, z1, head=None, head_at="top", head_depth=0.0):
     return s
 
 
-# ---------------------------------------------------------------- HTD 5M teeth
+# ---------------------------------------------------------------- HTD teeth
 def pulley_teeth_face(teeth=P.TEETH):
     """The toothed section's outline in the XY plane: the tip circle less the circular grooves."""
     r_c = P.R_TIP - P.GROOVE_DEPTH + P.GROOVE_R

@@ -30,10 +30,11 @@ one plate per job), slice, send. Masses and times are the slicer's. Edit only th
 
 ## Before the first print
 
-- [ ] Measure the frame and set `FRAME_L`, `FRAME_W`, `FRAME_H`, `ROD_SPACING` in `scripts/params.py`
-      (DESIGN.md, "Measure first"); run `python scripts/build_all.py`.
-- [ ] Read the belt's marking: HTD 5M, 15 mm wide? Closed loop: its length must be {LOOP} mm,
-      or use it as an open belt (cut it once, both ends in the clamp).
+- [ ] Measure the frame's height (desk to the top of the end bars) and set `FRAME_H` in
+      `scripts/params.py` (DESIGN.md, "Measure first"); length, width and the rods' spacing come
+      from your measuring photos.
+- [ ] Count the belt's teeth (mark one with a pen, go round once) and set `BELT_TEETH` (now
+      {TEETH}, {LOOP} mm): the pulleys' spacing follows it. Then run `python scripts/build_all.py`.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
 - [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
@@ -58,8 +59,7 @@ def _status():
 
 def render():
     status = _status()
-    lo, hi = P.BELT_LOOP_RANGE
-    head = HEAD.replace("{LOOP}", f"{lo:.0f}-{hi:.0f}")
+    head = HEAD.replace("{TEETH}", str(P.BELT_TEETH)).replace("{LOOP}", f"{P.BELT_LOOP:.0f}")
     rows, tot = [], {"pla": [0.0, 0.0], "petg": [0.0, 0.0]}
     for i, (plate, items) in enumerate(PT.PLATES.items(), start=1):
         g, mins, stamp = SA.stats(PT.gcode_path(plate))

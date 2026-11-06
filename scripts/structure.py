@@ -28,14 +28,14 @@ def _chamfered_rect(x0, x1, y0, y1, c):
 # ================================================================== carriage
 SC_HOLES = [(sx * P.BEARING_X + dx * P.SC8UU["hole_l"] / 2, sy * P.Y_ROD + dy * P.SC8UU["hole_w"] / 2)
             for sx in (-1, 1) for sy in (-1, 1) for dx in (-1, 1) for dy in (-1, 1)]
-BRIDGE_BOLTS = [(sx * (P.BRIDGE_X + 7.0), y) for sx in (-1, 1) for y in (-95.0, -45.0)]
+BRIDGE_BOLTS = [(sx * (P.BRIDGE_X + 7.0), y) for sx in (-1, 1) for y in P.BRIDGE_BOLT_Y]
 CLAMP_BOLTS = [(sx * 25.0, sy * 9.0) for sx in (-1, 1) for sy in (-1, 1)]
 CB3 = 3.2                                  # M3 head counterbore depth
 CB4 = 4.2                                  # M4 head counterbore depth
 
 
 def carriage_plate():
-    """Rides on the four SC8UU blocks (slotted holes: the rods may be 170-190 mm apart); the
+    """Rides on the four SC8UU blocks (holes slotted +-SC_SLOT in y, for the rods' spacing); the
     pivot bridge bolts on top, the belt clamp underneath, both on nuts in pockets."""
     z0, z1 = P.Z_PLATE0, P.Z_PLATE1
     p = prism_xy(_chamfered_rect(-P.PLATE_X, P.PLATE_X, -P.PLATE_Y, P.PLATE_Y, 6.0), z0, z1)
@@ -69,7 +69,8 @@ def pivot_bridge():
     fl_t = 6.0
     for sx in (-1, 1):
         x0, x1 = sorted((sx * P.BRIDGE_X, sx * (P.BRIDGE_X + 14.0)))
-        b += box(x0, x1, -95.0 - P.BRIDGE_SLIDE - 9.0, -45.0 + P.BRIDGE_SLIDE + 9.0, z0, z0 + fl_t)
+        b += box(x0, x1, P.BRIDGE_BOLT_Y[0] - P.BRIDGE_SLIDE - 9.0, P.BRIDGE_BOLT_Y[1] + P.BRIDGE_SLIDE + 9.0,
+                 z0, z0 + fl_t)
     for x, y in BRIDGE_BOLTS:
         b -= slot_z(P.D_M5 / 2, x, y - P.BRIDGE_SLIDE, x, y + P.BRIDGE_SLIDE, z0 - 1, z0 + fl_t + 1)
     for y in (P.Y_KP_F, P.Y_KP_R):        # KP08 bolts, nuts in pockets from below
@@ -141,7 +142,8 @@ def _clamp_levels():
 
 def belt_clamp():
     """Stiff box column from the plate down to the upper run. The belt (open ends or a closed
-    loop) lies in a 16 mm channel under a flat ceiling; the jaw underneath seats its teeth."""
+    loop) lies in a channel 1 mm wider than it, under a flat ceiling; the jaw underneath seats its
+    teeth."""
     c = P.CLAMP
     z_ceil, z_side, _ = _clamp_levels()
     fx, fy, ft = c["flange"]
@@ -173,8 +175,8 @@ def belt_clamp():
 
 
 def clamp_jaw():
-    """Under the belt: a ridge with HTD 5M tooth seats (one tooth centred at x = 0) that rises
-    into the channel, on a base screwed up into the clamp's side walls (4 x M3)."""
+    """Under the belt: a ridge with HTD tooth seats (one tooth centred at x = 0) that rises into
+    the channel, on a base screwed up into the clamp's side walls (4 x M3)."""
     c = P.CLAMP
     _, z_side, z_jaw0 = _clamp_levels()
     hx, hy = c["len"] / 2, c["side"]
@@ -216,9 +218,10 @@ IDLER_BOLTS_YZ = [(-19.0, P.Z_BAR_SLOTS[0]), (19.0, P.Z_BAR_SLOTS[0])]
 
 
 def motor_mount():
-    """Hangs the NEMA 17 under the -x top end bar, shaft along y, pulley on the belt plane.
-    Saddle (4 x M5 into T-nuts in the bar's 40 mm faces), motor plate with the screw heads sunk
-    so the pulley's flange clears them, and side walls either side of the motor body."""
+    """Hangs the NEMA 17 under the -x top end bar, shaft along y, pulley on the belt plane (inboard
+    of the bar when the belt is short: a web under the bar carries it). Saddle (4 x M5 into T-nuts
+    in the bar's 40 mm faces), motor plate with the screw heads sunk so the pulley's flange clears
+    them, and side walls either side of the motor body."""
     m = P.NEMA17
     y0, y1 = P.MOTOR_PLATE_Y
     yb = y1 + 32.0
@@ -226,6 +229,7 @@ def motor_mount():
     x0, x1 = P.X_MOTOR - a - 0.8, P.X_MOTOR + a + 0.8
     zb = P.Z_PULLEY - a - 1.0
     s = _saddle(-1, y0, yb)
+    s += box(min(x0 - 4.0, -P.X_BAR_OUT), x1 + 4.0, y0, yb, *P.SADDLE_WEB)      # web: saddle to the motor box
     s += box(x0 - 0.01, x1 + 0.01, y0, y1, zb, P.SADDLE_WEB[0] + 0.01)          # motor plate
     for xa, xb in ((x0 - 4.0, x0), (x1, x1 + 4.0)):                            # side walls
         s += box(xa, xb, y0, yb, zb, P.SADDLE_WEB[0] + 0.01)
@@ -241,8 +245,8 @@ def motor_mount():
 
 
 def pulley_body(bore="motor"):
-    """HTD 5M pulley, local frame (axis z): flange on the bed at z 0..1.5, teeth to 18.5, boss for
-    the pressed-on front flange to 20. Motor: D bore and a sunk M3 set screw with a captive nut."""
+    """HTD pulley, local frame (axis z): flange on the bed at z 0..1.5, teeth, boss for the
+    pressed-on front flange. Motor: D bore and a sunk M3 set screw with a captive nut."""
     teeth = extrude(pulley_teeth_face(), amount=P.TOOTH_W)
     p = Pos(0, 0, P.FLANGE_T) * teeth
     p += cyl_z(P.R_FLANGE, 0, 0, 0, P.FLANGE_T + 0.01)
@@ -298,6 +302,8 @@ def idler_mount():
     wx0, wx1, wz0, wz1 = _window()
     cz0 = wz0 - 7.0
     lug = 8.0
+    xo = P.X_BAR_OUT + P.SADDLE_T
+    s += box(min(wx0 - 7.0, P.X_BAR_IN - P.SADDLE_T), P.X_BAR_IN, y0, y1, *P.SADDLE_WEB)   # web out to the cheeks
     for sy in (-1, 1):
         ya, yb = sorted((sy * P.CHEEK_Y[0], sy * P.CHEEK_Y[1]))
         cheek = box(wx0 - 7.0, wx1 + lug, ya, yb, cz0, P.SADDLE_WEB[0] + 0.01)
@@ -305,10 +311,9 @@ def idler_mount():
         zs = P.Z_PULLEY - P.SLIDER["axle_dz"] + P.SLIDER["screw_dz"]
         cheek -= cyl_x(P.D_M3 / 2, sy * (P.CHEEK_Y[0] + P.CHEEK_T / 2), zs, wx1 - 1, wx1 + lug + 1)
         s += cheek
-        # gusset from the cheek's outboard end up the outer saddle cheek
-        xo = P.X_BAR_OUT + P.SADDLE_T
-        s += prism_xz([(xo - 0.01, P.SADDLE_WEB[0] - 0.01), (wx1 + lug, P.SADDLE_WEB[0] - 0.01),
-                       (xo - 0.01, P.SADDLE_WEB[0] + 24.0)], ya, yb)
+        if wx1 + lug > xo:                 # cheek reaching past the bar: gusset up the outer saddle cheek
+            s += prism_xz([(xo - 0.01, P.SADDLE_WEB[0] - 0.01), (wx1 + lug, P.SADDLE_WEB[0] - 0.01),
+                           (xo - 0.01, P.SADDLE_WEB[0] + 24.0)], ya, yb)
     return _saddle_bolts(s, 1, IDLER_BOLTS_YZ)
 
 
@@ -337,9 +342,10 @@ def idler_sleeve():
 
 # ================================================================== travel ends
 def rod_bumper():
-    """Split collar on the rod against the SK8's inner face (first copy: +x end, back rod; its
-    clamp lug points outboard in y). The SC8UU stops on it, 4 mm after the limit switch trips."""
-    x0, x1 = P.X_SK8_IN - P.BUMPER_W, P.X_SK8_IN
+    """Split collar on the rod where the cart must stop: against the SK8's inner face, or inboard
+    of it when the pulleys sit inboard (first copy: +x end, back rod; its clamp lug points
+    outboard in y). The SC8UU stops on it, 4 mm after the limit switch trips."""
+    x0, x1 = P.X_BUMPER, P.X_BUMPER + P.BUMPER_W
     y, z = P.Y_ROD, P.Z_ROD
     r = P.BUMPER_OD / 2
     c = cyl_x(r, y, z, x0, x1)
@@ -519,15 +525,15 @@ PARTS = {
     "belt_clamp": dict(fn=belt_clamp, material=PLA, group="cart", copies=[I4], print=[("x", 180)],
                        role="belt clamp: stiff column from the carriage down to the belt's upper run"),
     "clamp_jaw": dict(fn=clamp_jaw, material=PETG, group="cart", copies=[I4], print=[],
-                      role="clamp jaw: HTD 5M tooth seats under the belt"),
+                      role=f"clamp jaw: HTD {P.BELT['pitch']:.0f}M tooth seats under the belt"),
     "motor_mount": dict(fn=motor_mount, material=PETG, group="frame", copies=[I4], print=[("x", 90)],
                         role="motor mount: NEMA 17 under the -x top end bar, pulley on the belt plane"),
     "motor_pulley": dict(fn=motor_pulley, material=PETG, group="motor_pulley", local=True,
                          copies=[_pulley_to_assembly(P.X_MOTOR)], print=[],
-                         role="HTD 5M 30T pulley on the motor shaft (set screw on the flat)"),
+                         role=f"HTD {P.BELT['pitch']:.0f}M {P.TEETH}T pulley on the motor shaft (set screw on the flat)"),
     "idler_pulley": dict(fn=idler_pulley, material=PETG, group="idler_pulley", local=True,
                          copies=[_pulley_to_assembly(P.X_IDLER)], print=[],
-                         role="HTD 5M 30T idler on its sleeve"),
+                         role=f"HTD {P.BELT['pitch']:.0f}M {P.TEETH}T idler on its sleeve"),
     "pulley_flange": dict(fn=pulley_flange, material=PETG, group="pulleys", local=True,
                           copies=[G.mat4(G.rotation("x", 90.0), (P.X_MOTOR, -P.PULLEY_W / 2 + P.FLANGE_T, P.Z_PULLEY)),
                                   G.mat4(G.rotation("x", 90.0), (P.X_IDLER, -P.PULLEY_W / 2 + P.FLANGE_T, P.Z_PULLEY))],

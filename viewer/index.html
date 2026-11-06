@@ -42,7 +42,7 @@
   </fieldset>
   <fieldset><legend>Move it</legend>
     <div class="row"><span>cart</span><span id="xv">0 mm</span></div>
-    <input id="x" type="range" min="-178" max="178" step="1" value="0">
+    <input id="x" type="range" min="-241" max="241" step="1" value="0">
     <div class="row"><span>pendulum (0 = up)</span><span id="tv">0°</span></div>
     <input id="t" type="range" min="-180" max="180" step="1" value="0">
     <button id="play">▶ simulated swing-up</button><button id="hang">hang down</button>
@@ -91,6 +91,7 @@ const grid = new THREE.GridHelper(1800, 36, 0xc9d0d8, 0xdde2e7); grid.rotation.x
 const status = $('status');
 const man = await (await fetch('manifest.json', { cache: 'no-store' })).json();
 const L = man.layout;
+$('x').min = -Math.round(L.x_stop); $('x').max = Math.round(L.x_stop);
 const loader = new STLLoader();
 const geoCache = new Map();
 async function geo(url) {
@@ -223,16 +224,17 @@ function showMode() {
 
 // ---- views
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const SC = L.frame[0] / 560, YP = (L.y_pivot[0] + L.y_pivot[1]) / 2;   // views were set on a 560 mm frame
 const VIEWS = {
-  iso: { dir: V(0.62, -0.72, 0.42), c: V(0, -10, 230), r: 470 },
-  front: { dir: V(0, -1, 0.1), c: V(0, -40, 230), r: 430 },
-  side: { dir: V(1, -0.02, 0.12), c: V(0, -30, 250), r: 320 },
-  top: { dir: V(0, -0.001, 1), up: V(0, 1, 0), c: V(0, -10, 200), r: 420 },
-  belt: { dir: V(0, -1, 0.02), c: V(0, 0, 255), r: 360 },
-  motor: { dir: V(-0.62, -0.62, 0.48), c: V(-262, 10, 238), r: 95 },
-  idler: { dir: V(0.62, -0.62, 0.48), c: V(270, 0, 238), r: 90 },
-  cart: { dir: V(0.55, -0.72, 0.5), c: V(0, -45, 320), r: 175 },
-  sensor: { dir: V(0.75, 0.45, 0.42), c: V(0, -40, 366), r: 62 },
+  iso: { dir: V(0.62, -0.72, 0.42), c: V(0, -10, 230), r: 470 * SC },
+  front: { dir: V(0, -1, 0.1), c: V(0, -40, 230), r: 430 * SC },
+  side: { dir: V(1, -0.02, 0.12), c: V(0, -30, 335), r: 390 },
+  top: { dir: V(0, -0.001, 1), up: V(0, 1, 0), c: V(0, -10, 200), r: 420 * SC },
+  belt: { dir: V(0, -1, 0.02), c: V(0, 0, 255), r: 360 * SC },
+  motor: { dir: V(-0.62, -0.62, 0.48), c: V(L.x_motor + 8, 10, L.z_pulley + 12), r: 95 },
+  idler: { dir: V(0.62, -0.62, 0.48), c: V(L.x_idler - 2, 0, L.z_pulley + 12), r: 90 },
+  cart: { dir: V(0.55, -0.72, 0.5), c: V(0, YP + 58, 320), r: 175 },
+  sensor: { dir: V(0.75, 0.45, 0.42), c: V(0, L.y_pivot[1] + 5.5, L.z_shaft), r: 62 },
   plates: { dir: V(0, -0.35, 1), up: V(0, 1, 0), c: V(0, -110, 0), r: 470 },
 };
 function frameView(v, aspect) {
@@ -245,9 +247,9 @@ function frameView(v, aspect) {
 
 // ---- labels (overlay, and drawn into captures)
 const LABELS = { carriage_plate: 'carriage plate', pivot_bridge: 'pivot bridge + sensor tower', belt_clamp: 'belt clamp',
-  clamp_jaw: 'belt jaw', motor_mount: 'motor mount', motor_pulley: '30T HTD 5M pulley', idler_mount: 'idler mount (tensioner)',
+  clamp_jaw: 'belt jaw', motor_mount: 'motor mount', motor_pulley: 'motor pulley', idler_mount: 'idler mount (tensioner)',
   idler_pulley: 'idler', pendulum_hub: 'hub', pendulum_arm: 'pendulum arm', pendulum_tip: 'tip cap', kp08_front: 'KP08',
-  nema17: 'NEMA 17', belt: 'HTD 5M belt', as5600: 'AS5600', switch_mount_1: 'limit switch', rod_bumper_1: 'bumper',
+  nema17: 'NEMA 17', belt: 'HTD belt', as5600: 'AS5600', switch_mount_1: 'limit switch', rod_bumper_1: 'bumper',
   electronics_tray: 'electronics tray', sc8uu_pf: 'SC8UU', rod_f: '8 mm rod' };
 function labelList() {
   if (S.plates) return plateLabels.map(([p, t]) => [p, t]);
@@ -353,15 +355,15 @@ if (capture) {
     await shot('09_sensor', () => frameView(VIEWS.sensor, A));
     await shot('10_hanging', () => { setPose(-110, 180); frameView(VIEWS.iso, A); });
     await shot('11_labelled', () => { S.labels = true; setPose(60, 12); frameView(VIEWS.iso, A); });
-    await shot('12_burst', () => { S.burst = S.burstTo = 1; applyBurst(); frameView({ ...VIEWS.iso, r: 560 }, A); });
+    await shot('12_burst', () => { S.burst = S.burstTo = 1; applyBurst(); frameView({ ...VIEWS.iso, r: 560 * SC }, A); });
     await shot('13_as_built_v0', () => { S.v0 = true; showMode(); frameView(VIEWS.iso, A); });
-    await shot('14_v0_belt_cut', () => { S.v0 = true; S.section = false; showMode(); frameView({ dir: V(0.25, -1, 0.3), c: V(0, 0, 270), r: 380 }, A); });
+    await shot('14_v0_belt_cut', () => { S.v0 = true; S.section = false; showMode(); frameView({ dir: V(0.25, -1, 0.3), c: V(0, 0, 270), r: 380 * SC }, A); });
     await shot('15_print_plates', () => { S.plates = true; showMode(); frameView(VIEWS.plates, A); });
   }
   await movie('anim_turntable', 48, 90, (f) => { frameView({ ...VIEWS.iso, dir: V(Math.cos(f * 2 * Math.PI - 0.86) * 0.95, Math.sin(f * 2 * Math.PI - 0.86) * 0.95, 0.42) }, A); setPose(0, 0); });
   { const n = Math.min(tr.t.length, Math.round(8 * tr.fps)); const step = Math.max(1, Math.round(tr.fps / 10));
     await movie('anim_swingup', Math.floor(n / step), Math.round(1000 * step / tr.fps), (f, i) => { const [x, t] = simAt(i * step / tr.fps); setPose(x, t); frameView(VIEWS.iso, A); }, 640); }
-  await movie('anim_burst', 30, 70, (f) => { const k = f < 0.5 ? f * 2 : 2 - f * 2; S.burst = k * k * (3 - 2 * k); applyBurst(); frameView({ ...VIEWS.iso, r: 560 }, A); });
+  await movie('anim_burst', 30, 70, (f) => { const k = f < 0.5 ? f * 2 : 2 - f * 2; S.burst = k * k * (3 - 2 * k); applyBurst(); frameView({ ...VIEWS.iso, r: 560 * SC }, A); });
   await fetch('/__done__', { method: 'POST' });
   status.textContent = 'capture done';
 } else {

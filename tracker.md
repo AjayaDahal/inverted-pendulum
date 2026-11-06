@@ -6,10 +6,11 @@ one plate per job), slice, send. Masses and times are the slicer's. Edit only th
 
 ## Before the first print
 
-- [ ] Measure the frame and set `FRAME_L`, `FRAME_W`, `FRAME_H`, `ROD_SPACING` in `scripts/params.py`
-      (DESIGN.md, "Measure first"); run `python scripts/build_all.py`.
-- [ ] Read the belt's marking: HTD 5M, 15 mm wide? Closed loop: its length must be 1214-1254 mm,
-      or use it as an open belt (cut it once, both ends in the clamp).
+- [ ] Measure the frame's height (desk to the top of the end bars) and set `FRAME_H` in
+      `scripts/params.py` (DESIGN.md, "Measure first"); length, width and the rods' spacing come
+      from your measuring photos.
+- [ ] Count the belt's teeth (mark one with a pen, go round once) and set `BELT_TEETH` (now
+      175, 1400 mm): the pulleys' spacing follows it. Then run `python scripts/build_all.py`.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
 - [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
@@ -19,14 +20,14 @@ one plate per job), slice, send. Masses and times are the slicer's. Edit only th
 
 | # | Plate | Material | Parts | Filament | Time | Status |
 |---|---|---|---|---|---|---|
-| 1 | `petg_1_belt_drive` | PETG | motor_mount, idler_mount, clamp_jaw, 2 x idler_slider, idler_sleeve, 4 x rod_bumper, 3 x cable_clip (motor mount, idler mount and sliders, belt jaw, bumpers, clips) | 137 g | 5.3 h | to print |
-| 2 | `petg_2_pulleys_pivot` | PETG | motor_pulley, idler_pulley, 2 x pulley_flange, pendulum_hub, magnet_cap (both pulleys and their front flanges, pendulum hub, magnet cap) | 65 g | 3.0 h | to print |
-| 3 | `pla_1_carriage_plate` | PLA | carriage_plate (carriage plate) | 151 g | 5.9 h | to print |
-| 4 | `pla_2_bridge_clamp_tray` | PLA | pivot_bridge, belt_clamp, electronics_tray, 2 x switch_mount, as5600_mount (pivot bridge, belt clamp, electronics tray, switch blocks, AS5600 adapter) | 214 g | 8.5 h | to print |
+| 1 | `petg_1_belt_drive` | PETG | motor_mount, idler_mount, clamp_jaw, 2 x idler_slider, idler_sleeve, 4 x rod_bumper, 3 x cable_clip (motor mount, idler mount and sliders, belt jaw, bumpers, clips) | 157 g | 6.0 h | to print |
+| 2 | `petg_2_pulleys_pivot` | PETG | motor_pulley, idler_pulley, 2 x pulley_flange, pendulum_hub, magnet_cap (both pulleys and their front flanges, pendulum hub, magnet cap) | 81 g | 3.5 h | to print |
+| 3 | `pla_1_carriage_plate` | PLA | carriage_plate (carriage plate) | 106 g | 4.2 h | to print |
+| 4 | `pla_2_bridge_clamp_tray` | PLA | pivot_bridge, belt_clamp, electronics_tray, 2 x switch_mount, as5600_mount (pivot bridge, belt clamp, electronics tray, switch blocks, AS5600 adapter) | 219 g | 8.8 h | to print |
 | 5 | `pla_3_arm` | PLA | pendulum_arm, pendulum_tip (pendulum arm (diagonal) and tip cap) | 41 g | 1.7 h | to print |
 | 6 | `petg_3_option_encoder` | PETG | coupler (only for a 600 P/R optical encoder instead of the AS5600) | 5 g | 0.3 h | optional |
 
-**Totals** (without the optional encoder coupler): PLA 405 g, 16.2 h; PETG 202 g, 8.4 h; 24.6 h in all.
+**Totals** (without the optional encoder coupler): PLA 366 g, 14.7 h; PETG 238 g, 9.5 h; 24.3 h in all.
 
 ## Reminders for print time
 

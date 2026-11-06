@@ -183,7 +183,7 @@ def check_travel(parts, vit, belt_env):
     sboxes = {n: bb(s) for n, s in static.items()}
     bad, gaps = [], []
     allowed = {("belt_clamp", "belt_envelope"), ("clamp_jaw", "belt_envelope")}
-    for x in (-P.X_STOP, -P.X_SWITCH, -120.0, -60.0, 0.0, 60.0, 120.0, P.X_SWITCH, P.X_STOP):
+    for x in (-P.X_STOP, -P.X_SWITCH, -180.0, -120.0, -60.0, 0.0, 60.0, 120.0, 180.0, P.X_SWITCH, P.X_STOP):
         for cn, cs in cart.items():
             m = moved(cs, x)
             mb = bb(m)
@@ -195,12 +195,14 @@ def check_travel(parts, vit, belt_env):
                     bad.append(f"x={x:+.0f}: {cn} x {sn} {v:.1f} mm3")
     # stops: the SC8UU ends meet the bumpers exactly at X_STOP; the switch trips before
     sc_end = P.BEARING_X + P.SC8UU["l"] / 2
-    stop_gap = (P.X_SK8_IN - P.BUMPER_W) - (P.X_STOP + sc_end)
+    stop_gap = P.X_BUMPER - (P.X_STOP + sc_end)
     import vitamins as Vv
     g = Vv.endstop_geometry(1)
     trip = g["x_tip"] - P.PLATE_X
     if abs(stop_gap) > 1e-6:
         bad.append(f"SC8UU stops {stop_gap:.2f} mm from the bumpers at X_STOP")
+    if P.X_BUMPER + P.BUMPER_W > P.X_SK8_IN + 1e-6:
+        bad.append(f"bumpers reach into the SK8s ({P.X_BUMPER + P.BUMPER_W:.1f} > {P.X_SK8_IN:.1f})")
     if not (P.X_SOFT < trip < P.X_STOP - 2.0):
         bad.append(f"switch trips at {trip:.1f}, soft limit {P.X_SOFT}, stop {P.X_STOP}")
     # the switch body must stay outboard of the plate at the stop
@@ -269,6 +271,11 @@ def check_belt(parts):
         bad.append(f"lower run only {gap:.1f} mm under the jaw's screw heads")
     if not (P.IDLER_TRAVEL[0] < P.X_IDLER < P.IDLER_TRAVEL[1]):
         bad.append("nominal idler outside its travel")
+    # the closed loop sets the pulleys' spacing: both must stay within the end frames
+    if -P.X_MOTOR > P.X_END + 1e-6 or P.IDLER_TRAVEL[1] > P.X_END + 12.0:
+        bad.append(f"a {P.BELT_TEETH}-tooth loop ({P.BELT_LOOP:.0f} mm) puts the pulleys {2 * P.X_IDLER:.0f} mm apart: "
+                   f"outside the end frames ({2 * P.X_END:.0f}); cut it into an open belt")
+    info.append(f"closed loop of {P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm): axles {P.C_NOM:.0f} mm apart")
     flange_room = (P.TOOTH_W - P.BELT["width"]) / 2
     if flange_room < 0.5:
         bad.append("belt rubs the flanges")

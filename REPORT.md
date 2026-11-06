@@ -5,8 +5,10 @@ monitor behind it for scale; the KP08 (55 mm), SK8 (42 mm) and NEMA 17 (42.3 mm)
 better than the monitors. `scripts/asbuilt.py` models it (parts/as_built/, the viewer's "as built"
 mode) and `scripts/check_parts.py` checks this design. The photos show a 2020 frame with 2040 top
 end bars, two 8 mm rods on SK8 supports, a printed carriage plate on four SC8UU blocks, two KP08
-pillow blocks, a NEMA 17, two printed pulleys and an HTD 5M belt (about 15 mm). The structure was
-unfinished, and the belt did not run properly.
+pillow blocks, a NEMA 17, two printed pulleys and an HTD belt (read then as 5M, about 15 mm). The
+structure was unfinished, and the belt did not run properly. A second set of 20 photos, with a
+tape and calipers on the machine, then measured it: the model's frame, rods and belt were wrong,
+and the design was rebuilt to the measurements (M1-M4).
 
 <img src="renders/00_v0_vs_v1.png" alt="Left: the machine as built with findings A1-A9 marked. Right: this design">
 
@@ -24,7 +26,8 @@ unfinished, and the belt did not run properly.
 | A8 | One limit switch, no hard stops | major | fixed in v1 (bumpers + two switches) |
 | A9 | Loose electronics and leads | minor | fixed in v1 (tray, clips, strain relief) |
 | G1-G6 | Found by the gate while designing v1 | | all fixed (below) |
-| O1-O4 | Open: to confirm on the real machine | | open (below) |
+| M1-M4 | The measuring photos: frame, rods and belt not as modelled | major: the parts would not have fitted | fixed: design rebuilt to the measurements (below) |
+| O1-O4 | Open: to confirm on the real machine | | open: the frame's height and the belt's tooth count (below) |
 | P1-P16 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
 
 ## As built (v0)
@@ -43,13 +46,14 @@ the axle bolt then clamps the sliders' flanges against the cheeks.
 
 **A3. Nothing puts the pulleys and the clamp in one plane.** The motor hangs from one post on spacers,
 the idler from another post on its own bracket, the belt link from the plate: three separately
-located parts. *v1:* the belt's plane is the frame's centre line (y = 0). Both pulleys sit in the end
-frames' centre planes at the same height, both mounts take their place from the same kind of saddle on
-the top end bars, and the belt clamp hangs from the carriage's centre. The gate checks it (`belt`).
+located parts. *v1:* the belt's plane is the frame's centre line (y = 0). Both pulleys hang from the
+top end bars at the same height, spaced for the closed loop, both mounts take their place from the
+same kind of saddle on the bars, and the belt clamp hangs from the carriage's centre. The gate
+checks it (`belt`).
 
 **A4. Single-flanged pulleys at different heights.** The printed pulleys have one flange each, and
-in the photos the runs slope. *v1:* new 30-tooth HTD 5M pulleys with a flange on each side (the front
-one pressed on after assembly), both axles at z 226, so both runs are level and parallel to the rails;
+in the photos the runs slope. *v1:* new 20-tooth HTD 8M pulleys with a flange on each side (the front
+one pressed on after assembly), both axles at z 223, so both runs are level and parallel to the rails;
 1 mm between the belt and each flange.
 
 **A5. The belt link slips.** A hollow bar with a ladder of slots hangs from the plate, and a hex key
@@ -57,7 +61,7 @@ through a slot holds the belt. No tooth is engaged: the link slips under load an
 a thin-walled bar on two screws flexes. Both matter for balancing: the controller's cart position
 is the stepper's, and any slip or play is error it cannot see. *v1:* `belt_clamp`, a box column
 (40 x 24 mm, 3 mm walls) on four M3 screws from the plate down to the upper run, with a flat ceiling
-on the belt's back and `clamp_jaw` underneath: HTD 5M tooth seats in phase with the belt's teeth,
+on the belt's back and `clamp_jaw` underneath: HTD 8M tooth seats in phase with the belt's teeth,
 four M3 screws. Open belt ends or a closed loop both clamp.
 
 **A6. The pivot over the cart's middle cannot swing up.** In the latest photos the two KP08s stand in
@@ -72,8 +76,8 @@ AS5600 on an adapter on the sensor tower with `magnet_cap` on the shaft's end, o
 encoder on the tower's back with `coupler`.
 
 **A8. No hard stops, one switch.** The carriage's SC8UU blocks run into the SK8 supports. *v1:*
-`rod_bumper` collars stop the SC8UU blocks at +-178 mm; a `switch_mount` on each top end bar trips
-its switch 4 mm before (+-174); the firmware keeps to +-168.
+`rod_bumper` collars stop the SC8UU blocks at +-241 mm; a `switch_mount` on each top end bar trips
+its switch 4 mm before (+-237); the firmware keeps to +-231.
 
 **A9. Loose electronics.** The driver board, controller and leads lie on the desk; the sensor lead
 from the moving cart has no strain relief. *v1:* `electronics_tray` hooked to the back long member,
@@ -81,8 +85,7 @@ zip-tie bridges at the plate's back edge, `cable_clip`s in the frame's slots.
 
 **Kept as is:** the frame, rods, SK8 supports, SC8UU blocks, KP08s, motor and belt; the black wedge
 parts on the idler-end front post (their purpose is not clear from the photos; nothing in v1
-touches them). The pulleys sit in the end frames under the top end bars as before, so a closed belt
-that fitted v0 is likely to fit v1 (O2).
+touches them). The pulleys sit near where yours were, spaced for your closed loop (O2).
 
 ## Found by the gate while designing v1
 
@@ -95,16 +98,41 @@ that fitted v0 is likely to fit v1 (O2).
 | G5 | A bang-bang swing-up lurched the cart at the start and never settled on the top | tanh-softened energy pumping with cart centring (`sim.py`) |
 | G6 | The pulley's set screw would have pressed on the round of the shaft | the bore's flat and the motor's flat both face the screw (+x) |
 
+## Checked against the measuring photos
+
+The first model scaled the frame from catalogue parts and monitors in the photos. The second set
+of photos put a tape and calipers on the machine. Read from them:
+
+| | The model had | The photos show | Now |
+|---|---|---|---|
+| M1 | Frame 560 x 280 mm | 686 x 193 mm (tape along a long member and an end bar, photos 9-15) | the design's frame: every part follows it |
+| M2 | Rods 180 mm apart | 114 mm between centres (calipers over both rods read 122.09, photo 17; the tape gives about 125 with parallax) | SC8UU holes slotted +-8 mm, so 98-130 fit |
+| M3 | HTD 5M belt, 15 mm wide | HTD 8M, 20 mm (calipers read 20.0-20.6; the teeth 8 mm apart against the caliper's scale, photo 22); a closed loop (the owner) | 20-tooth 8M pulleys, a 21 mm clamp channel with 8M seats, the axles spaced for the loop |
+| M4 | Limit-switch blocks at y = 50 on the end bars | with the rods 114 apart the SK8s sit at y 36-78 there | blocks at y = 20 |
+
+What follows from them: the frame is 126 mm longer, so the cart travels +-241 mm (was +-178). The
+pendulum's plane moves 43.5 mm back with the narrower frame, and the plate narrows to 160 mm (was
+226). A closed loop fixes the pulleys' spacing: 175 teeth (1400 mm, assumed: O2) puts each axle 23
+mm inboard of its end frame, so the motor and idler mounts carry them on webs under the end bars. The
+8M belt (0.18 kg) moves with the cart, and the 20-tooth pulley gives 9.8 N for the motor's torque
+(was 10.4 with the 5M): the old controller then failed 20 of its 48 runs on the force budget. It
+was re-tuned and checked again on scenarios it was not tuned on (DESIGN.md, "Control").
+
+The photos could not give two things, still open: the frame's height (no photo measures it) and
+the belt's length (its marking, "113C020189", is a batch number).
+
 ## Open: to confirm on the real machine
 
-**O1. The frame's size is an estimate.** 560 x 280 x 300 mm, rods 180 mm apart. The parts that touch the
-frame bolt to it locally and have slack where it matters (SC8UU holes +-5 mm: rods 170-190 apart; the
-bridge slides +-10 mm, so the pendulum clears frames 260-300 wide). Measure and run
-`build_all.py`; the gate re-checks every clearance (DESIGN.md, "Measure first").
+**O1. The frame's height.** Length, width and the rods' spacing are measured (M1, M2); the height is
+still the 300 mm estimate. The pendulum's tip clears the desk by 64 mm at 300; on a frame lower than
+about 250 mm it would hit. Measure it, set `FRAME_H` and run `build_all.py`: the gate re-checks every
+clearance (DESIGN.md, "Measure first").
 
-**O2. The belt.** Read as HTD 5M, about 15 mm wide, from the photos. If it is a closed loop, its
-length must be within the tensioner's range, printed by the gate (`belt` check); if not, cut it
-once and clamp both ends (an open belt works with the same clamp).
+**O2. The belt's tooth count.** A closed HTD 8M loop, 20 mm wide (M3); its length is not printed on
+it. The design assumes 175 teeth (1400 mm), from where the old pulleys sat. Count them (mark one
+tooth, go round): `BELT_TEETH` sets the axles' spacing, the tensioner takes +-2.5 teeth, and the
+gate fails if the loop cannot fit inside the end frames (over about 187 teeth: then cut it once and
+clamp both ends).
 
 **O3. The angle sensor.** The design takes an AS5600 board (corner holes 18-26 mm apart) and its
 6 x 2.5 mm diametric magnet, or a 600 P/R optical encoder (38 mm, 6 mm shaft, M3 on 28-32 mm).
@@ -141,17 +169,18 @@ rest on paper. The first version of the controller failed most of them in simula
 **P1. The motor runs out of force.** The old check took half the holding torque (8.4 N at the
 belt) against what the motion asks plus 1 N of friction, and the worst case already asked
 8.6 N. A stepper's force depends on its driver's current and falls with speed: an A4988 left at
-a typical 1 A gives 7.0 N, and at 12 V the force collapses above about 0.9 m/s. *Fix:* the model
+a typical 1 A gives 6.5 N (20-tooth 8M pulley), and at 12 V the force collapses above about
+0.9 m/s. *Fix:* the model
 now has the motor's torque-speed curve at the driver's current and supply (`params.MOTOR`,
 `DRIVE`: 1.5 A, the 19 V laptop brick, 80 % of the torque relied on), against the motion plus
-the friction at the cart, in every run; the controller's acceleration limit (4.68 m/s²) comes
-out of that budget and every run keeps 0.30 N in hand. Setting the driver: DESIGN.md,
-"Electronics and firmware".
+the friction at the cart, in every run; the controller's acceleration limit (3.54 m/s² with the
+8M drive) comes out of that budget and every run keeps 0.73 N in hand. Setting the driver:
+DESIGN.md, "Electronics and firmware".
 
 **P2. The idler drags.** The idler turns on its PETG sleeve, a plain bearing that both belt runs
 load. At the 35-40 N the old instructions asked for, a dry sleeve takes 3.7 N of the motor's
 force. *Fix:* 15 N of tension (the belt only has to stay taut under the motor's largest pull,
-about 4 N a side), set by sag (100 g hung mid-span: 9 mm), and grease on the sleeve: 0.7 N,
+about 4 N a side), set by sag (100 g hung mid-span: 10 mm), and grease on the sleeve: 0.7 N,
 counted in the budget with the rails and the belt (1.8 N in all).
 
 **P3. The swing-up never starts, or stalls.** Energy pumping pushes in proportion to the swing, so
@@ -184,7 +213,7 @@ field in, and the angle reads weaker and less linear. *Fix:* 5 mm of plastic bet
 sensor tower moves back 3.6 mm); the firmware checks the AS5600's magnet status before it runs.
 
 **P8. No firmware, and the usual stepper library is too slow.** A typical sketch with AccelStepper
-manages about 4,000 steps/s on an Uno; the cart needs up to 21,000 (1 m/s at 1/16 step). A wrong
+manages about 4,000 steps/s on an Uno; the cart needs up to 20,000 (1 m/s at 1/16 step). A wrong
 motor direction or angle sign makes it fail at once. *Fix:* `firmware/pendulum` (Uno / Nano or
 ESP32, FastAccelStepper, built for all three): homing checks the motor's direction against the
 switches, the `d` test checks the angle's sign, and it stops on a failed sensor read, a switch or
@@ -199,7 +228,7 @@ AS5600's DIR pin tied to GND (floating on some boards, it flips the direction at
 **P10. A broken switch wire means no stop.** *Fix:* the firmware expects normally closed
 switches, so a broken wire reads as pressed and stops it.
 
-**P11. The frame walks on the desk.** The cart's pushes reach 6.2 N on the frame, about
+**P11. The frame walks on the desk.** The cart's pushes reach 5.3 N on the frame, about
 what a 3.6 kg frame on a smooth desk holds by friction. *Check:* clamp the frame to the desk.
 
 **P12. The T-nuts.** The saddles bolt into the 40 mm faces of the top end bars. Drop-in T-nuts go
@@ -214,7 +243,7 @@ fitting the belt (DESIGN.md, assembly step 5).
 "Electronics and firmware".
 
 **P15. The pendulum hits something.** Its tip sweeps a 600 mm circle in front of the frame, out
-to x +-480 mm, at up to 4 m/s. *Check:* keep that disc clear while it runs (DESIGN.md,
+to x +-544 mm, at up to 4 m/s. *Check:* keep that disc clear while it runs (DESIGN.md,
 "Pendulum").
 
 **P16. Balanced, the pendulum hunts.** The first premortem pass checked that every run stays
@@ -223,11 +252,15 @@ pendulum never settled: a 0.8 Hz cycle of 3.5 deg and 44 mm of cart travel, peak
 7 deg and over 90 mm at 2.5 mN m. Without friction it holds within 0.15 deg. While the pivot's
 bearings stick, the pendulum moves with the cart and the balance law walks the cart until they
 break free. Other LQR weights, no integral action, a model-based observer, even the true rate,
-and friction compensation each change it by 10 % at most: it is the pivot, at 2.9 deg and 36 mm
-per mN m. Rubber-sealed KP08 inserts are often 1-2 mN m. *Fix:* a goal for the pivot, 0.5 mN m
-(`params.PIVOT_FRICTION_GOAL`: 1.2 deg and 14 mm), which the nominal run now uses and at which
-the gate bounds the hunting; the firmware's `f` test measures the friction from a free swing and
+and friction compensation each changed it by 10 % at most: 2.9 deg and 36 mm per mN m.
+Rubber-sealed KP08 inserts are often 1-2 mN m. *Fix:* a goal for the pivot, 0.5 mN m
+(`params.PIVOT_FRICTION_GOAL`), which the nominal run now uses and at which the gate bounds the
+hunting (1 deg, 15 mm); the firmware's `f` test measures the friction from a free swing and
 says what hunting to expect (the gate checks its estimator on simulated swings: within 0.05 mN m),
 and re-centres hanging on the true vertical, which friction would otherwise leave off by up to
-friction / m g l (1.9 deg at 2.5 mN m). *Check:* free the pivot (DESIGN.md, "Pendulum": seals
-off, grease out, a drop of oil, blocks in line) and run `f` before the first run.
+friction / m g l (1.9 deg at 2.5 mN m). The re-tune for the 8M drive (M3) then showed the gains
+do matter after all, for the onset: weighting the cart's speed and the angle heavily and its
+position lightly lets the pivot stick less. With those gains it hunts 0.1 deg at 0.5 mN m, 0.9
+at 1 and 4.1 at 2.5 (the first controller: 1.2, 2.8 and 7.2), and `tune_controller.py` now ranks
+candidates by it. *Check:* free the pivot (DESIGN.md, "Pendulum": seals off, grease out, a drop
+of oil, blocks in line) and run `f` before the first run.

@@ -1,7 +1,9 @@
 """Search for the controller's numbers (sim.py's CANDIDATES). A candidate must swing the pendulum up
-from hanging still, hold it and take a push on every PLANTS x CORNERS run, inside the soft limits
-and the force budget. Random search, then a local search around the best; prints the best as
-CANDIDATES entries to paste into sim.py.
+from hanging still, hold it and take a push on every sim.ROBUST run, inside the soft limits and
+the force budget; among those, the less it hunts when balanced (pivot stick-slip at the goal
+friction and twice it), the better. Random search, then a local search around the best; prints
+the best as CANDIDATES entries to paste into sim.py (after a check on scenarios they were not
+tuned on: AGENTS.md).
 
 Run: python scripts/tune_controller.py [random_n] [local_n] [seed]     (every core but one)
 """
@@ -10,6 +12,8 @@ import multiprocessing as mp
 import random
 import sys
 import time
+
+import numpy as np
 
 import params as P
 import sim
@@ -61,14 +65,28 @@ def _init(m):
     _M = m
 
 
+def _hunt(cand):
+    """Balanced from near upright: peak-to-peak angle (deg) after 4 s at the pivot's goal friction,
+    plus half that at twice it; 99 for a fall."""
+    g, out = sim.gains(_M, cand), 0.0
+    for tau, w in ((P.PIVOT_FRICTION_GOAL, 1.0), (2 * P.PIVOT_FRICTION_GOAL, 0.5)):
+        log = np.array(sim.simulate(_M, g, dict(sim.NOMINAL, tau=tau), t_end=10.0, push_at=None, theta0=0.02,
+                                    record=True)["log"], float)
+        late = log[log[:, 0] >= 4.0]
+        th = np.degrees(late[:, 3])
+        out += w * (float(th.max() - th.min()) if np.all(late[:, 6] == sim.Controller.BALANCE) else 99.0)
+    return out
+
+
 def _score(cand):
     ev = sim.evaluate(_M, cand, stop_on_fail=True)
+    ev["hunt"] = 0.0 if ev["fails"] else _hunt(cand)
     return cand, ev
 
 
 def key(ev):
     passed = ev["runs"] - len(ev["fails"])
-    return (len(ev["fails"]) > 0, -(passed + ev["partial"]), ev["x_max"], ev["t_worst"], -ev["margin"])
+    return (len(ev["fails"]) > 0, -(passed + ev["partial"]), ev["hunt"], ev["x_max"], ev["t_worst"], -ev["margin"])
 
 
 def search(pool, cands, label):
@@ -78,7 +96,7 @@ def search(pool, cands, label):
         out.append((key(ev), cand, ev))
         if not ev["fails"]:
             print(f"  {label} pass: x {ev['x_max'] * 1000:.0f} mm, catch <= {ev['t_worst']:.2f} s, "
-                  f"margin {ev['margin']:.2f} N  {cand}", flush=True)
+                  f"margin {ev['margin']:.2f} N, hunting {ev['hunt']:.2f}  {cand}", flush=True)
         if (i + 1) % 200 == 0:
             print(f"  {label}: {i + 1}/{len(cands)} in {time.time() - t0:.0f} s", flush=True)
     out.sort(key=lambda r: r[0])
@@ -101,7 +119,7 @@ def main():
     print("\nBest (paste the top ones into sim.py CANDIDATES):")
     for k, cand, ev in res[:6]:
         print(f"# fails {len(ev['fails'])}, runs {ev['runs']} (partial {ev['partial']:.2f}), x {ev['x_max'] * 1000:.0f} mm, "
-              f"catch <= {ev['t_worst']:.2f} s, margin {ev['margin']:.2f} N")
+              f"catch <= {ev['t_worst']:.2f} s, margin {ev['margin']:.2f} N, hunting {ev['hunt']:.2f} deg")
         print(f"dict(q={cand['q']}, r={cand['r']}, a_max={cand['a_max']}, pump={cand['pump']}, ks={cand.get('ks', 1.0)}, "
               f"lead={cand.get('lead', 0.0)}, xp={cand.get('xp', 0.8)}, "
               f"kx={cand['kx']}, kv={cand['kv']}, ke={cand['ke']}, catch={cand['catch']}, e_ref={cand['e_ref']}, "

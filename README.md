@@ -10,8 +10,8 @@
 ![CAD](https://img.shields.io/badge/CAD-Python%20%2B%20build123d-3776ab?logo=python&logoColor=white)
 ![Printed](https://img.shields.io/badge/printed-PLA%20%2B%20PETG-e36209)
 ![Printer](https://img.shields.io/badge/printer-Kobra%20S1-6f42c1)
-![Travel](https://img.shields.io/badge/travel-%C2%B1168%20mm-2ea44f)
-![Swing-up](https://img.shields.io/badge/swing--up-~6%20s%20(sim)-2ea44f)
+![Travel](https://img.shields.io/badge/travel-%C2%B1231%20mm-2ea44f)
+![Swing-up](https://img.shields.io/badge/swing--up-~3%20s%20(sim)-2ea44f)
 ![To buy](https://img.shields.io/badge/to%20buy-nothing-2ea44f)
 
 **[▶ Open the live 3-D viewer](https://ajayadahal.github.io/inverted-pendulum/)** ·
@@ -20,7 +20,7 @@
 
 </div>
 
-A NEMA 17 pulls a printed carriage along two 8 mm rods with an HTD 5M belt. On the carriage, a
+A NEMA 17 pulls a printed carriage along two 8 mm rods with a closed HTD 8M belt. On the carriage, a
 300 mm pendulum turns on an 8 mm shaft in two KP08 pillow blocks, in front of the frame, and an
 AS5600 reads its angle. The controller swings it up from hanging and balances it upright.
 
@@ -39,12 +39,12 @@ could still make the machine fail, and what was changed or must be checked for e
 | | |
 |---|---|
 | **Machine** | Cart-pole: belt-driven carriage on two 8 mm rods, pendulum on a shaft in two KP08s |
-| **Frame** | The owner's 2020/2040 frame, about 560 × 280 × 300 mm (estimated from photos: [measure first](DESIGN.md#measure-first)) |
-| **Travel** | ±178 mm to the hard stops, limit switches at ±174 mm, firmware keeps to ±168 mm |
-| **Drive** | NEMA 17, HTD 5M 15 mm belt on two printed 30-tooth pulleys: 150 mm per turn, 21.3 steps/mm |
+| **Frame** | The owner's 2020/2040 frame, 686 × 193 mm from his measuring photos, about 300 mm high ([measure it](DESIGN.md#measure-first)) |
+| **Travel** | ±241 mm to the hard stops, limit switches at ±237 mm, firmware keeps to ±231 mm |
+| **Drive** | NEMA 17, his closed HTD 8M 20 mm belt on two printed 20-tooth pulleys spaced for it: 160 mm per turn, 20 steps/mm |
 | **Pendulum** | 300 mm PLA arm, 112 g, turns a full circle in front of the frame at any cart position |
 | **Sensor** | AS5600 magnetic encoder on the shaft's end, or a 600 P/R optical encoder |
-| **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 6 s from hanging, in simulation |
+| **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 3 s from hanging, in simulation |
 | **Electronics** | Your stepper driver at 1.5 A and 19 V; an Arduino Uno / Nano or ESP32 runs [`firmware/pendulum`](firmware/pendulum), the simulated controller line for line |
 | **Prints** | 21 part files on 6 Kobra S1 plates: PLA ~400 g, PETG ~200 g, ~24 h |
 | **To buy** | Nothing: the machine's own parts plus plain M3/M4/M5 screws and T-nuts |
@@ -76,7 +76,7 @@ runs and how to tension it: [`DESIGN.md`](DESIGN.md#how-the-belt-runs-now).
 <tr>
 <td width="50%"><img src="renders/anim_swingup.gif" alt="Simulated swing-up: the cart pumps energy into the pendulum, which rises to upright and balances"><br>
 <b>Swing-up.</b> The simulated controller kicks the pendulum, pumps it up from hanging and
-catches it upright; the cart stays within ±122 mm (±129 mm over 48 runs with the model
+catches it upright; the cart stays within ±144 mm (±186 mm over 48 runs with the model
 off, slow reactions, pivot friction and a push).</td>
 <td width="50%"><img src="renders/anim_burst.gif" alt="Burst view: every part moves out along the way it goes together"><br>
 <b>Burst view.</b> Every part moves out along the way it goes together.</td>
@@ -130,7 +130,8 @@ branch → `main`, `/ (root)`*); the root `index.html` opens `viewer/`.
 
 ## Build it
 
-1. **Measure the frame** and the belt, put the numbers in `scripts/params.py` and run
+1. **Measure** the frame's height and count the belt's teeth, put them in `scripts/params.py`
+   (`FRAME_H`, `BELT_TEETH`) and run
    `python scripts/build_all.py`: every part and clearance follows
    ([`DESIGN.md`](DESIGN.md#measure-first)).
 2. **Print** from `3mf/complete_project_kobra_s1_petg.3mf` and `..._pla.3mf`, belt drive first

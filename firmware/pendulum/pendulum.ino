@@ -222,6 +222,14 @@ static void directionTest() {
   }
 }
 
+static float huntAt(float mnm, const float *v) {  // sim.py's hunting at this pivot friction, interpolated
+  const int n = sizeof(CFG_HUNT_MNM) / sizeof(CFG_HUNT_MNM[0]);
+  int i = 1;
+  while (i < n - 1 && mnm > CFG_HUNT_MNM[i]) i++;
+  float h = v[i - 1] + (mnm - CFG_HUNT_MNM[i - 1]) / (CFG_HUNT_MNM[i] - CFG_HUNT_MNM[i - 1]) * (v[i] - v[i - 1]);
+  return h > 0.0f ? h : 0.0f;
+}
+
 static void pivotTest() {
   // A free swing's turning points give the pivot's friction and the true vertical (PivotTest in
   // controller.h); the vertical re-centres the calibration, which friction leaves off by up to
@@ -275,9 +283,9 @@ static void pivotTest() {
   Serial.print(F(", swing-up checked to "));
   Serial.print(CFG_PIVOT_MAX * 1000.0f, 2);
   Serial.print(F("): balanced, it will hunt about "));
-  Serial.print(mnm * CFG_HUNT_DEG, 1);
+  Serial.print(huntAt(mnm, CFG_HUNT_DEG), 1);
   Serial.print(F(" deg and "));
-  Serial.print(mnm * CFG_HUNT_MM, 0);
+  Serial.print(huntAt(mnm, CFG_HUNT_MM), 0);
   Serial.println(F(" mm peak to peak"));
   if (tau > CFG_PIVOT_MAX) Serial.println(F("too stiff for the swing-up: free the pivot first (DESIGN.md, Pendulum)"));
   else if (tau > CFG_PIVOT_GOAL) Serial.println(F("above the goal: free the pivot (DESIGN.md, Pendulum)"));

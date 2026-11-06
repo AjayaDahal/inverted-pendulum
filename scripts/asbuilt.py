@@ -15,12 +15,13 @@ from cad import box, cyl_y, cyl_z, export
 
 Y_OLD_BELT = -20.0          # belt plane of the old layout (estimated)
 Z_OLD_MOTOR, Z_OLD_IDLER = 238.0, 224.0
-X_OLD_MOTOR, X_OLD_IDLER = -246.0, 262.0
-R_OLD = 24.0                # old printed pulleys, ~30 teeth
+X_OLD_MOTOR, X_OLD_IDLER = -(P.X_END - 24.0), P.X_BAR_IN - 6.0   # inboard of the end frames' planes
+R_OLD = 24.0                # old printed pulleys
+Y_OLD_POST_FACE = P.Y_POST - P.EXT / 2   # brackets on the back posts' inner faces
 
 
 def old_plate():
-    p = box(-90, 90, -100, 100, P.Z_PLATE0, P.Z_PLATE0 + 6)
+    p = box(-90, 90, -80, 80, P.Z_PLATE0, P.Z_PLATE0 + 6)
     for x in (-70, 70):
         for y in (-P.Y_ROD, P.Y_ROD):
             for dx in (-9, 9):
@@ -59,8 +60,8 @@ def hex_key():
 
 def old_motor_bracket():
     """L bracket on the -x back post with stacked spacers pushing the motor out to the belt."""
-    yb = 120.0
-    b = box(P.X_BAR_IN - 4, P.X_BAR_IN + 30, yb - 6, yb, Z_OLD_MOTOR - 30, Z_OLD_MOTOR + 26)
+    yb = Y_OLD_POST_FACE
+    b = box(-P.X_BAR_IN - 4, -P.X_BAR_IN + 30, yb - 6, yb, Z_OLD_MOTOR - 30, Z_OLD_MOTOR + 26)
     for dz in (-15.5, 15.5):
         b += box(X_OLD_MOTOR - 8, X_OLD_MOTOR + 8, Y_OLD_BELT + 14 + 40, yb - 6, Z_OLD_MOTOR + dz - 5, Z_OLD_MOTOR + dz + 5)
     return b
@@ -83,7 +84,7 @@ def old_pulley(x, z):
 
 def old_idler_bracket():
     """Plate with a row of holes on the +x back post; the axle is a thin rod cantilevered from it."""
-    yb = 120.0
+    yb = Y_OLD_POST_FACE
     b = box(P.X_BAR_IN - 40, P.X_BAR_IN, yb - 5, yb, Z_OLD_IDLER - 12, Z_OLD_IDLER + 12)
     for k in range(7):
         b -= cyl_y(2.2, P.X_BAR_IN - 36 + 6 * k, Z_OLD_IDLER, yb - 6, yb + 1)
@@ -91,7 +92,7 @@ def old_idler_bracket():
 
 
 def old_idler_rod():
-    return cyl_y(2.0, X_OLD_IDLER, Z_OLD_IDLER, Y_OLD_BELT - 25, 118.0)
+    return cyl_y(2.0, X_OLD_IDLER, Z_OLD_IDLER, Y_OLD_BELT - 25, Y_OLD_POST_FACE - 2.0)
 
 
 def old_belt():
@@ -109,9 +110,9 @@ def old_belt():
 
 
 def old_switch_arm():
-    x = -P.X_END
-    return (box(x - 7, x + 7, 98, 112, P.FRAME_H, P.FRAME_H + 20) + cyl_z(4, x, 105, P.FRAME_H + 20, P.FRAME_H + 45)
-            + box(x - 6, x + 30, 85, 105, P.FRAME_H + 40, P.FRAME_H + 46))
+    x, y = -P.X_END, P.Y_POST - 25.0
+    return (box(x - 7, x + 7, y - 7, y + 7, P.FRAME_H, P.FRAME_H + 20) + cyl_z(4, x, y, P.FRAME_H + 20, P.FRAME_H + 45)
+            + box(x - 6, x + 30, y - 20, y, P.FRAME_H + 40, P.FRAME_H + 46))
 
 
 def old_wedge():
@@ -125,8 +126,8 @@ def old_wedge():
 # name, builder, group, colour, label
 PARTS = [
     ("old_plate", old_plate, "cart", "#2b2d30", "old carriage plate (printed)"),
-    ("old_kp08_front", lambda: old_kp08(15.0), "cart", "#3a3d42", "KP08, old position"),
-    ("old_kp08_rear", lambda: old_kp08(75.0), "cart", "#3a3d42", "KP08, old position"),
+    ("old_kp08_front", lambda: old_kp08(12.0), "cart", "#3a3d42", "KP08, old position"),
+    ("old_kp08_rear", lambda: old_kp08(60.0), "cart", "#3a3d42", "KP08, old position"),
     ("old_bar", old_bar, "cart", "#22252a", "old belt link: hollow ladder bar"),
     ("hex_key", hex_key, "cart", "#c0c4c9", "hex key used as the belt pin"),
     ("old_motor_bracket", old_motor_bracket, "frame", "#8e959c", "old motor bracket + spacers on the back post"),
@@ -143,14 +144,14 @@ PARTS = [
 # What the audit found (REPORT.md has the reasoning): id, where (for the viewer's marker), title.
 FINDINGS = [
     ("A1", (X_OLD_IDLER, 60.0, Z_OLD_IDLER), "Idler axle is a thin rod held at one end, ~140 mm from its bracket: belt tension bends and tilts it, so the belt walks"),
-    ("A2", (P.X_BAR_IN - 20, 118.0, Z_OLD_IDLER + 14), "Idler position set by a row of holes: tension only in 6 mm steps, no lock, no squaring"),
-    ("A3", (X_OLD_MOTOR, 60.0, Z_OLD_MOTOR + 25), "Motor and idler each located from a different post with spacers: nothing puts both pulleys and the clamp in one plane"),
+    ("A2", (P.X_BAR_IN - 20, Y_OLD_POST_FACE - 2.0, Z_OLD_IDLER + 14), "Idler position set by a row of holes: tension only in 6 mm steps, no lock, no squaring"),
+    ("A3", (X_OLD_MOTOR, 40.0, Z_OLD_MOTOR + 25), "Motor and idler each located from a different post with spacers: nothing puts both pulleys and the clamp in one plane"),
     ("A4", (X_OLD_MOTOR, Y_OLD_BELT, Z_OLD_MOTOR - 30), "Pulleys have one flange each; the two pulleys sit at different heights, so the runs slope"),
     ("A5", (0.0, Y_OLD_BELT - 20, Z_OLD_MOTOR), "Belt link: hollow ladder bar and a hex key through a slot. No teeth engaged: it slips and has backlash"),
     ("A6", (0.0, 45.0, P.Z_PLATE0 + 40), "Pivot over the middle of the cart: a pendulum there hangs inside the frame, cannot pass the plate or rails, so it cannot swing up"),
-    ("A7", (0.0, 105.0, P.Z_PLATE0 + 20), "No shaft, hub, arm or angle-sensor mount yet"),
-    ("A8", (-P.X_END, 105.0, P.FRAME_H + 50), "One limit switch on a separate arm; no hard stops: the SC8UU blocks run into the SK8 supports"),
-    ("A9", (0.0, 140.0, 60.0), "Electronics and leads loose on the desk; no strain relief on the moving cart"),
+    ("A7", (0.0, 70.0, P.Z_PLATE0 + 20), "No shaft, hub, arm or angle-sensor mount yet"),
+    ("A8", (-P.X_END, P.Y_POST - 25.0, P.FRAME_H + 50), "One limit switch on a separate arm; no hard stops: the SC8UU blocks run into the SK8 supports"),
+    ("A9", (0.0, P.FRAME_W / 2 + 40.0, 60.0), "Electronics and leads loose on the desk; no strain relief on the moving cart"),
 ]
 
 

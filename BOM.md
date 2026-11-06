@@ -15,10 +15,10 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | `pivot_bridge` | 1 | PLA | 4 `pla_2_bridge_clamp_tray` | pivot bridge: both KP08s in line, pendulum in front of the frame, sensor tower |
 | `as5600_mount` | 1 | PLA | 4 `pla_2_bridge_clamp_tray` | AS5600 adapter on the sensor tower |
 | `belt_clamp` | 1 | PLA | 4 `pla_2_bridge_clamp_tray` | belt clamp: stiff column from the carriage down to the belt's upper run |
-| `clamp_jaw` | 1 | PETG | 1 `petg_1_belt_drive` | clamp jaw: HTD 5M tooth seats under the belt |
+| `clamp_jaw` | 1 | PETG | 1 `petg_1_belt_drive` | clamp jaw: HTD 8M tooth seats under the belt |
 | `motor_mount` | 1 | PETG | 1 `petg_1_belt_drive` | motor mount: NEMA 17 under the -x top end bar, pulley on the belt plane |
-| `motor_pulley` | 1 | PETG | 2 `petg_2_pulleys_pivot` | HTD 5M 30T pulley on the motor shaft (set screw on the flat) |
-| `idler_pulley` | 1 | PETG | 2 `petg_2_pulleys_pivot` | HTD 5M 30T idler on its sleeve |
+| `motor_pulley` | 1 | PETG | 2 `petg_2_pulleys_pivot` | HTD 8M 20T pulley on the motor shaft (set screw on the flat) |
+| `idler_pulley` | 1 | PETG | 2 `petg_2_pulleys_pivot` | HTD 8M 20T idler on its sleeve |
 | `pulley_flange` | 2 | PETG | 2 `petg_2_pulleys_pivot` | front flange, pressed on each pulley's boss |
 | `idler_mount` | 1 | PETG | 1 `petg_1_belt_drive` | idler mount: saddle on the +x top end bar, cheeks with slider windows |
 | `idler_slider` | 2 | PETG | 1 `petg_1_belt_drive` | axle slider: tension screw pulls it out, flange locks it |
@@ -38,7 +38,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | Item | Qty | Notes |
 |---|---|---|
 | 2020 / 2040 aluminium profile | 10 | the frame as built: 4 posts, 2 top end bars (2040 on edge), 2 bottom end bars, 2 long members. Measure it before printing (DESIGN.md, "Measure first") |
-| 8 mm rod | 2 | 600 mm, 180 mm apart (170-190 fit) |
+| 8 mm rod | 2 | 680 mm or longer, 114 mm apart (98-130 fit) |
 | SK8 rod support | 4 | on the top end bars, as built |
 | SC8UU bearing block | 4 | under the carriage plate, 4 x M4 x 10 each |
 | KP08 pillow block | 2 | on the pivot bridge, in line, 70 mm apart |
@@ -50,7 +50,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | mechanical endstop | 2 | lever switch on a 40 x 16 mm board, holes 19 mm apart; wired normally closed |
 | stepper driver carrier (A4988 / DRV8825) | 1 | step/dir driver set to 1.5 A, with its heatsink |
 | controller (Arduino Uno / Nano or ESP32) | 1 | runs firmware/pendulum (FastAccelStepper: not an STM32) |
-| HTD 5M belt, 15 mm wide | 1 | closed loop 1214-1254 mm (the tensioner's range), or an open belt: cut 1244 mm, both ends in the clamp |
+| HTD 8M belt, 20 mm wide | 1 | yours: a closed loop of 175 teeth (1400 mm; the tensioner takes 1380-1420); set `BELT_TEETH` to your count |
 
 ## Fasteners
 
@@ -68,7 +68,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | M5 x 12 | 2 | `switch_mount` |
 | M5 x 16 | 4 | `pivot_bridge` |
 | M5 x 20 | 4 | `pivot_bridge` |
-| M5 x 40 | 1 | `idler_slider` |
+| M5 x 50 | 1 | `idler_slider` |
 | M3 nut | 20 | `belt_clamp`, `clamp_jaw`, `motor_pulley`, `rod_bumper`, `pendulum_hub`, `pendulum_tip`, `magnet_cap`, `as5600_mount` |
 | M5 nut | 9 | `pivot_bridge`, `idler_slider` |
 | T-nut M5, 20-series | 15 | `motor_mount`, `idler_mount`, `switch_mount`, `electronics_tray`, `cable_clip` |
@@ -84,6 +84,6 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's size and the belt (`tracker.md`, "Before the first
-print"), and that the drawer holds the 15 T-nuts, the M5 x 40 idler axle and an 8 mm x
-115 mm steel shaft.
+**To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
+"Before the first print"), and that the drawer holds the 15 T-nuts, the M5 x 50 idler axle
+and an 8 mm x 115 mm steel shaft.

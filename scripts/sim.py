@@ -10,8 +10,9 @@ The model includes what the premortem (REPORT.md) found can make the real machin
 - a delay from reading the angle to the motor moving (the step generator plans ahead);
 - Coulomb friction at the pivot: two sealed KP08s let the pendulum rest a few degrees off
   vertical, so the swing-up has to start it; balanced, the same friction makes the pendulum hunt
-  (stick-slip) by an amount the gains hardly change: `hunting` gives it against the friction, and
-  the nominal run uses the pivot's goal (params.PIVOT_FRICTION_GOAL);
+  (stick-slip), more the more friction, from an onset that stiff angle and speed gains delay:
+  `hunting` gives it against the friction, and the nominal run uses the pivot's goal
+  (params.PIVOT_FRICTION_GOAL);
 - an error in the upright calibration, and the sensor's resolution (AS5600 or 600 P/R encoder).
 The controller must swing up, hold and take a push on every ROBUST run, inside the soft limits
 and the force budget.
@@ -46,7 +47,7 @@ CORNERS = [dict(delay=P.ACT_DELAY[1], tau=P.PIVOT_FRICTION, offset=-P.ANGLE_OFFS
 NOMINAL = dict(delay=sum(P.ACT_DELAY) / 2, tau=P.PIVOT_FRICTION_GOAL, offset=0.0, counts=4096)
 # Balanced, peak-to-peak hunting against pivot friction (N m); the most allowed at the goal
 HUNT_TAUS = sorted({0.0, 0.00025, P.PIVOT_FRICTION_GOAL, 0.001, 0.0015, 0.002, P.PIVOT_FRICTION})
-HUNT_LIMIT = dict(theta_pp_deg=2.0, cart_pp_mm=25.0)
+HUNT_LIMIT = dict(theta_pp_deg=1.0, cart_pp_mm=15.0)
 
 
 def _robust_runs():
@@ -429,11 +430,13 @@ def hunting(m, g):
 # (1/s) and centring kx (1/s^2), energy sharpness ke and target e_ref (of m g l above upright rest); catch (deg from upright, and
 # the largest theta + omega / w0 in rad: coasting into the top); kick (m/s^2, s each way); pred:
 # periods of commands still on their way to the motor that the balance law looks past; alpha:
-# rate filter. Chosen from 74 candidates that pass every ROBUST run by 260 random scenarios none was
-# tuned on (same bounds): 258 swung up, held and took the push; cart within +-146 mm.
+# rate filter. For the HTD 8M drive: tune_controller.py, then a local search scoring 60 more random
+# runs and the balanced hunting; of six that passed all, this one did best on 260 random scenarios
+# none was tuned on (same bounds): with the sliced masses all 260 swung up, held and took the push;
+# cart within +-190 mm.
 CANDIDATES = [
-    dict(q=(2580.071, 10.071, 109.237, 4.679, 25.581), r=1.385, a_max=4.68, pump=0.222, ks=15.345, lead=0.037, xp=1.935,
-         kx=3.7, kv=31.766, ke=53.171, catch=(38.91, 0.133), e_ref=0.128, kick=(3.028, 0.067), pred=0, alpha=0.9),
+    dict(q=(24.448, 373.58, 379.009, 4.503, 3.825), r=0.273, a_max=3.54, pump=0.655, ks=13.042, lead=0.085, xp=1.155,
+         kx=22.704, kv=6.001, ke=3.323, catch=(37.588, 0.145), e_ref=0.102, kick=(3.54, 0.136), pred=4, alpha=0.552),
 ]
 
 

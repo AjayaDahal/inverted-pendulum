@@ -68,8 +68,8 @@ def bolts():
     out.append(_b("set_screw", "M3", 12, (P.X_MOTOR + 13.0, P.PULLEY_W / 2 - zc, P.Z_PULLEY), (-1, 0, 0), "motor_pulley",
                   "motor_pulley", 13.0 - 8.7 - 2.5, nut=True, note="M3 x 12 set screw, head sunk below the teeth, captive nut"))
     ya = -(P.CHEEK_Y[1] + 1.5)
-    out.append(_b("idler_axle", "M5", 40, (P.X_IDLER, ya, P.Z_PULLEY), (0, 1, 0), "frame", "idler_slider",
-                  2 * (P.CHEEK_T + 1.5) + 2 * P.CHEEK_Y[0], nut=True, note="M5 x 40 axle + nut: clamps sliders and sleeve"))
+    out.append(_b("idler_axle", "M5", 50, (P.X_IDLER, ya, P.Z_PULLEY), (0, 1, 0), "frame", "idler_slider",
+                  2 * (P.CHEEK_T + 1.5) + 2 * P.CHEEK_Y[0], nut=True, note="M5 x 50 axle + nut: clamps sliders and sleeve"))
     wx1 = S._window()[1]
     zs = P.Z_PULLEY - P.SLIDER["axle_dz"] + P.SLIDER["screw_dz"]
     for sy in (-1, 1):
@@ -77,7 +77,7 @@ def bolts():
         out.append(_b(f"tension_screw_{'fb'[sy > 0]}", "M3", 30, (wx1 + 8.0, y, zs), (-1, 0, 0), "frame", "idler_mount",
                       8.0 + (wx1 - P.X_IDLER - P.SLIDER["x"] / 2), into="slider",
                       note="M3 x 30 through the lug into the slider (tapped)"))
-    out += _copies([_b("bumper_screw", "M3", 12, ((2 * P.X_SK8_IN - P.BUMPER_W) / 2, P.Y_ROD + P.BUMPER_OD / 2 + 2.0,
+    out += _copies([_b("bumper_screw", "M3", 12, (P.X_BUMPER + P.BUMPER_W / 2, P.Y_ROD + P.BUMPER_OD / 2 + 2.0,
                                                    P.Z_ROD + 5.0), (0, 0, -1), "frame", "rod_bumper", 10.0 - 1.0, nut=True,
                        note="M3 x 12 + nut: clamps the collar")], S.PARTS["rod_bumper"]["copies"])
     import vitamins as V

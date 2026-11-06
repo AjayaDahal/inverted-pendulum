@@ -26,7 +26,8 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 VIT_NOTES = {
     "2020 / 2040 aluminium profile": "the frame as built: 4 posts, 2 top end bars (2040 on edge), 2 bottom end bars, "
                                      "2 long members. Measure it before printing (DESIGN.md, \"Measure first\")",
-    "8 mm rod": f"{P.ROD_L:.0f} mm, {P.ROD_SPACING:.0f} mm apart (170-190 fit)",
+    "8 mm rod": f"{P.ROD_L:.0f} mm or longer, {P.ROD_SPACING:.0f} mm apart "
+                f"({P.ROD_SPACING - 2 * P.SC_SLOT:.0f}-{P.ROD_SPACING + 2 * P.SC_SLOT:.0f} fit)",
     "SK8 rod support": "on the top end bars, as built",
     "SC8UU bearing block": "under the carriage plate, 4 x M4 x 10 each",
     "KP08 pillow block": "on the pivot bridge, in line, 70 mm apart",
@@ -54,9 +55,9 @@ EXTRA = """
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's size and the belt (`tracker.md`, "Before the first
-print"), and that the drawer holds the {TNUTS} T-nuts, the M5 x 40 idler axle and an 8 mm x
-{SHAFT} mm steel shaft.
+**To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
+"Before the first print"), and that the drawer holds the {TNUTS} T-nuts, the M5 x 50 idler axle
+and an 8 mm x {SHAFT} mm steel shaft.
 """
 
 
@@ -86,8 +87,9 @@ def bought():
     lo, hi = P.BELT_LOOP_RANGE
     rows = ["| Item | Qty | Notes |", "|---|---|---|"]
     rows += [f"| {label} | {count[label]} | {VIT_NOTES.get(label, '')} |" for label in order]
-    rows.append(f"| HTD 5M belt, {P.BELT['width']:.0f} mm wide | 1 | closed loop {lo:.0f}-{hi:.0f} mm (the tensioner's range), "
-                f"or an open belt: cut {P.BELT_OPEN_CUT:.0f} mm, both ends in the clamp |")
+    rows.append(f"| HTD {P.BELT['pitch']:.0f}M belt, {P.BELT['width']:.0f} mm wide | 1 | yours: a closed loop of "
+                f"{P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm; the tensioner takes {lo:.0f}-{hi:.0f}); "
+                f"set `BELT_TEETH` to your count |")
     return rows
 
 
