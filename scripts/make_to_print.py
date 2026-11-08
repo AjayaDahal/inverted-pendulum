@@ -118,11 +118,11 @@ def plan():
 
 
 def stamp(beds=None):
+    """Hash of the presets (parsed, so line endings do not count), the beds and their layouts."""
     h = hashlib.sha256()
     for f in (SA.MACHINE["s1"], SA.PROCESS[("s1", "pla")], SA.PROCESS[("s1", "petg")], SA.FILAMENT["pla"],
               SA.FILAMENT["petg"]):
-        with open(os.path.join(SA.PROFILES, f), "rb") as fh:
-            h.update(hashlib.sha256(fh.read()).digest())
+        h.update(json.dumps(_profile(f), sort_keys=True).encode())
     for label, mat, items, _ in beds or plan():
         h.update(json.dumps([label, mat]).encode())
         for name, k, x, y, a in PT.layout_items(items, label):
