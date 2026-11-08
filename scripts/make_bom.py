@@ -55,7 +55,7 @@ EXTRA = """
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
+**To confirm before printing:** the frame's height (`tracker.md`,
 "Before the first print"), and that the drawer holds the {TNUTS} T-nuts, the {AXLE} idler axle
 and an 8 mm x {SHAFT} mm steel shaft.
 """
@@ -88,8 +88,8 @@ def bought():
     rows = ["| Item | Qty | Notes |", "|---|---|---|"]
     rows += [f"| {label} | {count[label]} | {VIT_NOTES.get(label, '')} |" for label in order]
     rows.append(f"| HTD {P.BELT['pitch']:.0f}M belt, {P.BELT['width']:.0f} mm wide | 1 | yours: a closed loop of "
-                f"{P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm, counted from your photos; the tensioner takes "
-                f"{lo:.0f}-{hi:.0f}); confirm the count and set `BELT_TEETH` if it differs |")
+                f"{P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm, your count; the tensioner takes "
+                f"{lo:.0f}-{hi:.0f}) |")
     return rows
 
 

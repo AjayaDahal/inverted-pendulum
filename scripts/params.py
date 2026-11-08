@@ -7,10 +7,10 @@ cart's home is x = 0; the pendulum angle is 0 upright and positive leaning towar
 
 The frame, rails, bearings, motor and belt are the owner's own (no purchases). Their catalogue
 sizes are exact. The frame's length and width, the rod spacing and the belt (HTD 8M, 20 mm, a
-closed loop) were read from his measuring photos (tape and calipers, 2026-11-06), the belt's
-tooth count from his photos of the loop (2026-11-08). Still to measure: the frame's height, and
-to confirm by hand: the tooth count (DESIGN.md, "Measure first"). Every printed part that
-touches the frame is adjustable over the remaining error.
+closed loop) were read from his measuring photos (tape and calipers, 2026-11-06); the belt's
+175 teeth are his own count (it is stamped 1400 mm). Still to measure: the frame's height
+(DESIGN.md, "Measure first"). Every printed part that touches the frame is adjustable over the
+remaining error.
 """
 import math
 
@@ -50,7 +50,7 @@ SC_SLOT = 8.0                            # SC8UU holes slotted +-8 in y: rods 98
 NEMA17 = dict(side=42.3, length=40.0, hole=31.0, boss=22.0, boss_h=2.0, shaft=5.0, shaft_len=24.0,
               flat=0.5, chamfer=4.0, torque=0.40, rotor=54e-7)   # N m holding torque, kg m^2
 BELT = dict(pitch=8.0, width=20.0, thick=5.6, tooth_h=3.38, pld=0.686, kg_per_m=0.13)  # HTD 8M-20 (calipers: 20.0-20.6)
-BELT_TEETH = 180                         # the closed loop's teeth: 180 from the photos of the loop (1440 mm): confirm by hand
+BELT_TEETH = 175                         # the closed loop's teeth: counted by the owner, stamped 1400 mm
 TEETH = 20
 PD = TEETH * BELT["pitch"] / math.pi     # 50.93 pitch diameter
 R_TIP = PD / 2 - BELT["pld"]             # 24.78 tip circle of the pulley teeth
@@ -62,10 +62,10 @@ PULLEY_W = TOOTH_W + 2 * FLANGE_T        # 25
 R_BELT_BACK = R_TIP + BELT["thick"] - BELT["tooth_h"]   # 27.0
 Y_BELT = 0.0                             # belt centre plane = the frame's centre line
 # The closed loop sets the axles' spacing; the pulleys sit symmetric about the frame's centre
-BELT_LOOP = BELT_TEETH * BELT["pitch"]   # 1440: pitch-line length
-C_NOM = (BELT_LOOP - math.pi * PD) / 2   # 640: axle spacing with the idler at its nominal position
-X_MOTOR = -C_NOM / 2                     # -320: motor pulley
-X_IDLER = C_NOM / 2                      # 320: idler, nominal: the drawings use it
+BELT_LOOP = BELT_TEETH * BELT["pitch"]   # 1400: pitch-line length
+C_NOM = (BELT_LOOP - math.pi * PD) / 2   # 620: axle spacing with the idler at its nominal position
+X_MOTOR = -C_NOM / 2                     # -310: motor pulley
+X_IDLER = C_NOM / 2                      # 310: idler, nominal: the drawings use it
 IDLER_TRAVEL = (X_IDLER - 10.0, X_IDLER + 10.0)   # idler axle x range (belt tension)
 SADDLE_T = 7.0                           # saddle cheeks and web around each top end bar
 SADDLE_WEB = (Z_BAR[0] - 6.0, Z_BAR[0])  # 254..260: web under the bar

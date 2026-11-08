@@ -1,9 +1,9 @@
 {
  "masses": {
-  "cart_kg": 0.683,
-  "belt_kg": 0.187,
+  "cart_kg": 0.68,
+  "belt_kg": 0.182,
   "spinning_kg": 0.034,
-  "effective_kg": 0.904,
+  "effective_kg": 0.896,
   "pendulum_kg": 0.1124,
   "cg_m": 0.0695,
   "J_kgm2": 0.001713,
@@ -22,7 +22,7 @@
     "how": "sliced"
    },
    "belt_clamp": {
-    "g": 66.6,
+    "g": 64.3,
     "how": "sliced"
    },
    "clamp_jaw": {
@@ -138,8 +138,8 @@
  "swing_up_s": 3.14,
  "x_max_m": 0.1439,
  "v_max_m_s": 0.726,
- "f_peak_N": 4.66,
- "force_margin_N": 1.39,
+ "f_peak_N": 4.64,
+ "force_margin_N": 1.42,
  "balanced_at_end": true,
  "theta_rms_balanced_deg": 0.045,
  "robust": {
@@ -148,9 +148,9 @@
   "fails": [],
   "x_max_m": 0.1859,
   "swing_up_s": 4.83,
-  "force_margin_N": 0.71,
+  "force_margin_N": 0.74,
   "v_max_m_s": 0.875,
-  "frame_push_N": 5.35,
+  "frame_push_N": 5.31,
   "step_rate_hz": 17500
  },
  "scenarios": {

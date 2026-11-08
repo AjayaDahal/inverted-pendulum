@@ -58,10 +58,10 @@ def bolts():
                           (0, 1, 0), "frame", "motor_mount", P.MOTOR_PLATE_Y[1] - P.MOTOR_PLATE_Y[0] - S.CB3, into="NEMA 17",
                           note="M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"))
     t = P.SADDLE_T
-    for end, sgn, yz in (("motor", -1, S.MOTOR_BOLTS_YZ), ("idler", 1, S.IDLER_BOLTS_YZ)):
+    for end, sgn, bolts in (("motor", -1, S.MOTOR_BOLTS), ("idler", 1, S.IDLER_BOLTS)):
         for face, xf, d in (("in", P.X_BAR_IN, -1), ("out", P.X_BAR_OUT, 1)):
             xa = sgn * xf + sgn * d * t
-            for j, (y, z) in enumerate(yz):
+            for j, (y, z) in enumerate(bolts[face]):
                 out.append(_b(f"{end}_saddle_{face}_{j + 1}", "M5", 10, (xa - sgn * d * 3.0, y, z), (-sgn * d, 0, 0), "frame",
                               f"{end}_mount", t - 3.0, tnut=True, note="M5 x 10 into a T-nut in the top end bar's slot"))
     zc = P.FLANGE_T + P.TOOTH_W / 2

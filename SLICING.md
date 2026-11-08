@@ -9,7 +9,7 @@ Anycubic Slicer Next 2.0.0.3 (set `PENDULUM_SLICER` if it is not at
 
 | File | What it is |
 |---|---|
-| `3mf/to_print_kobra_s1.3mf` | only the parts still to print, both materials in one project: filament 1 PLA, 2 PETG, one material per bed, in print order; beds marked OPTION only if you need them |
+| `3mf/to_print_kobra_s1.3mf` | only the parts still to print, both materials in one project: filament 1 PLA (blue), 2 PETG (orange), one material per bed, the PETG beds first and then the PLA ones; beds marked OPTION only if you need them |
 | `3mf/complete_project_kobra_s1_pla.3mf` | the three PLA plates as named plates, in print order: open, pick a plate, slice, send |
 | `3mf/complete_project_kobra_s1_petg.3mf` | the three PETG plates the same way (the third, the encoder coupler, is optional) |
 | `3mf/s1_<material>_plates/<plate>.3mf` | one plate per project, same content |
@@ -44,9 +44,11 @@ The plates, their parts, masses and times: [`tracker.md`](tracker.md). Start wit
    names blanked.
 6. `make_to_print.py`: the one project of the parts still to print. It drops the parts you keep
    (`HAVE`) and the other sensor's, puts `MAYBE` parts on beds of their own, and packs the rest
-   first-fit, largest first, one material per bed (`plates.py`'s layout), in the plates' print
-   order. Each bed is a project with both filaments: PLA objects on filament 1, PETG on 2 with the
-   PETG process's one change (35 % infill) set on each object; the beds are then assembled like
+   first-fit, largest first, one material per bed (`plates.py`'s layout): the PETG beds first, then
+   the PLA ones, each named with its material ("PETG 1/2"). Each bed is a project with both
+   filaments: PLA objects on filament 1, PETG on 2 with the PETG process's one change (35 % infill)
+   set on each object; the filaments get their own colours and the prime tower is off (no bed
+   mixes them); the beds are then assembled like
    the complete projects. `--verify` (run by `build_all.py`) slices each bed of the project, and
    the same bed again on its own with its material's presets: same grams, same bed and nozzle
    temperatures. A PETG bed's G-code selects filament 2 (`T1`): on the printer, map each
@@ -68,23 +70,30 @@ Both start from the installed slicer's "0.20mm Standard @Anycubic Kobra S1 0.4 n
 temperature is set for every plate type, so the build plate chosen on the printer does not
 matter. Supports are off, and the parts are laid out to print without them: overhangs are
 bridges (the idler mount prints upside down, its slider windows' tops bridge 32 mm), teardrop
-holes or 45° chamfers. The process
+holes or 45° chamfers and gussets (the idler mount's web, the clamp's flare on all four sides);
+the coupler prints on its side so its flex slots stand upright. The gate checks it (`overhang`,
+below). The process
 prints no brim; the three parts that stand tall on a small base, `idler_mount`, `belt_clamp`
 and `switch_mount`, get a 5 mm brim on their own object from the print table. The 287 mm
 `pendulum_arm` lies diagonally on the 250 mm bed.
 
 ## What the gate checks
 
-`python scripts/check_parts.py` (also in CI, on the committed files), checks `bed` and `files`:
+`python scripts/check_parts.py` (also in CI, on the committed files), checks `bed`, `overhang` and
+`files`:
 
 - Every print-ready part fits the bed with 5 mm to spare on each side and stands on z = 0; every
   plate keeps its parts 10 mm inside the bed; every copy in the print table is on exactly one
   plate.
+- Every print-ready part, sliced into 0.2 mm layers, prints without supports: nothing starts in
+  mid-air, nothing held on one side reaches more than 3 mm past the layer below (beyond a 45°
+  step), and no bridge spans more than 34 mm.
 - All 27 jobs (21 parts, 6 plates): the G-code exists and its stamp is the current STLs' hash;
   it names the right printer and process presets and filament type and has supports off; its 3MF exists
   and carries the same stamp; each object has a brim exactly when the print table gives it one.
 - No stray G-code or 3MF files; the complete projects match their plates file for file; the
-  to-print project was built from the current parts, layout, choices and presets.
+  to-print project was built from the current parts, layout, choices and presets, and each of its
+  beds holds one material, every object on that material's filament, every copy once.
 - `tracker.md` (masses and times from the G-code footers), `BOM.md` and the viewer's manifest are
   current.
 

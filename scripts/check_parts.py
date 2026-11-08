@@ -136,6 +136,89 @@ def check_bed():
                                             f"every copy on exactly one plate")
 
 
+# ------------------------------------------------------------------ overhang
+LAYER, PIX = 0.2, 0.2
+REACH = 0.6              # mm a layer may stand out over the one below (45 deg, plus a line's width)
+CANTILEVER_MAX = 3.0     # mm a region may reach out held on one side
+BRIDGE_MAX = 34.0        # mm a region may span between holds (a ceiling held all round spans twice its reach)
+
+
+def _layer(tris, zr, z, x0, y0, nx, ny):
+    """The part's cross-section at height z as a raster (even-odd fill of the cut outline)."""
+    t = tris[(zr[:, 0] < z) & (zr[:, 1] > z)]
+    img = np.zeros((ny, nx + 1), np.int32)
+    if not len(t):
+        return img[:, :nx] > 0
+    a, b = t, np.roll(t, -1, axis=1)
+    cross = (a[..., 2] > z) != (b[..., 2] > z)
+    s = (z - a[..., 2]) / np.where(cross, b[..., 2] - a[..., 2], 1.0)
+    pts = a[..., :2] + s[..., None] * (b[..., :2] - a[..., :2])
+    order = np.argsort(~cross, axis=1, kind="stable")[:, :2]
+    seg = np.take_along_axis(pts, order[..., None], axis=1)
+    seg = seg[cross.sum(1) == 2]
+    (px, py), (qx, qy) = seg[:, 0].T, seg[:, 1].T
+    j0 = np.ceil((np.minimum(py, qy) - y0) / PIX - 0.5).astype(int)
+    j1 = np.ceil((np.maximum(py, qy) - y0) / PIX - 0.5).astype(int)
+    n = np.clip(j1 - j0, 0, None)
+    k = np.repeat(np.arange(len(seg)), n)
+    jj = j0[k] + np.arange(n.sum()) - np.repeat(np.cumsum(n) - n, n)
+    yc = y0 + (jj + 0.5) * PIX
+    xc = px[k] + (yc - py[k]) * (qx[k] - px[k]) / (qy[k] - py[k])
+    ii = np.clip(np.ceil((xc - x0) / PIX - 0.5).astype(int), 0, nx)
+    ok = (jj >= 0) & (jj < ny)
+    np.add.at(img, (jj[ok], ii[ok]), 1)
+    return (np.cumsum(img, axis=1)[:, :nx] % 2) == 1
+
+
+def overhangs(name):
+    """Regions of the print-ready part with nothing under them, layer by layer: (kind, z, reach mm),
+    kind 'island' (no hold), 'cantilever' (one), 'ceiling' (held all round) or 'bridge' (two or more)."""
+    from scipy import ndimage as ndi
+    tris = G.read_stl(os.path.join(G.PRINT, name + ".stl"))
+    zr = np.stack([tris[..., 2].min(1), tris[..., 2].max(1)], 1)
+    lo, hi = tris.reshape(-1, 3).min(0), tris.reshape(-1, 3).max(0)
+    x0, y0 = lo[0] - 2, lo[1] - 2
+    nx, ny = int((hi[0] - lo[0] + 4) / PIX) + 1, int((hi[1] - lo[1] + 4) / PIX) + 1
+    r = int(round(REACH / PIX))
+    disk = np.hypot(*np.mgrid[-r:r + 1, -r:r + 1]) <= r
+    out, prev = [], None
+    for k in range(int(hi[2] / LAYER)):
+        z = (k + 0.5) * LAYER + 1e-4
+        cur = _layer(tris, zr, z, x0, y0, nx, ny)
+        if prev is not None and cur.any():
+            over = cur & ~ndi.binary_dilation(prev, disk)
+            if over.any():
+                lab, n = ndi.label(over)
+                dist = ndi.distance_transform_edt(~prev) * PIX
+                for i in range(1, n + 1):
+                    comp = lab == i
+                    reach = float(dist[comp].max())
+                    if comp.sum() * PIX * PIX < 0.5:
+                        continue
+                    holds = ndi.label(ndi.binary_dilation(comp, iterations=r + 2) & prev, np.ones((3, 3)))[1]
+                    rim = ndi.binary_dilation(comp) & ~comp
+                    held = (rim & ndi.binary_dilation(prev, disk)).sum() / max(rim.sum(), 1)
+                    kind = ("island" if holds == 0 else "ceiling" if held > 0.9 else
+                            "bridge" if holds > 1 else "cantilever")
+                    out.append((kind, round(z, 1), round(reach, 1)))
+        prev = cur
+    return out
+
+
+def check_overhang():
+    bad, longest = [], (0.0, "")
+    limit = {"island": 0.0, "cantilever": CANTILEVER_MAX, "ceiling": BRIDGE_MAX / 2, "bridge": BRIDGE_MAX / 2}
+    for name in PRINT:
+        for kind, z, reach in overhangs(name):
+            if reach > limit[kind]:
+                bad.append(f"{name}: {kind} reaching {reach} mm at z {z}")
+            elif kind in ("bridge", "ceiling") and 2 * reach > longest[0]:
+                longest = (2 * reach, name)
+    report("overhang", not bad, "; ".join(bad[:8]) or
+           f"{len(PRINT)} parts print without supports: no islands, nothing held on one side reaches past "
+           f"{CANTILEVER_MAX:g} mm, bridges up to {longest[0]:.0f} mm ({longest[1]}; at most {BRIDGE_MAX:g})")
+
+
 # ------------------------------------------------------------------ clash at home
 def all_solids(parts, vit, x=0.0, theta=0.0):
     return A.solids_at(x, theta, parts=parts, vit=vit)
@@ -458,6 +541,7 @@ def main():
     belt_env = A.smooth_belt()
     check_parts(parts)
     check_bed()
+    check_overhang()
     check_clash(parts, vit, belt_env)
     check_travel(parts, vit, belt_env)
     check_pendulum(parts, vit)

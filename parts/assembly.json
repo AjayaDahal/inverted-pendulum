@@ -193,7 +193,7 @@
     -1.0,
     0.0,
     0.0,
-    -320.0,
+    -310.0,
     12.5,
     223.0,
     1.0
@@ -222,7 +222,7 @@
     -1.0,
     0.0,
     0.0,
-    320.0,
+    310.0,
     12.5,
     223.0,
     1.0
@@ -251,7 +251,7 @@
     -1.0,
     0.0,
     0.0,
-    -320.0,
+    -310.0,
     -11.0,
     223.0,
     1.0
@@ -280,7 +280,7 @@
     -1.0,
     0.0,
     0.0,
-    320.0,
+    310.0,
     -11.0,
     223.0,
     1.0
@@ -367,7 +367,7 @@
     0.0,
     1.0,
     0.0,
-    640.0,
+    620.0,
     0.0,
     0.0,
     1.0
@@ -2417,7 +2417,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -335.5,
+    -325.5,
     16.7,
     207.5
    ],
@@ -2439,7 +2439,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -335.5,
+    -325.5,
     16.7,
     238.5
    ],
@@ -2461,7 +2461,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -304.5,
+    -294.5,
     16.7,
     207.5
    ],
@@ -2483,7 +2483,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -304.5,
+    -294.5,
     16.7,
     238.5
    ],
@@ -2589,50 +2589,6 @@
    "note": "M5 x 10 into a T-nut in the top end bar's slot"
   },
   {
-   "name": "idler_saddle_in_1",
-   "size": "M5",
-   "length": 10.0,
-   "p0": [
-    319.0,
-    -19.0,
-    270.0
-   ],
-   "u": [
-    1.0,
-    0.0,
-    0.0
-   ],
-   "group": "frame",
-   "part": "idler_mount",
-   "stack": 4.0,
-   "nut": false,
-   "tnut": true,
-   "into": null,
-   "note": "M5 x 10 into a T-nut in the top end bar's slot"
-  },
-  {
-   "name": "idler_saddle_in_2",
-   "size": "M5",
-   "length": 10.0,
-   "p0": [
-    319.0,
-    19.0,
-    270.0
-   ],
-   "u": [
-    1.0,
-    0.0,
-    0.0
-   ],
-   "group": "frame",
-   "part": "idler_mount",
-   "stack": 4.0,
-   "nut": false,
-   "tnut": true,
-   "into": null,
-   "note": "M5 x 10 into a T-nut in the top end bar's slot"
-  },
-  {
    "name": "idler_saddle_out_1",
    "size": "M5",
    "length": 10.0,
@@ -2677,11 +2633,55 @@
    "note": "M5 x 10 into a T-nut in the top end bar's slot"
   },
   {
+   "name": "idler_saddle_out_3",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    347.0,
+    -19.0,
+    290.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_out_4",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    347.0,
+    19.0,
+    290.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
    "name": "set_screw",
    "size": "M3",
    "length": 12.0,
    "p0": [
-    -307.0,
+    -297.0,
     0.0,
     223.0
    ],
@@ -2703,7 +2703,7 @@
    "size": "M4",
    "length": 50.0,
    "p0": [
-    320.0,
+    310.0,
     -20.5,
     223.0
    ],
@@ -2725,7 +2725,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    344.2,
+    334.2,
     -16.0,
     233.0
    ],
@@ -2747,7 +2747,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    344.2,
+    334.2,
     16.0,
     233.0
    ],
@@ -3455,8 +3455,8 @@
    -116.0,
    -1.0
   ],
-  "x_motor": -320.0,
-  "x_idler": 320.0,
+  "x_motor": -310.0,
+  "x_idler": 310.0,
   "z_pulley": 223.0,
   "pd": 50.92958178940651,
   "x_stop": 241.0,
@@ -3470,15 +3470,15 @@
    300.0
   ],
   "z_rod": 320.0,
-  "belt_loop": 1440.0,
+  "belt_loop": 1400.0,
   "belt_loop_range": [
-   1420.0,
-   1460.0
+   1380.0,
+   1420.0
   ],
-  "belt_open_cut": 1450.0,
+  "belt_open_cut": 1410.0,
   "idler_travel": [
-   310.0,
-   330.0
+   300.0,
+   320.0
   ],
   "z_run_land": 247.77879089470326
  }

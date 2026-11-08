@@ -26,9 +26,9 @@ laid flat and the idler off the machine on its axle (M5, M6).
 | A7 | No shaft, hub, arm or sensor mount | missing | added in v1 |
 | A8 | One limit switch, no hard stops | major | fixed in v1 (bumpers + two switches) |
 | A9 | Loose electronics and leads | minor | fixed in v1 (tray, clips, strain relief) |
-| G1-G6 | Found by the gate while designing v1 | | all fixed (below) |
+| G1-G8 | Found by the gate while designing v1, and by the owner's slicer | | all fixed (below) |
 | M1-M6 | The measuring photos: frame, rods and belt not as modelled; the belt's teeth and the idler from the third set | major: the parts would not have fitted | fixed: design rebuilt to the measurements (below) |
-| O1-O4 | Open: to confirm on the real machine | | open: the frame's height; the belt's teeth to confirm by hand (below) |
+| O1-O4 | Open: to confirm on the real machine | | open: the frame's height; the belt's teeth confirmed (below) |
 | P1-P16 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
 
 ## As built (v0)
@@ -96,7 +96,7 @@ zip-tie bridges at the plate's back edge, `cable_clip`s in the frame's slots.
 parts on the idler-end front post (their purpose is not clear from the photos; nothing in v1
 touches them). The pulleys sit near where yours were, spaced for your closed loop (O2).
 
-## Found by the gate while designing v1
+## Found by the gate while designing v1, and by the owner's slicer
 
 | | What | Fix |
 |---|---|---|
@@ -106,6 +106,8 @@ touches them). The pulleys sit near where yours were, spaced for your closed loo
 | G4 | Catching the pendulum at 25 deg sent the cart 280-440 mm: past the stops | swing-up aims slightly above the top and the LQR takes over within 10 deg: worst case 80-90 mm |
 | G5 | A bang-bang swing-up lurched the cart at the start and never settled on the top | tanh-softened energy pumping with cart centring (`sim.py`) |
 | G6 | The pulley's set screw would have pressed on the round of the shaft | the bore's flat and the motor's flat both face the screw (+x) |
+| G7 | With supports off, three parts printed in mid-air (the owner's slicer flagged the idler mount): the idler mount's web 29 mm out from its saddle, the clamp's flare 9 mm out across the belt, the coupler's flex slots | a 45° gusset holds the web (the idler saddle now bolts through its outer face only), the flare tapers on all four sides, the coupler prints on its side; the gate's `overhang` check now slices every part |
+| G8 | The coupler's set-screw nut pockets were sealed inside it | each opens to the side |
 
 ## Checked against the measuring photos
 
@@ -118,20 +120,20 @@ of photos put a tape and calipers on the machine. Read from them:
 | M2 | Rods 180 mm apart | 114 mm between centres (calipers over both rods read 122.09, photo 17; the tape gives about 125 with parallax) | SC8UU holes slotted +-8 mm, so 98-130 fit |
 | M3 | HTD 5M belt, 15 mm wide | HTD 8M, 20 mm (calipers read 20.0-20.6; the teeth 8 mm apart against the caliper's scale, photo 22); a closed loop (the owner) | 20-tooth 8M pulleys, a 21 mm clamp channel with 8M seats, the axles spaced for the loop; the idler's sliders tension it, and the belt goes on before the idler's axle and the motor pulley's front flange (DESIGN.md, "Assembly order": the order written for an open belt could not fit a loop) |
 | M4 | Limit-switch blocks at y = 50 on the end bars | with the rods 114 apart the SK8s sit at y 36-78 there | blocks at y = 20 |
-| M5 | A loop of 175 teeth (1400 mm), assumed from where the old pulleys sat | the loop laid flat (photos 4, 8 of the third set): 180 teeth (1440 mm, a stock 8M length). Counted from the tooth pattern's phase round the unwrapped loop: 180.4 and 180.0-181.0 | `BELT_TEETH` 180: the axles 640 mm apart (were 620), both mounts 10 mm further out |
+| M5 | A loop of 175 teeth (1400 mm), assumed from where the old pulleys sat | 175: the owner's count, and the belt is stamped 1400 mm at 8 mm pitch. The photos of the loop laid flat (4, 8 of the third set) had been read as 180, counted from the tooth pattern round the unwrapped loop: about 3 % off, from the loop's perspective; built in for a day, then corrected | `BELT_TEETH` 175: the axles 620 mm apart. A photo cannot count teeth to one: count by hand |
 | M6 | Idler with one flange on a 4 mm rod | 20-tooth 8M, about 58 mm flanges on both sides, on two ~1.7 mm rods taped together (photos 6, 7, 9) | A1 and A4 corrected; it can stay the idler if it fits the cheeks (`make_to_print.py`, `MAYBE`) |
 
 What follows from them: the frame is 126 mm longer, so the cart travels +-241 mm (was +-178). The
 pendulum's plane moves 43.5 mm back with the narrower frame, and the plate narrows to 160 mm (was
-226). A closed loop fixes the pulleys' spacing: 180 teeth (1440 mm, M5) puts each axle 13 mm
+226). A closed loop fixes the pulleys' spacing: 175 teeth (1400 mm, M5) puts each axle 23 mm
 inboard of its end frame's centre line, so the motor and idler mounts carry them on webs under the end bars. The
-8M belt (0.19 kg) moves with the cart, and the 20-tooth pulley gives 9.8 N for the motor's torque
+8M belt (0.18 kg) moves with the cart, and the 20-tooth pulley gives 9.8 N for the motor's torque
 (was 10.4 with the 5M): the old controller then failed 20 of its 48 runs on the force budget. It
 was re-tuned and checked again on scenarios it was not tuned on (DESIGN.md, "Control").
 
-The photos could not give the frame's height (no photo measures it), still open. The belt's length
-is not printed on it (its marking, "113C020189", is a batch number); the third set gave its teeth
-(M5).
+The photos could not give the frame's height (no photo measures it), still open. The belt is
+stamped with its 1400 mm pitch length (the photos showed only its batch number, "113C020189"), and
+the owner counted its 175 teeth (M5).
 
 ## Open: to confirm on the real machine
 
@@ -140,11 +142,10 @@ still the 300 mm estimate. The pendulum's tip clears the desk by 64 mm at 300; o
 about 250 mm it would hit. Measure it, set `FRAME_H` and run `build_all.py`: the gate re-checks every
 clearance (DESIGN.md, "Measure first").
 
-**O2. The belt's tooth count.** A closed HTD 8M loop, 20 mm wide (M3). Its photos laid flat give 180
-teeth (M5), and the design is built for 180. Confirm it by hand (mark one tooth, go round): the
-tensioner takes +-2.5 teeth; for more, set `BELT_TEETH` and run `build_all.py`. The gate fails if
-the loop cannot fit inside the end frames (over about 187 teeth: then cut it once and
-clamp both ends).
+**O2. The belt's tooth count.** Closed: a closed HTD 8M loop, 20 mm wide (M3), of 175 teeth, the
+owner's count, and stamped 1400 mm (M5). The design is built for it; the tensioner takes +-2.5
+teeth. A different belt: set `BELT_TEETH` and run `build_all.py`. The gate fails if the loop cannot
+fit inside the end frames (over about 187 teeth: then cut it once and clamp both ends).
 
 **O3. The angle sensor.** The design takes an AS5600 board (corner holes 18-26 mm apart) and its
 6 x 2.5 mm diametric magnet, or a 600 P/R optical encoder (38 mm, 6 mm shaft, M3 on 28-32 mm).
@@ -186,7 +187,7 @@ a typical 1 A gives 6.5 N (20-tooth 8M pulley), and at 12 V the force collapses 
 now has the motor's torque-speed curve at the driver's current and supply (`params.MOTOR`,
 `DRIVE`: 1.5 A, the 19 V laptop brick, 80 % of the torque relied on), against the motion plus
 the friction at the cart, in every run; the controller's acceleration limit (3.54 m/s² with the
-8M drive) comes out of that budget and every run keeps 0.71 N in hand. Setting the driver:
+8M drive) comes out of that budget and every run keeps 0.74 N in hand. Setting the driver:
 DESIGN.md, "Electronics and firmware".
 
 **P2. The idler drags.** The idler turns on its PETG sleeve, a plain bearing that both belt runs

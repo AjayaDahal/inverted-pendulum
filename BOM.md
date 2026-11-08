@@ -50,7 +50,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | mechanical endstop | 2 | lever switch on a 40 x 16 mm board, holes 19 mm apart; wired normally closed |
 | stepper driver carrier (A4988 / DRV8825) | 1 | step/dir driver set to 1.5 A, with its heatsink |
 | controller (Arduino Uno / Nano or ESP32) | 1 | runs firmware/pendulum (FastAccelStepper: not an STM32) |
-| HTD 8M belt, 20 mm wide | 1 | yours: a closed loop of 180 teeth (1440 mm, counted from your photos; the tensioner takes 1420-1460); confirm the count and set `BELT_TEETH` if it differs |
+| HTD 8M belt, 20 mm wide | 1 | yours: a closed loop of 175 teeth (1400 mm, your count; the tensioner takes 1380-1420) |
 
 ## Fasteners
 
@@ -85,6 +85,6 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
+**To confirm before printing:** the frame's height (`tracker.md`,
 "Before the first print"), and that the drawer holds the 15 T-nuts, the M4 x 50 idler axle
 and an 8 mm x 115 mm steel shaft.

@@ -147,8 +147,8 @@
     -60
    ],
    "shared": false,
-   "grams": 66.6,
-   "minutes": 170.1
+   "grams": 64.3,
+   "minutes": 164.1
   },
   {
    "name": "clamp_jaw",
@@ -221,8 +221,8 @@
     -50
    ],
    "shared": false,
-   "grams": 59.6,
-   "minutes": 123.9
+   "grams": 61.5,
+   "minutes": 126.8
   },
   {
    "name": "motor_pulley",
@@ -241,7 +241,7 @@
     -1.0,
     0.0,
     0.0,
-    -320.0,
+    -310.0,
     12.5,
     223.0,
     1.0
@@ -278,7 +278,7 @@
     -1.0,
     0.0,
     0.0,
-    320.0,
+    310.0,
     12.5,
     223.0,
     1.0
@@ -315,7 +315,7 @@
     -1.0,
     0.0,
     0.0,
-    -320.0,
+    -310.0,
     -11.0,
     223.0,
     1.0
@@ -352,7 +352,7 @@
     -1.0,
     0.0,
     0.0,
-    320.0,
+    310.0,
     -11.0,
     223.0,
     1.0
@@ -406,8 +406,8 @@
     -50
    ],
    "shared": false,
-   "grams": 51.2,
-   "minutes": 123.1
+   "grams": 62.9,
+   "minutes": 157.1
   },
   {
    "name": "idler_slider_1",
@@ -463,7 +463,7 @@
     0.0,
     1.0,
     0.0,
-    640.0,
+    620.0,
     0.0,
     0.0,
     1.0
@@ -924,8 +924,8 @@
     215
    ],
    "shared": false,
-   "grams": 5.2,
-   "minutes": 19.4
+   "grams": 4.8,
+   "minutes": 15.3
   },
   {
    "name": "electronics_tray",
@@ -2096,7 +2096,7 @@
    ],
    "shared": false,
    "centre": [
-    -320.0,
+    -310.0,
     28.5,
     223.0
    ]
@@ -2997,7 +2997,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -335.5,
+    -325.5,
     16.7,
     207.5
    ],
@@ -3019,7 +3019,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -335.5,
+    -325.5,
     16.7,
     238.5
    ],
@@ -3041,7 +3041,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -304.5,
+    -294.5,
     16.7,
     207.5
    ],
@@ -3063,7 +3063,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -304.5,
+    -294.5,
     16.7,
     238.5
    ],
@@ -3169,50 +3169,6 @@
    "note": "M5 x 10 into a T-nut in the top end bar's slot"
   },
   {
-   "name": "idler_saddle_in_1",
-   "size": "M5",
-   "length": 10.0,
-   "p0": [
-    319.0,
-    -19.0,
-    270.0
-   ],
-   "u": [
-    1.0,
-    0.0,
-    0.0
-   ],
-   "group": "frame",
-   "part": "idler_mount",
-   "stack": 4.0,
-   "nut": false,
-   "tnut": true,
-   "into": null,
-   "note": "M5 x 10 into a T-nut in the top end bar's slot"
-  },
-  {
-   "name": "idler_saddle_in_2",
-   "size": "M5",
-   "length": 10.0,
-   "p0": [
-    319.0,
-    19.0,
-    270.0
-   ],
-   "u": [
-    1.0,
-    0.0,
-    0.0
-   ],
-   "group": "frame",
-   "part": "idler_mount",
-   "stack": 4.0,
-   "nut": false,
-   "tnut": true,
-   "into": null,
-   "note": "M5 x 10 into a T-nut in the top end bar's slot"
-  },
-  {
    "name": "idler_saddle_out_1",
    "size": "M5",
    "length": 10.0,
@@ -3257,11 +3213,55 @@
    "note": "M5 x 10 into a T-nut in the top end bar's slot"
   },
   {
+   "name": "idler_saddle_out_3",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    347.0,
+    -19.0,
+    290.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
+   "name": "idler_saddle_out_4",
+   "size": "M5",
+   "length": 10.0,
+   "p0": [
+    347.0,
+    19.0,
+    290.0
+   ],
+   "u": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "group": "frame",
+   "part": "idler_mount",
+   "stack": 4.0,
+   "nut": false,
+   "tnut": true,
+   "into": null,
+   "note": "M5 x 10 into a T-nut in the top end bar's slot"
+  },
+  {
    "name": "set_screw",
    "size": "M3",
    "length": 12.0,
    "p0": [
-    -307.0,
+    -297.0,
     0.0,
     223.0
    ],
@@ -3283,7 +3283,7 @@
    "size": "M4",
    "length": 50.0,
    "p0": [
-    320.0,
+    310.0,
     -20.5,
     223.0
    ],
@@ -3305,7 +3305,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    344.2,
+    334.2,
     -16.0,
     233.0
    ],
@@ -3327,7 +3327,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    344.2,
+    334.2,
     16.0,
     233.0
    ],
@@ -4035,8 +4035,8 @@
    -116.0,
    -1.0
   ],
-  "x_motor": -320.0,
-  "x_idler": 320.0,
+  "x_motor": -310.0,
+  "x_idler": 310.0,
   "z_pulley": 223.0,
   "pd": 50.92958178940651,
   "x_stop": 241.0,
@@ -4050,15 +4050,15 @@
    300.0
   ],
   "z_rod": 320.0,
-  "belt_loop": 1440.0,
+  "belt_loop": 1400.0,
   "belt_loop_range": [
-   1420.0,
-   1460.0
+   1380.0,
+   1420.0
   ],
-  "belt_open_cut": 1450.0,
+  "belt_open_cut": 1410.0,
   "idler_travel": [
-   310.0,
-   330.0
+   300.0,
+   320.0
   ],
   "z_run_land": 247.77879089470326
  },
@@ -4066,110 +4066,110 @@
   {
    "name": "petg_1_belt_drive",
    "material": "petg",
-   "grams": 153.4,
-   "minutes": 354.5,
+   "grams": 167.3,
+   "minutes": 391.7,
    "items": [
     {
      "part": "cable_clip",
      "k": 1,
-     "x": 231.038,
-     "y": 140.25,
-     "angle": 90.0,
+     "x": 92.538,
+     "y": 166.0,
+     "angle": 0.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "cable_clip",
      "k": 2,
-     "x": 172.038,
-     "y": 155.25,
+     "x": 126.538,
+     "y": 166.0,
      "angle": 0.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "cable_clip",
      "k": 3,
-     "x": 52.038,
-     "y": 165.25,
-     "angle": 0.0,
+     "x": 229.538,
+     "y": 163.0,
+     "angle": 90.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "clamp_jaw",
      "k": 1,
-     "x": 152.038,
-     "y": 95.25,
-     "angle": 0.0,
+     "x": 209.538,
+     "y": 108.0,
+     "angle": 90.0,
      "url": "../parts/print_ready/clamp_jaw.stl"
     },
     {
      "part": "idler_mount",
      "k": 1,
-     "x": 125.038,
-     "y": 149.25,
+     "x": 150.538,
+     "y": 100.0,
      "angle": 0.0,
      "url": "../parts/print_ready/idler_mount.stl"
     },
     {
      "part": "idler_sleeve",
      "k": 1,
-     "x": 233.038,
-     "y": 78.25,
+     "x": 150.538,
+     "y": 163.0,
      "angle": 45.0,
      "url": "../parts/print_ready/idler_sleeve.stl"
     },
     {
      "part": "idler_slider",
      "k": 1,
-     "x": 208.038,
-     "y": 84.25,
+     "x": 106.538,
+     "y": 143.0,
      "angle": 90.0,
      "url": "../parts/print_ready/idler_slider.stl"
     },
     {
      "part": "idler_slider",
      "k": 2,
-     "x": 208.038,
-     "y": 110.25,
+     "x": 142.538,
+     "y": 143.0,
      "angle": 90.0,
      "url": "../parts/print_ready/idler_slider.stl"
     },
     {
      "part": "motor_mount",
      "k": 1,
-     "x": 61.038,
-     "y": 102.25,
+     "x": 62.538,
+     "y": 106.0,
      "angle": 90.0,
      "url": "../parts/print_ready/motor_mount.stl"
     },
     {
      "part": "rod_bumper",
      "k": 1,
-     "x": 172.038,
-     "y": 132.25,
-     "angle": 90.0,
+     "x": 173.538,
+     "y": 149.0,
+     "angle": 180.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 2,
-     "x": 205.038,
-     "y": 136.25,
+     "x": 26.538,
+     "y": 155.0,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 3,
-     "x": 77.038,
-     "y": 145.25,
+     "x": 59.538,
+     "y": 155.0,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 4,
-     "x": 25.038,
-     "y": 146.25,
+     "x": 203.538,
+     "y": 159.0,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     }
@@ -4253,8 +4253,8 @@
   {
    "name": "pla_2_bridge_clamp_tray",
    "material": "pla",
-   "grams": 219.0,
-   "minutes": 525.6,
+   "grams": 216.7,
+   "minutes": 519.7,
    "items": [
     {
      "part": "as5600_mount",
@@ -4335,15 +4335,15 @@
   {
    "name": "petg_3_option_encoder",
    "material": "petg",
-   "grams": 5.2,
-   "minutes": 19.4,
+   "grams": 4.8,
+   "minutes": 15.2,
    "items": [
     {
      "part": "coupler",
      "k": 1,
-     "x": 125.001,
-     "y": 125.001,
-     "angle": 45.0,
+     "x": 125.0,
+     "y": 125.0,
+     "angle": 90.0,
      "url": "../parts/print_ready/coupler.stl"
     }
    ],
@@ -6373,10 +6373,10 @@
    -3.743
   ],
   "masses": {
-   "cart_kg": 0.683,
-   "belt_kg": 0.187,
+   "cart_kg": 0.68,
+   "belt_kg": 0.182,
    "spinning_kg": 0.034,
-   "effective_kg": 0.904,
+   "effective_kg": 0.896,
    "pendulum_kg": 0.1124,
    "cg_m": 0.0695,
    "J_kgm2": 0.001713

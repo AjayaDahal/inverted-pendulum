@@ -155,10 +155,12 @@ def belt_clamp():
     col -= box(-c["col_x"] / 2 + c["wall"], c["col_x"] / 2 - c["wall"], -c["col_y"] / 2 + c["wall"],
                c["col_y"] / 2 - c["wall"], seat_top + flare + 2.0, z_top - ft - 2.0)
     body += col
-    # 45 deg flare from the column to the seat (no overhang when printed flange-down)
     hx, hy = c["len"] / 2, c["side"]
-    body += prism_xz([(-hx, seat_top), (hx, seat_top), (c["col_x"] / 2, seat_top + flare),
-                      (-c["col_x"] / 2, seat_top + flare)], -hy, hy)
+    # flared on all four sides (45 deg along the belt, 31 across): prints flange-down without a shelf
+    body += (prism_xz([(-hx, seat_top), (hx, seat_top), (c["col_x"] / 2, seat_top + flare),
+                       (-c["col_x"] / 2, seat_top + flare)], -hy, hy)
+             & prism_yz([(-hy, seat_top), (hy, seat_top), (c["col_y"] / 2, seat_top + flare),
+                         (-c["col_y"] / 2, seat_top + flare)], -hx, hx))
     body += box(-hx, hx, -hy, hy, z_side, seat_top)
     body -= box(-hx - 1, hx + 1, -c["chan"], c["chan"], z_side - 1, z_ceil)      # belt channel
     for x, y in CLAMP_BOLTS:               # M3 from the plate's top, nuts in pockets under the flange
@@ -202,19 +204,20 @@ def _saddle(x_end_sign, y0, y1):
     return s
 
 
-def _saddle_bolts(s, x_end_sign, ys):
+def _saddle_bolts(s, x_end_sign, bolts):
     t = P.SADDLE_T
-    for xf, d in ((P.X_BAR_IN, -1), (P.X_BAR_OUT, 1)):
+    for face, xf, d in (("in", P.X_BAR_IN, -1), ("out", P.X_BAR_OUT, 1)):
         x = x_end_sign * xf
         xa = x + x_end_sign * d * t
-        for y, z in ys:
+        for y, z in bolts[face]:
             s -= cyl_x(P.D_M5 / 2, y, z, *sorted((x - x_end_sign * d, xa + x_end_sign * d)))
             s -= cyl_x(P.HEAD["M5"][0] / 2 + F, y, z, *sorted((xa - x_end_sign * d * 3.0, xa + x_end_sign * d)))
     return s
 
 
-MOTOR_BOLTS_YZ = [(22.0, P.Z_BAR_SLOTS[0]), (40.0, P.Z_BAR_SLOTS[1])]
-IDLER_BOLTS_YZ = [(-19.0, P.Z_BAR_SLOTS[0]), (19.0, P.Z_BAR_SLOTS[0])]
+MOTOR_BOLTS = {face: [(22.0, P.Z_BAR_SLOTS[0]), (40.0, P.Z_BAR_SLOTS[1])] for face in ("in", "out")}
+# the idler saddle's inner face is under the web's gusset: all four through the outer face
+IDLER_BOLTS = {"in": [], "out": [(y, z) for z in P.Z_BAR_SLOTS for y in (-19.0, 19.0)]}
 
 
 def motor_mount():
@@ -241,7 +244,7 @@ def motor_mount():
             s -= cyl_y(P.D_M3 / 2, x, z, y0 - 1, y1 + 1)
             s -= cyl_y(P.HEAD["M3"][0] / 2 + F, x, z, y0 - 1, y0 + CB3)
     s -= box(x0 + 6.0, x1 - 6.0, y1 + 6.0, yb + 1, zb - 5.0, zb + 0.01)           # cable slot in the floor
-    return _saddle_bolts(s, -1, MOTOR_BOLTS_YZ)
+    return _saddle_bolts(s, -1, MOTOR_BOLTS)
 
 
 def pulley_body(bore="motor"):
@@ -303,7 +306,12 @@ def idler_mount():
     cz0 = wz0 - 7.0
     lug = 8.0
     xo = P.X_BAR_OUT + P.SADDLE_T
-    s += box(min(wx0 - 7.0, P.X_BAR_IN - P.SADDLE_T), P.X_BAR_IN, y0, y1, *P.SADDLE_WEB)   # web out to the cheeks
+    xg = P.X_BAR_IN - P.SADDLE_T                 # the saddle's inner cheek
+    xw = min(wx0 - 7.0, xg)
+    s += box(xw, P.X_BAR_IN, y0, y1, *P.SADDLE_WEB)   # web out to the cheeks
+    if xg - xw > 0.5:                          # 45 deg gusset over the web's reach: prints upside down unsupported
+        zw = P.SADDLE_WEB[1] - 0.01
+        s += prism_xz([(xw, zw), (xg + 0.01, zw), (xg + 0.01, zw + xg - xw)], y0, y1)
     for sy in (-1, 1):
         ya, yb = sorted((sy * P.CHEEK_Y[0], sy * P.CHEEK_Y[1]))
         cheek = box(wx0 - 7.0, wx1 + lug, ya, yb, cz0, P.SADDLE_WEB[0] + 0.01)
@@ -314,7 +322,7 @@ def idler_mount():
         if wx1 + lug > xo:                 # cheek reaching past the bar: gusset up the outer saddle cheek
             s += prism_xz([(xo - 0.01, P.SADDLE_WEB[0] - 0.01), (wx1 + lug, P.SADDLE_WEB[0] - 0.01),
                            (xo - 0.01, P.SADDLE_WEB[0] + 24.0)], ya, yb)
-    return _saddle_bolts(s, 1, IDLER_BOLTS_YZ)
+    return _saddle_bolts(s, 1, IDLER_BOLTS)
 
 
 def idler_slider():
@@ -449,19 +457,21 @@ def magnet_cap():
 def coupler():
     """Option for the 600 P/R encoder: flexible beam coupling, 8 mm shaft to the encoder's 6 mm,
     alternating slots so it takes up the misalignment between the KP08s and the encoder's
-    bearings. Two M3 set screws."""
+    bearings. Two M3 set screws, their nuts slid in from the side. Prints on its side, on a flat, so
+    the slots stand upright."""
     c = P.COUPLER
     y0, y1 = c["y0"], c["y1"]
     k = cyl_y(c["r"], 0, P.Z_SHAFT, y0, y1)
+    k -= box(c["r"] - 2.0, c["r"] + 1.0, y0 - 1, y1 + 1, P.Z_SHAFT - c["r"] - 1, P.Z_SHAFT + c["r"] + 1)
     k -= cyl_y((P.SHAFT_D + 0.1) / 2, 0, P.Z_SHAFT, y0 - 1, y0 + 8.0)
     k -= cyl_y((P.LPD3806["shaft"] + 0.1) / 2, 0, P.Z_SHAFT, y1 - 12.5, y1 + 1)
     for i, ys in enumerate((y0 + 10.0, y0 + 11.6)):
         sz = 1 if i % 2 == 0 else -1
         k -= box(-c["r"] - 1, c["r"] + 1, ys, ys + 0.8, *sorted((P.Z_SHAFT - sz * 2.5, P.Z_SHAFT + sz * (c["r"] + 1))))
+    a = NUT3[0] + 0.3
     for ym in (y0 + 4.0, y1 - 6.0):
         k -= cyl_z(P.D_M3 / 2, 0, ym, P.Z_SHAFT, P.Z_SHAFT + c["r"] + 1)
-        k -= box(-(NUT3[0] + 0.3) / 2, (NUT3[0] + 0.3) / 2, ym - (NUT3[0] + 0.3) / 2, ym + (NUT3[0] + 0.3) / 2,
-                 P.Z_SHAFT + 4.6, P.Z_SHAFT + 4.6 + NUT3[1] + 0.3)
+        k -= box(-c["r"] - 1, a / math.sqrt(3), ym - a / 2, ym + a / 2, P.Z_SHAFT + 4.6, P.Z_SHAFT + 4.6 + NUT3[1] + 0.3)
     return k
 
 
@@ -557,7 +567,7 @@ PARTS = {
                          role="tip cap (room for washers as tip mass)"),
     "magnet_cap": dict(fn=magnet_cap, material=PETG, group="pendulum", copies=[I4], print=[("x", 90)],
                        role="magnet cap: AS5600 magnet on the shaft's axis"),
-    "coupler": dict(fn=coupler, material=PETG, group="pendulum_opt", copies=[I4], print=[("x", 90)],
+    "coupler": dict(fn=coupler, material=PETG, group="pendulum_opt", copies=[I4], print=[("y", 90)],
                     role="option: flexible coupling to a 600 P/R optical encoder (instead of the magnet cap)"),
     "electronics_tray": dict(fn=electronics_tray, material=PLA, group="frame", copies=[I4], print=[],
                              role="electronics tray behind the frame"),
