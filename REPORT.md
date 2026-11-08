@@ -28,7 +28,7 @@ laid flat and the idler off the machine on its axle (M5, M6).
 | A9 | Loose electronics and leads | minor | fixed in v1 (tray, clips, strain relief) |
 | G1-G8 | Found by the gate while designing v1, and by the owner's slicer | | all fixed (below) |
 | M1-M6 | The measuring photos: frame, rods and belt not as modelled; the belt's teeth and the idler from the third set | major: the parts would not have fitted | fixed: design rebuilt to the measurements (below) |
-| O1-O4 | Open: to confirm on the real machine | | open: the frame's height; the belt's teeth confirmed (below) |
+| O1-O4 | Open: to confirm on the real machine | | O1, O2 closed (the frame's height and the belt's teeth, measured); O3, O4 to confirm (below) |
 | P1-P16 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
 
 ## As built (v0)
@@ -62,7 +62,7 @@ checks it (`belt`).
 **A4. Pulleys at different heights, the motor's with one flange.** The printed pulleys are 20-tooth
 8M; the idler has a flange on each side (M6), the motor pulley one, and in the photos the runs
 slope. *v1:* new 20-tooth HTD 8M pulleys with a flange on each side (the front
-one pressed on after assembly), both axles at z 223, so both runs are level and parallel to the rails;
+one pressed on after assembly), both axles at z 242, so both runs are level and parallel to the rails;
 1 mm between the belt and each flange.
 
 **A5. The belt link slips.** A hollow bar with a ladder of slots hangs from the plate, and a hex key
@@ -77,7 +77,7 @@ four M3 screws. Open belt ends or a closed loop both clamp.
 line on the plate's back half. A pendulum on that axis sits over the carriage, between the rails: it
 cannot hang past the plate or the rods, so it can only ever be balanced from upright, by hand. *v1:*
 `pivot_bridge` carries both KP08s forward so the arm turns in a plane 8 mm in front of the frame's
-front face: a full turn is clear at every cart position, the tip 64 mm above the desk when hanging.
+front face: a full turn is clear at every cart position, the tip 83 mm above the desk when hanging.
 
 **A7. Missing:** pivot shaft, hub, arm, angle sensor mount. *v1:* 8 mm x 115 mm shaft (offcut or M8
 bolt), `pendulum_hub` (split clamp), `pendulum_arm` (20 x 10 mm, 300 mm to the tip), `pendulum_tip`,
@@ -131,15 +131,18 @@ inboard of its end frame's centre line, so the motor and idler mounts carry them
 (was 10.4 with the 5M): the old controller then failed 20 of its 48 runs on the force budget. It
 was re-tuned and checked again on scenarios it was not tuned on (DESIGN.md, "Control").
 
-The photos could not give the frame's height (no photo measures it), still open. The belt is
+The photos could not give the frame's height (no photo measured it); the owner's tape since has
+(O1). The belt is
 stamped with its 1400 mm pitch length (the photos showed only its batch number, "113C020189"), and
 the owner counted its 175 teeth (M5).
 
 ## Open: to confirm on the real machine
 
-**O1. The frame's height.** Length, width and the rods' spacing are measured (M1, M2); the height is
-still the 300 mm estimate. The pendulum's tip clears the desk by 64 mm at 300; on a frame lower than
-about 250 mm it would hit. Measure it, set `FRAME_H` and run `build_all.py`: the gate re-checks every
+**O1. The frame's height.** Closed: 319 mm from the desk to the top of the end bars, the owner's
+tape with its hook on the desk, against an end bar (photos of 2026-11-08; two more, with the tape
+about 50 mm in front of a rod, read its axis about 10 mm high, as parallax from above makes it).
+It had been the 300 mm estimate: everything rises 19 mm, no printed part changes, and the
+pendulum's tip clears the desk by 83 mm (64 at 300). The gate re-checks every
 clearance (DESIGN.md, "Measure first").
 
 **O2. The belt's tooth count.** Closed: a closed HTD 8M loop, 20 mm wide (M3), of 175 teeth, the

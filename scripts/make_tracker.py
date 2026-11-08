@@ -32,9 +32,7 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 
 ## Before the first print
 
-- [ ] Measure the frame's height (desk to the top of the end bars) and set `FRAME_H` in
-      `scripts/params.py` (DESIGN.md, "Measure first"); length, width and the rods' spacing come
-      from your measuring photos.
+- [x] The frame: {L} x {W} x {H} mm (your photos and tape), set in `scripts/params.py`.
 - [x] The belt: {TEETH} teeth ({LOOP} mm), your count, and `BELT_TEETH` is set to it.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
@@ -60,7 +58,8 @@ def _status():
 
 def render():
     status = _status()
-    head = HEAD.replace("{TEETH}", str(P.BELT_TEETH)).replace("{LOOP}", f"{P.BELT_LOOP:.0f}")
+    head = (HEAD.replace("{TEETH}", str(P.BELT_TEETH)).replace("{LOOP}", f"{P.BELT_LOOP:.0f}")
+            .replace("{L}", f"{P.FRAME_L:.0f}").replace("{W}", f"{P.FRAME_W:.0f}").replace("{H}", f"{P.FRAME_H:.0f}"))
     rows, tot = [], {"pla": [0.0, 0.0], "petg": [0.0, 0.0]}
     for i, (plate, items) in enumerate(PT.PLATES.items(), start=1):
         g, mins, stamp = SA.stats(PT.gcode_path(plate))

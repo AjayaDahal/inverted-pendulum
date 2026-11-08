@@ -8,16 +8,15 @@ cart's home is x = 0; the pendulum angle is 0 upright and positive leaning towar
 The frame, rails, bearings, motor and belt are the owner's own (no purchases). Their catalogue
 sizes are exact. The frame's length and width, the rod spacing and the belt (HTD 8M, 20 mm, a
 closed loop) were read from his measuring photos (tape and calipers, 2026-11-06); the belt's
-175 teeth are his own count (it is stamped 1400 mm). Still to measure: the frame's height
-(DESIGN.md, "Measure first"). Every printed part that touches the frame is adjustable over the
-remaining error.
+175 teeth are his own count (it is stamped 1400 mm), and the frame's height his tape from the desk
+(2026-11-08). Every printed part that touches the frame is adjustable over the remaining error.
 """
 import math
 
 # ---------------------------------------------------------------- frame (photos 9-15: tape)
 FRAME_L = 686.0          # outer length along the rails (end frames' outer faces)
 FRAME_W = 193.0          # outer width
-FRAME_H = 300.0          # top of the posts and of the 2040 top end bars: an estimate, measure it
+FRAME_H = 319.0          # top of the posts and of the 2040 top end bars: tape from the desk (2026-11-08)
 EXT = 20.0               # 20-series profile module
 SLOT = 6.2               # slot opening of the 20-series profile (B-type, 6 mm)
 BAR_H = 40.0             # top end bars: 2040 standing on edge

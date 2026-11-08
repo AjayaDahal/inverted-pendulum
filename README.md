@@ -39,7 +39,7 @@ could still make the machine fail, and what was changed or must be checked for e
 | | |
 |---|---|
 | **Machine** | Cart-pole: belt-driven carriage on two 8 mm rods, pendulum on a shaft in two KP08s |
-| **Frame** | The owner's 2020/2040 frame, 686 × 193 mm from his measuring photos, about 300 mm high ([measure it](DESIGN.md#measure-first)) |
+| **Frame** | The owner's 2020/2040 frame, 686 × 193 × 319 mm, from his measuring photos and tape ([measured](DESIGN.md#measure-first)) |
 | **Travel** | ±241 mm to the hard stops, limit switches at ±237 mm, firmware keeps to ±231 mm |
 | **Drive** | NEMA 17, his closed HTD 8M 20 mm belt on two printed 20-tooth pulleys spaced for it: 160 mm per turn, 20 steps/mm |
 | **Pendulum** | 300 mm PLA arm, 112 g, turns a full circle in front of the frame at any cart position |
@@ -130,8 +130,8 @@ branch → `main`, `/ (root)`*); the root `index.html` opens `viewer/`.
 
 ## Build it
 
-1. **Measure** the frame's height (the belt's 175 teeth, your count, are set), put it in
-   `scripts/params.py` (`FRAME_H`) and run
+1. **Measured**: the frame (686 × 193 × 319 mm) and the belt (175 teeth) are set in
+   `scripts/params.py`; if yours differ, change them there and run
    `python scripts/build_all.py`: every part and clearance follows
    ([`DESIGN.md`](DESIGN.md#measure-first)).
 2. **Print** from `3mf/to_print_kobra_s1.3mf`: one project with only the parts still to print

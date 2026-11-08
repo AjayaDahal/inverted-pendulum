@@ -46,5 +46,5 @@ static const int CFG_COUNTS_ENCODER = 2400;     // 600 P/R: both edges of both c
 static const float CFG_PIVOT_GOAL = 0.0005f;    // N m: the f test's goal for the pivot's friction
 static const float CFG_PIVOT_MAX = 0.0025f;     // N m: the swing-up is checked up to this
 static const float CFG_HUNT_MNM[7] = {0.0f, 0.25f, 0.5f, 1.0f, 1.5f, 2.0f, 2.5f};  // balanced, the pendulum hunts (sim.py) at this pivot friction, mN m:
-static const float CFG_HUNT_DEG[7] = {0.17f, 0.14f, 0.1f, 0.94f, 2.2f, 3.19f, 4.05f};  // deg peak to peak
-static const float CFG_HUNT_MM[7] = {2.1f, 2.1f, 2.2f, 16.7f, 38.8f, 65.5f, 88.1f};  // cart mm peak to peak
+static const float CFG_HUNT_DEG[7] = {0.15f, 0.17f, 0.1f, 0.93f, 2.16f, 3.17f, 4.1f};  // deg peak to peak
+static const float CFG_HUNT_MM[7] = {2.8f, 4.3f, 2.2f, 15.7f, 41.5f, 66.5f, 87.9f};  // cart mm peak to peak

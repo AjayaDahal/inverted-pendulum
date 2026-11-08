@@ -25,7 +25,8 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 
 VIT_NOTES = {
     "2020 / 2040 aluminium profile": "the frame as built: 4 posts, 2 top end bars (2040 on edge), 2 bottom end bars, "
-                                     "2 long members. Measure it before printing (DESIGN.md, \"Measure first\")",
+                                     f"2 long members, {P.FRAME_L:.0f} x {P.FRAME_W:.0f} x {P.FRAME_H:.0f} mm "
+                                     "(your photos and tape)",
     "8 mm rod": f"{P.ROD_L:.0f} mm or longer, {P.ROD_SPACING:.0f} mm apart "
                 f"({P.ROD_SPACING - 2 * P.SC_SLOT:.0f}-{P.ROD_SPACING + 2 * P.SC_SLOT:.0f} fit)",
     "SK8 rod support": "on the top end bars, as built",
@@ -55,8 +56,7 @@ EXTRA = """
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's height (`tracker.md`,
-"Before the first print"), and that the drawer holds the {TNUTS} T-nuts, the {AXLE} idler axle
+**To confirm before printing:** that the drawer holds the {TNUTS} T-nuts, the {AXLE} idler axle
 and an 8 mm x {SHAFT} mm steel shaft.
 """
 

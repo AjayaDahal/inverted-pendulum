@@ -7,10 +7,10 @@
 - His photos are in `git_ignore_this/` and stay private: the folder is in `.gitignore`; never
   commit or publish them, or any picture taken from them.
 - The frame's length and width, the rods' spacing and the belt come from his measuring photos;
-  the belt's 175 teeth from his own count (it is stamped 1400 mm); the frame's height is still
-  open (`REPORT.md`, O1). When he measures it, put it in `scripts/params.py` (`FRAME_H`) and run
-  `python scripts/build_all.py`. Every other dimension follows from them. Don't count teeth from a
-  photo: one read 180 for this belt (M5).
+  the belt's 175 teeth from his own count (it is stamped 1400 mm), the frame's 319 mm height from
+  his tape (`REPORT.md`, M5, O1, O2). If he re-measures anything, put it in `scripts/params.py`
+  and run `python scripts/build_all.py`. Every other dimension follows from them. Don't count
+  teeth from a photo: one read 180 for this belt (M5).
 - Parts print without supports: the gate's `overhang` check slices each print-ready part and fails
   on anything that starts in mid-air, reaches more than 3 mm out held on one side, or bridges more
   than 34 mm. Fix the shape (45° gussets, chamfers) or the print orientation; don't turn supports on.
@@ -54,8 +54,8 @@
   (`PIVOT_FRICTION_GOAL`, the firmware's `f` test, whose estimator `PivotTest` the C++ test checks on
   simulated swings). The gate bounds the hunting at the goal: keep it passing rather than raising
   `sim.HUNT_LIMIT`.
-- The machine's numbers come from the owner's photos (REPORT.md, M1-M6), except the frame's
-  height (`FRAME_H`: O1) and the belt's 175 teeth (`BELT_TEETH`: his count, M5). `BELT_TEETH`
+- The machine's numbers come from the owner's photos and measurements (REPORT.md, M1-M6, O1, O2):
+  `FRAME_H` 319 (his tape), `BELT_TEETH` 175 (his count). `BELT_TEETH`
   sets the pulleys' spacing, and the travel stops follow it.
 - Firmware compile check (not in CI): arduino-cli with the `arduino:avr` and `esp32:esp32` cores and
   FastAccelStepper; it builds for `arduino:avr:uno`, `arduino:avr:nano` and `esp32:esp32:esp32`

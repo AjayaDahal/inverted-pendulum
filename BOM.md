@@ -37,7 +37,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 
 | Item | Qty | Notes |
 |---|---|---|
-| 2020 / 2040 aluminium profile | 10 | the frame as built: 4 posts, 2 top end bars (2040 on edge), 2 bottom end bars, 2 long members. Measure it before printing (DESIGN.md, "Measure first") |
+| 2020 / 2040 aluminium profile | 10 | the frame as built: 4 posts, 2 top end bars (2040 on edge), 2 bottom end bars, 2 long members, 686 x 193 x 319 mm (your photos and tape) |
 | 8 mm rod | 2 | 680 mm or longer, 114 mm apart (98-130 fit) |
 | SK8 rod support | 4 | on the top end bars, as built |
 | SC8UU bearing block | 4 | under the carriage plate, 4 x M4 x 10 each |
@@ -85,6 +85,5 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** the frame's height (`tracker.md`,
-"Before the first print"), and that the drawer holds the 15 T-nuts, the M4 x 50 idler axle
+**To confirm before printing:** that the drawer holds the 15 T-nuts, the M4 x 50 idler axle
 and an 8 mm x 115 mm steel shaft.

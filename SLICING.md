@@ -25,7 +25,9 @@ The plates, their parts, masses and times: [`tracker.md`](tracker.md). Start wit
 
 1. `make_print_ready.py`: the print table. Each part's material, number of copies, the rotation
    that lays it on the bed (proper rotations only, so nothing is mirrored), brim and per-part
-   settings; writes `parts/print_ready/<part>.stl`, centred, standing on z = 0.
+   settings; writes `parts/print_ready/<part>.stl`, centred, standing on z = 0. A part whose surface
+   has not changed keeps its file (the CAD kernel re-triangulates a part that only moves), so a new
+   frame height does not make its G-code stale.
 2. `plates.py`: six plates, one material each. Parts keep their print orientation and only turn
    about z; footprints (convex hulls) go on largest first at the lowest, then leftmost free spot,
    6 mm apart and 10 mm inside the bed, and the layout is centred. Deterministic: the gate and the

@@ -8,9 +8,7 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 
 ## Before the first print
 
-- [ ] Measure the frame's height (desk to the top of the end bars) and set `FRAME_H` in
-      `scripts/params.py` (DESIGN.md, "Measure first"); length, width and the rods' spacing come
-      from your measuring photos.
+- [x] The frame: 686 x 193 x 319 mm (your photos and tape), set in `scripts/params.py`.
 - [x] The belt: 175 teeth (1400 mm), your count, and `BELT_TEETH` is set to it.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.

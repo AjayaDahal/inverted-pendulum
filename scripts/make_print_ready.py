@@ -44,14 +44,32 @@ def print_mesh(name):
     return G.transform(tris, None, (-(lo[0] + hi[0]) / 2, -(lo[1] + hi[1]) / 2, -lo[2]))
 
 
+def same_mesh(a, b, tol=1e-3):
+    """The same surface to tol mm: when a part only moves, the CAD kernel reorders its triangles, splits
+    flat faces along other diagonals and moves the last float digits. Same vertices, volume and area."""
+    from scipy.spatial import cKDTree
+    if a.shape != b.shape:
+        return False
+    pa, pb = a.reshape(-1, 3), b.reshape(-1, 3)
+    if cKDTree(pb).query(pa)[0].max() > tol or cKDTree(pa).query(pb)[0].max() > tol:
+        return False
+
+    def area(t):
+        return np.linalg.norm(np.cross(t[:, 1] - t[:, 0], t[:, 2] - t[:, 0]), axis=1).sum() / 2
+    va, vb = abs(G.signed_volume(a)), abs(G.signed_volume(b))
+    return abs(va - vb) <= 1e-6 * va + 1e-3 and abs(area(a) - area(b)) <= 1e-6 * area(a) + 1e-3
+
+
 def build():
     os.makedirs(G.PRINT, exist_ok=True)
     for f in os.listdir(G.PRINT):
-        if f.endswith(".stl"):
+        if f.endswith(".stl") and f[:-4] not in PARTS:
             os.remove(os.path.join(G.PRINT, f))
     for name in sorted(PARTS):
         tris = print_mesh(name)
-        G.write_stl(os.path.join(G.PRINT, name + ".stl"), tris)
+        path = os.path.join(G.PRINT, name + ".stl")
+        if not (os.path.exists(path) and same_mesh(G.read_stl(path), tris)):   # unchanged: keep its bytes (G-code stamps)
+            G.write_stl(path, tris)
         lo, hi = G.bounds(tris)
         ext = hi - lo
         print(f"{name:18s} {PARTS[name]['material']:5s} x{PARTS[name]['qty']}  {ext[0]:6.1f} x {ext[1]:6.1f} x {ext[2]:6.1f} mm"
