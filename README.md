@@ -130,11 +130,14 @@ branch → `main`, `/ (root)`*); the root `index.html` opens `viewer/`.
 
 ## Build it
 
-1. **Measure** the frame's height and count the belt's teeth, put them in `scripts/params.py`
-   (`FRAME_H`, `BELT_TEETH`) and run
+1. **Measure** the frame's height and confirm the belt's teeth (your photos of the loop give 180),
+   put them in `scripts/params.py` (`FRAME_H`, `BELT_TEETH`) and run
    `python scripts/build_all.py`: every part and clearance follows
    ([`DESIGN.md`](DESIGN.md#measure-first)).
-2. **Print** from `3mf/complete_project_kobra_s1_petg.3mf` and `..._pla.3mf`, belt drive first
+2. **Print** from `3mf/to_print_kobra_s1.3mf`: one project with only the parts still to print
+   (filament 1 PLA, 2 PETG, one material per bed, belt drive first). It leaves out what you keep
+   and takes one sensor's parts: set `HAVE`, `MAYBE` and `SENSOR` in `scripts/make_to_print.py`.
+   Every part: `3mf/complete_project_kobra_s1_petg.3mf` and `..._pla.3mf`
    ([`tracker.md`](tracker.md), [`SLICING.md`](SLICING.md)).
 3. **Assemble** in the order in [`DESIGN.md`](DESIGN.md#assembly-order): motor end, pulleys, idler
    and tensioner, carriage, clamp, tension, pivot (its bearings freed: the pivot's friction decides

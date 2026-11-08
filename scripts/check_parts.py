@@ -422,6 +422,11 @@ def check_files(no_gcode):
             bad += MP.stale()
         except Exception as exc:
             bad.append(f"complete projects: {exc}")
+        try:
+            import make_to_print as MTP
+            bad += MTP.stale()
+        except Exception as exc:
+            bad.append(f"to-print project: {exc}")
     try:
         import make_tracker as MT
         if MT.render() != MT.current():

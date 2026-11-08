@@ -9,6 +9,7 @@ Anycubic Slicer Next 2.0.0.3 (set `PENDULUM_SLICER` if it is not at
 
 | File | What it is |
 |---|---|
+| `3mf/to_print_kobra_s1.3mf` | only the parts still to print, both materials in one project: filament 1 PLA, 2 PETG, one material per bed, in print order; beds marked OPTION only if you need them |
 | `3mf/complete_project_kobra_s1_pla.3mf` | the three PLA plates as named plates, in print order: open, pick a plate, slice, send |
 | `3mf/complete_project_kobra_s1_petg.3mf` | the three PETG plates the same way (the third, the encoder coupler, is optional) |
 | `3mf/s1_<material>_plates/<plate>.3mf` | one plate per project, same content |
@@ -41,6 +42,15 @@ The plates, their parts, masses and times: [`tracker.md`](tracker.md). Start wit
    `--verify` (run by `build_all.py`) slices each plate of each project again and compares it with
    that plate's G-code. The slicer's CLI crashes on a named plate, so it slices a copy with the
    names blanked.
+6. `make_to_print.py`: the one project of the parts still to print. It drops the parts you keep
+   (`HAVE`) and the other sensor's, puts `MAYBE` parts on beds of their own, and packs the rest
+   first-fit, largest first, one material per bed (`plates.py`'s layout), in the plates' print
+   order. Each bed is a project with both filaments: PLA objects on filament 1, PETG on 2 with the
+   PETG process's one change (35 % infill) set on each object; the beds are then assembled like
+   the complete projects. `--verify` (run by `build_all.py`) slices each bed of the project, and
+   the same bed again on its own with its material's presets: same grams, same bed and nozzle
+   temperatures. A PETG bed's G-code selects filament 2 (`T1`): on the printer, map each
+   filament to the spool that holds it.
 
 `python scripts/slice_all.py <part or plate> ...` re-slices only those; the stamp is the STL's
 hash only, so after a profile change re-slice everything.
@@ -73,7 +83,8 @@ and `switch_mount`, get a 5 mm brim on their own object from the print table. Th
 - All 27 jobs (21 parts, 6 plates): the G-code exists and its stamp is the current STLs' hash;
   it names the right printer and process presets and filament type and has supports off; its 3MF exists
   and carries the same stamp; each object has a brim exactly when the print table gives it one.
-- No stray G-code or 3MF files; the complete projects match their plates file for file.
+- No stray G-code or 3MF files; the complete projects match their plates file for file; the
+  to-print project was built from the current parts, layout, choices and presets.
 - `tracker.md` (masses and times from the G-code footers), `BOM.md` and the viewer's manifest are
   current.
 

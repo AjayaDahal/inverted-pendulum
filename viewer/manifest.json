@@ -221,8 +221,8 @@
     -50
    ],
    "shared": false,
-   "grams": 61.5,
-   "minutes": 126.8
+   "grams": 59.6,
+   "minutes": 123.9
   },
   {
    "name": "motor_pulley",
@@ -241,7 +241,7 @@
     -1.0,
     0.0,
     0.0,
-    -310.0,
+    -320.0,
     12.5,
     223.0,
     1.0
@@ -278,7 +278,7 @@
     -1.0,
     0.0,
     0.0,
-    310.0,
+    320.0,
     12.5,
     223.0,
     1.0
@@ -315,7 +315,7 @@
     -1.0,
     0.0,
     0.0,
-    -310.0,
+    -320.0,
     -11.0,
     223.0,
     1.0
@@ -352,7 +352,7 @@
     -1.0,
     0.0,
     0.0,
-    310.0,
+    320.0,
     -11.0,
     223.0,
     1.0
@@ -406,8 +406,8 @@
     -50
    ],
    "shared": false,
-   "grams": 52.9,
-   "minutes": 127.1
+   "grams": 51.2,
+   "minutes": 123.1
   },
   {
    "name": "idler_slider_1",
@@ -463,7 +463,7 @@
     0.0,
     1.0,
     0.0,
-    620.0,
+    640.0,
     0.0,
     0.0,
     1.0
@@ -517,8 +517,8 @@
     -95
    ],
    "shared": false,
-   "grams": 0.8,
-   "minutes": 14.1
+   "grams": 1.0,
+   "minutes": 17.6
   },
   {
    "name": "rod_bumper_1",
@@ -2096,7 +2096,7 @@
    ],
    "shared": false,
    "centre": [
-    -310.0,
+    -320.0,
     28.5,
     223.0
    ]
@@ -2997,7 +2997,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -325.5,
+    -335.5,
     16.7,
     207.5
    ],
@@ -3019,7 +3019,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -325.5,
+    -335.5,
     16.7,
     238.5
    ],
@@ -3041,7 +3041,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -294.5,
+    -304.5,
     16.7,
     207.5
    ],
@@ -3063,7 +3063,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -294.5,
+    -304.5,
     16.7,
     238.5
    ],
@@ -3261,7 +3261,7 @@
    "size": "M3",
    "length": 12.0,
    "p0": [
-    -297.0,
+    -307.0,
     0.0,
     223.0
    ],
@@ -3280,10 +3280,10 @@
   },
   {
    "name": "idler_axle",
-   "size": "M5",
+   "size": "M4",
    "length": 50.0,
    "p0": [
-    310.0,
+    320.0,
     -20.5,
     223.0
    ],
@@ -3298,14 +3298,14 @@
    "nut": true,
    "tnut": false,
    "into": null,
-   "note": "M5 x 50 axle + nut: clamps sliders and sleeve"
+   "note": "M4 x 50 axle + nut: clamps sliders and sleeve"
   },
   {
    "name": "tension_screw_f",
    "size": "M3",
    "length": 30.0,
    "p0": [
-    334.2,
+    344.2,
     -16.0,
     233.0
    ],
@@ -3327,7 +3327,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    334.2,
+    344.2,
     16.0,
     233.0
    ],
@@ -3836,13 +3836,14 @@
   "M3 x 20": 4,
   "M3 x 30": 2,
   "M3 x 8": 9,
+  "M4 nut": 1,
   "M4 x 10": 16,
-  "M5 nut": 9,
+  "M4 x 50": 1,
+  "M5 nut": 8,
   "M5 x 10": 13,
   "M5 x 12": 2,
   "M5 x 16": 4,
   "M5 x 20": 4,
-  "M5 x 50": 1,
   "T-nut M5 (20-series)": 15
  },
  "v0": [
@@ -3906,7 +3907,7 @@
    "name": "old_idler_pulley",
    "group": "frame",
    "colour": "#2b2d30",
-   "label": "old idler, one flange",
+   "label": "old idler, 20-tooth 8M, two flanges",
    "url": "../parts/as_built/old_idler_pulley.stl"
   },
   {
@@ -3920,7 +3921,7 @@
    "name": "old_idler_rod",
    "group": "frame",
    "colour": "#4a4e54",
-   "label": "old idler axle: thin rod, held at one end",
+   "label": "old idler axle: two thin rods taped together, held at one end",
    "url": "../parts/as_built/old_idler_rod.stl"
   },
   {
@@ -3953,7 +3954,7 @@
     60.0,
     224.0
    ],
-   "text": "Idler axle is a thin rod held at one end, ~140 mm from its bracket: belt tension bends and tilts it, so the belt walks"
+   "text": "Idler axle: two ~1.7 mm rods taped together, held at one end ~140 mm from its bracket: belt tension bends and tilts them, so the belt walks"
   },
   {
    "id": "A2",
@@ -3980,7 +3981,7 @@
     -20.0,
     208.0
    ],
-   "text": "Pulleys have one flange each; the two pulleys sit at different heights, so the runs slope"
+   "text": "The motor pulley has one flange, and the two pulleys sit at different heights, so the runs slope"
   },
   {
    "id": "A5",
@@ -4034,8 +4035,8 @@
    -116.0,
    -1.0
   ],
-  "x_motor": -310.0,
-  "x_idler": 310.0,
+  "x_motor": -320.0,
+  "x_idler": 320.0,
   "z_pulley": 223.0,
   "pd": 50.92958178940651,
   "x_stop": 241.0,
@@ -4049,15 +4050,15 @@
    300.0
   ],
   "z_rod": 320.0,
-  "belt_loop": 1400.0,
+  "belt_loop": 1440.0,
   "belt_loop_range": [
-   1380.0,
-   1420.0
+   1420.0,
+   1460.0
   ],
-  "belt_open_cut": 1410.0,
+  "belt_open_cut": 1450.0,
   "idler_travel": [
-   300.0,
-   320.0
+   310.0,
+   330.0
   ],
   "z_run_land": 247.77879089470326
  },
@@ -4065,110 +4066,110 @@
   {
    "name": "petg_1_belt_drive",
    "material": "petg",
-   "grams": 157.0,
-   "minutes": 361.1,
+   "grams": 153.4,
+   "minutes": 354.5,
    "items": [
     {
      "part": "cable_clip",
      "k": 1,
-     "x": 92.538,
-     "y": 166.0,
-     "angle": 0.0,
+     "x": 231.038,
+     "y": 140.25,
+     "angle": 90.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "cable_clip",
      "k": 2,
-     "x": 126.538,
-     "y": 166.0,
+     "x": 172.038,
+     "y": 155.25,
      "angle": 0.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "cable_clip",
      "k": 3,
-     "x": 229.538,
-     "y": 163.0,
-     "angle": 90.0,
+     "x": 52.038,
+     "y": 165.25,
+     "angle": 0.0,
      "url": "../parts/print_ready/cable_clip.stl"
     },
     {
      "part": "clamp_jaw",
      "k": 1,
-     "x": 209.538,
-     "y": 108.0,
-     "angle": 90.0,
+     "x": 152.038,
+     "y": 95.25,
+     "angle": 0.0,
      "url": "../parts/print_ready/clamp_jaw.stl"
     },
     {
      "part": "idler_mount",
      "k": 1,
-     "x": 150.538,
-     "y": 100.0,
+     "x": 125.038,
+     "y": 149.25,
      "angle": 0.0,
      "url": "../parts/print_ready/idler_mount.stl"
     },
     {
      "part": "idler_sleeve",
      "k": 1,
-     "x": 150.538,
-     "y": 163.0,
+     "x": 233.038,
+     "y": 78.25,
      "angle": 45.0,
      "url": "../parts/print_ready/idler_sleeve.stl"
     },
     {
      "part": "idler_slider",
      "k": 1,
-     "x": 106.538,
-     "y": 143.0,
+     "x": 208.038,
+     "y": 84.25,
      "angle": 90.0,
      "url": "../parts/print_ready/idler_slider.stl"
     },
     {
      "part": "idler_slider",
      "k": 2,
-     "x": 142.538,
-     "y": 143.0,
+     "x": 208.038,
+     "y": 110.25,
      "angle": 90.0,
      "url": "../parts/print_ready/idler_slider.stl"
     },
     {
      "part": "motor_mount",
      "k": 1,
-     "x": 62.538,
-     "y": 106.0,
+     "x": 61.038,
+     "y": 102.25,
      "angle": 90.0,
      "url": "../parts/print_ready/motor_mount.stl"
     },
     {
      "part": "rod_bumper",
      "k": 1,
-     "x": 173.538,
-     "y": 149.0,
-     "angle": 180.0,
+     "x": 172.038,
+     "y": 132.25,
+     "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 2,
-     "x": 26.538,
-     "y": 155.0,
+     "x": 205.038,
+     "y": 136.25,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 3,
-     "x": 59.538,
-     "y": 155.0,
+     "x": 77.038,
+     "y": 145.25,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     },
     {
      "part": "rod_bumper",
      "k": 4,
-     "x": 203.538,
-     "y": 159.0,
+     "x": 25.038,
+     "y": 146.25,
      "angle": 90.0,
      "url": "../parts/print_ready/rod_bumper.stl"
     }
@@ -6373,9 +6374,9 @@
   ],
   "masses": {
    "cart_kg": 0.683,
-   "belt_kg": 0.182,
+   "belt_kg": 0.187,
    "spinning_kg": 0.034,
-   "effective_kg": 0.899,
+   "effective_kg": 0.904,
    "pendulum_kg": 0.1124,
    "cg_m": 0.0695,
    "J_kgm2": 0.001713

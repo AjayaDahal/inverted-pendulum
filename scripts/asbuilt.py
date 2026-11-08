@@ -75,11 +75,15 @@ def old_motor():
     return body + cyl_y(2.5, X_OLD_MOTOR, Z_OLD_MOTOR, yf - m["shaft_len"], yf)
 
 
-def old_pulley(x, z):
-    """One flange only, on the motor side."""
+def old_pulley(x, z, both=False):
+    """20-tooth 8M, printed. The motor's has one flange (motor side); the idler's has two
+    (photos of 2026-11-08)."""
     y = Y_OLD_BELT
-    p = cyl_y(R_OLD - 1.0, x, z, y - 9, y + 9) + cyl_y(R_OLD + 5.0, x, z, y + 9, y + 11)
-    return p - cyl_y(2.0 if x < 0 else 2.6, x, z, y - 12, y + 12)
+    h = P.TOOTH_W / 2
+    p = cyl_y(R_OLD - 1.0, x, z, y - h, y + h) + cyl_y(R_OLD + 5.0, x, z, y + h, y + h + 2)
+    if both:
+        p += cyl_y(R_OLD + 5.0, x, z, y - h - 2, y - h)
+    return p - cyl_y(2.0 if x < 0 else 2.6, x, z, y - h - 3, y + h + 3)
 
 
 def old_idler_bracket():
@@ -92,21 +96,25 @@ def old_idler_bracket():
 
 
 def old_idler_rod():
-    return cyl_y(2.0, X_OLD_IDLER, Z_OLD_IDLER, Y_OLD_BELT - 25, Y_OLD_POST_FACE - 2.0)
+    """Two thin rods (about 1.7 mm) taped together, held at one end by the bracket."""
+    y0, y1 = Y_OLD_BELT - 25, Y_OLD_POST_FACE - 2.0
+    return (cyl_y(0.85, X_OLD_IDLER - 0.8, Z_OLD_IDLER, y0, y1)
+            + cyl_y(0.85, X_OLD_IDLER + 0.8, Z_OLD_IDLER, y0, y1))
 
 
 def old_belt():
     """The old loop without teeth: the pulleys sit at different heights, so the runs slope."""
     from build123d import Face, Vector, Wire, extrude
+    t, w = P.BELT["thick"], P.BELT["width"]
     outer_pts, inner_pts = [], []
     for (x, z, a0) in ((X_OLD_IDLER, Z_OLD_IDLER, -90), (X_OLD_MOTOR, Z_OLD_MOTOR, 90)):
         for a in np.linspace(a0, a0 + 180, 40):
             c, s = np.cos(np.radians(a)), np.sin(np.radians(a))
-            outer_pts.append((x + (R_OLD + 3.8) * c, z + (R_OLD + 3.8) * s))
+            outer_pts.append((x + (R_OLD + t) * c, z + (R_OLD + t) * s))
             inner_pts.append((x + R_OLD * c, z + R_OLD * s))
-    ow = Wire.make_polygon([Vector(x, Y_OLD_BELT - 7.5, z) for x, z in outer_pts], close=True)
-    iw = Wire.make_polygon([Vector(x, Y_OLD_BELT - 7.5, z) for x, z in inner_pts], close=True)
-    return extrude(Face(ow, [iw]), amount=15.0, dir=(0, 1, 0))
+    ow = Wire.make_polygon([Vector(x, Y_OLD_BELT - w / 2, z) for x, z in outer_pts], close=True)
+    iw = Wire.make_polygon([Vector(x, Y_OLD_BELT - w / 2, z) for x, z in inner_pts], close=True)
+    return extrude(Face(ow, [iw]), amount=w, dir=(0, 1, 0))
 
 
 def old_switch_arm():
@@ -133,9 +141,10 @@ PARTS = [
     ("old_motor_bracket", old_motor_bracket, "frame", "#8e959c", "old motor bracket + spacers on the back post"),
     ("old_motor", old_motor, "frame", "#26282b", "NEMA 17 (old position)"),
     ("old_motor_pulley", lambda: old_pulley(X_OLD_MOTOR, Z_OLD_MOTOR), "frame", "#2b2d30", "old pulley, one flange"),
-    ("old_idler_pulley", lambda: old_pulley(X_OLD_IDLER, Z_OLD_IDLER), "frame", "#2b2d30", "old idler, one flange"),
+    ("old_idler_pulley", lambda: old_pulley(X_OLD_IDLER, Z_OLD_IDLER, both=True), "frame", "#2b2d30",
+     "old idler, 20-tooth 8M, two flanges"),
     ("old_idler_bracket", old_idler_bracket, "frame", "#22252a", "old idler bracket: row of holes"),
-    ("old_idler_rod", old_idler_rod, "frame", "#4a4e54", "old idler axle: thin rod, held at one end"),
+    ("old_idler_rod", old_idler_rod, "frame", "#4a4e54", "old idler axle: two thin rods taped together, held at one end"),
     ("old_belt", old_belt, "frame", "#1d1f22", "belt (old run)"),
     ("old_switch_arm", old_switch_arm, "frame", "#22252a", "old limit-switch arm"),
     ("old_wedge", old_wedge, "frame", "#22252a", "wedge part (kept as is)"),
@@ -143,10 +152,10 @@ PARTS = [
 
 # What the audit found (REPORT.md has the reasoning): id, where (for the viewer's marker), title.
 FINDINGS = [
-    ("A1", (X_OLD_IDLER, 60.0, Z_OLD_IDLER), "Idler axle is a thin rod held at one end, ~140 mm from its bracket: belt tension bends and tilts it, so the belt walks"),
+    ("A1", (X_OLD_IDLER, 60.0, Z_OLD_IDLER), "Idler axle: two ~1.7 mm rods taped together, held at one end ~140 mm from its bracket: belt tension bends and tilts them, so the belt walks"),
     ("A2", (P.X_BAR_IN - 20, Y_OLD_POST_FACE - 2.0, Z_OLD_IDLER + 14), "Idler position set by a row of holes: tension only in 6 mm steps, no lock, no squaring"),
     ("A3", (X_OLD_MOTOR, 40.0, Z_OLD_MOTOR + 25), "Motor and idler each located from a different post with spacers: nothing puts both pulleys and the clamp in one plane"),
-    ("A4", (X_OLD_MOTOR, Y_OLD_BELT, Z_OLD_MOTOR - 30), "Pulleys have one flange each; the two pulleys sit at different heights, so the runs slope"),
+    ("A4", (X_OLD_MOTOR, Y_OLD_BELT, Z_OLD_MOTOR - 30), "The motor pulley has one flange, and the two pulleys sit at different heights, so the runs slope"),
     ("A5", (0.0, Y_OLD_BELT - 20, Z_OLD_MOTOR), "Belt link: hollow ladder bar and a hex key through a slot. No teeth engaged: it slips and has backlash"),
     ("A6", (0.0, 45.0, P.Z_PLATE0 + 40), "Pivot over the middle of the cart: a pendulum there hangs inside the frame, cannot pass the plate or rails, so it cannot swing up"),
     ("A7", (0.0, 70.0, P.Z_PLATE0 + 20), "No shaft, hub, arm or angle-sensor mount yet"),

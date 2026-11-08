@@ -7,9 +7,16 @@
 - His photos are in `git_ignore_this/` and stay private: the folder is in `.gitignore`; never
   commit or publish them, or any picture taken from them.
 - The frame's length and width, the rods' spacing and the belt come from his measuring photos;
-  the frame's height and the belt's tooth count are still open (`REPORT.md`, O1, O2). When he
-  measures them, put the numbers in `scripts/params.py` (`FRAME_H`, `BELT_TEETH`) and run
-  `python scripts/build_all.py`. Every other dimension follows from them.
+  the belt's tooth count (180) from his photos of the loop laid flat, to confirm by hand; the
+  frame's height is still open (`REPORT.md`, M5, O1, O2). When he measures them, put the numbers
+  in `scripts/params.py` (`FRAME_H`, `BELT_TEETH`) and run `python scripts/build_all.py`. Every
+  other dimension follows from them.
+- `3mf/to_print_kobra_s1.3mf` is his print list: `scripts/make_to_print.py` leaves out the parts
+  he keeps (`HAVE`), puts parts he may not need on OPTION beds (`MAYBE`: his own idler pulley may
+  replace the printed one) and takes one sensor's parts (`SENSOR`). When he says what he has, edit
+  those and rebuild; the gate fails when the project is stale. It holds both materials (filament 1
+  PLA, 2 PETG, one material per bed); `--verify` checks each bed against the same bed sliced with
+  its own material's presets.
 - After any change to `scripts/` or `slicer_profiles/`, run `python scripts/build_all.py`
   (rebuild, re-slice, re-simulate, verify; `--no-slice` without the slicer).
   `python scripts/check_parts.py` must pass before anything is printed; CI runs it on every push.
@@ -44,9 +51,9 @@
   (`PIVOT_FRICTION_GOAL`, the firmware's `f` test, whose estimator `PivotTest` the C++ test checks on
   simulated swings). The gate bounds the hunting at the goal: keep it passing rather than raising
   `sim.HUNT_LIMIT`.
-- The machine's numbers come from the owner's measuring photos (REPORT.md, M1-M4), except the
-  frame's height and the closed belt's tooth count (`FRAME_H`, `BELT_TEETH`: O1, O2). `BELT_TEETH`
-  sets the pulleys' spacing, and the travel stops follow it.
+- The machine's numbers come from the owner's photos (REPORT.md, M1-M6), except the frame's
+  height (`FRAME_H`: O1); the closed belt's tooth count (`BELT_TEETH`, M5) is to confirm by hand
+  (O2). `BELT_TEETH` sets the pulleys' spacing, and the travel stops follow it.
 - Firmware compile check (not in CI): arduino-cli with the `arduino:avr` and `esp32:esp32` cores and
   FastAccelStepper; it builds for `arduino:avr:uno`, `arduino:avr:nano` and `esp32:esp32:esp32`
   with both sensors (`USE_ENCODER` 0 and 1) and no warnings in its own files. The Nano (old

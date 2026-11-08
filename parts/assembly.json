@@ -193,7 +193,7 @@
     -1.0,
     0.0,
     0.0,
-    -310.0,
+    -320.0,
     12.5,
     223.0,
     1.0
@@ -222,7 +222,7 @@
     -1.0,
     0.0,
     0.0,
-    310.0,
+    320.0,
     12.5,
     223.0,
     1.0
@@ -251,7 +251,7 @@
     -1.0,
     0.0,
     0.0,
-    -310.0,
+    -320.0,
     -11.0,
     223.0,
     1.0
@@ -280,7 +280,7 @@
     -1.0,
     0.0,
     0.0,
-    310.0,
+    320.0,
     -11.0,
     223.0,
     1.0
@@ -367,7 +367,7 @@
     0.0,
     1.0,
     0.0,
-    620.0,
+    640.0,
     0.0,
     0.0,
     1.0
@@ -2417,7 +2417,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -325.5,
+    -335.5,
     16.7,
     207.5
    ],
@@ -2439,7 +2439,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -325.5,
+    -335.5,
     16.7,
     238.5
    ],
@@ -2461,7 +2461,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -294.5,
+    -304.5,
     16.7,
     207.5
    ],
@@ -2483,7 +2483,7 @@
    "size": "M3",
    "length": 8.0,
    "p0": [
-    -294.5,
+    -304.5,
     16.7,
     238.5
    ],
@@ -2681,7 +2681,7 @@
    "size": "M3",
    "length": 12.0,
    "p0": [
-    -297.0,
+    -307.0,
     0.0,
     223.0
    ],
@@ -2700,10 +2700,10 @@
   },
   {
    "name": "idler_axle",
-   "size": "M5",
+   "size": "M4",
    "length": 50.0,
    "p0": [
-    310.0,
+    320.0,
     -20.5,
     223.0
    ],
@@ -2718,14 +2718,14 @@
    "nut": true,
    "tnut": false,
    "into": null,
-   "note": "M5 x 50 axle + nut: clamps sliders and sleeve"
+   "note": "M4 x 50 axle + nut: clamps sliders and sleeve"
   },
   {
    "name": "tension_screw_f",
    "size": "M3",
    "length": 30.0,
    "p0": [
-    334.2,
+    344.2,
     -16.0,
     233.0
    ],
@@ -2747,7 +2747,7 @@
    "size": "M3",
    "length": 30.0,
    "p0": [
-    334.2,
+    344.2,
     16.0,
     233.0
    ],
@@ -3256,13 +3256,14 @@
   "M3 x 20": 4,
   "M3 x 30": 2,
   "M3 x 8": 9,
+  "M4 nut": 1,
   "M4 x 10": 16,
-  "M5 nut": 9,
+  "M4 x 50": 1,
+  "M5 nut": 8,
   "M5 x 10": 13,
   "M5 x 12": 2,
   "M5 x 16": 4,
   "M5 x 20": 4,
-  "M5 x 50": 1,
   "T-nut M5 (20-series)": 15
  },
  "v0": [
@@ -3327,7 +3328,7 @@
    "file": "as_built/old_idler_pulley.stl",
    "group": "frame",
    "colour": "#2b2d30",
-   "label": "old idler, one flange"
+   "label": "old idler, 20-tooth 8M, two flanges"
   },
   {
    "name": "old_idler_bracket",
@@ -3341,7 +3342,7 @@
    "file": "as_built/old_idler_rod.stl",
    "group": "frame",
    "colour": "#4a4e54",
-   "label": "old idler axle: thin rod, held at one end"
+   "label": "old idler axle: two thin rods taped together, held at one end"
   },
   {
    "name": "old_belt",
@@ -3373,7 +3374,7 @@
     60.0,
     224.0
    ],
-   "text": "Idler axle is a thin rod held at one end, ~140 mm from its bracket: belt tension bends and tilts it, so the belt walks"
+   "text": "Idler axle: two ~1.7 mm rods taped together, held at one end ~140 mm from its bracket: belt tension bends and tilts them, so the belt walks"
   },
   {
    "id": "A2",
@@ -3400,7 +3401,7 @@
     -20.0,
     208.0
    ],
-   "text": "Pulleys have one flange each; the two pulleys sit at different heights, so the runs slope"
+   "text": "The motor pulley has one flange, and the two pulleys sit at different heights, so the runs slope"
   },
   {
    "id": "A5",
@@ -3454,8 +3455,8 @@
    -116.0,
    -1.0
   ],
-  "x_motor": -310.0,
-  "x_idler": 310.0,
+  "x_motor": -320.0,
+  "x_idler": 320.0,
   "z_pulley": 223.0,
   "pd": 50.92958178940651,
   "x_stop": 241.0,
@@ -3469,15 +3470,15 @@
    300.0
   ],
   "z_rod": 320.0,
-  "belt_loop": 1400.0,
+  "belt_loop": 1440.0,
   "belt_loop_range": [
-   1380.0,
-   1420.0
+   1420.0,
+   1460.0
   ],
-  "belt_open_cut": 1410.0,
+  "belt_open_cut": 1450.0,
   "idler_travel": [
-   300.0,
-   320.0
+   310.0,
+   330.0
   ],
   "z_run_land": 247.77879089470326
  }

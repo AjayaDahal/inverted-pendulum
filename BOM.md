@@ -50,7 +50,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | mechanical endstop | 2 | lever switch on a 40 x 16 mm board, holes 19 mm apart; wired normally closed |
 | stepper driver carrier (A4988 / DRV8825) | 1 | step/dir driver set to 1.5 A, with its heatsink |
 | controller (Arduino Uno / Nano or ESP32) | 1 | runs firmware/pendulum (FastAccelStepper: not an STM32) |
-| HTD 8M belt, 20 mm wide | 1 | yours: a closed loop of 175 teeth (1400 mm; the tensioner takes 1380-1420); set `BELT_TEETH` to your count |
+| HTD 8M belt, 20 mm wide | 1 | yours: a closed loop of 180 teeth (1440 mm, counted from your photos; the tensioner takes 1420-1460); confirm the count and set `BELT_TEETH` if it differs |
 
 ## Fasteners
 
@@ -64,13 +64,14 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | M3 x 20 | 4 | `pendulum_hub`, `pendulum_tip` |
 | M3 x 30 | 2 | `idler_mount` |
 | M4 x 10 | 16 | `carriage_plate` |
+| M4 x 50 | 1 | `idler_slider` |
 | M5 x 10 | 13 | `motor_mount`, `idler_mount`, `electronics_tray`, `cable_clip` |
 | M5 x 12 | 2 | `switch_mount` |
 | M5 x 16 | 4 | `pivot_bridge` |
 | M5 x 20 | 4 | `pivot_bridge` |
-| M5 x 50 | 1 | `idler_slider` |
 | M3 nut | 20 | `belt_clamp`, `clamp_jaw`, `motor_pulley`, `rod_bumper`, `pendulum_hub`, `pendulum_tip`, `magnet_cap`, `as5600_mount` |
-| M5 nut | 9 | `pivot_bridge`, `idler_slider` |
+| M4 nut | 1 | `idler_slider` |
+| M5 nut | 8 | `pivot_bridge` |
 | T-nut M5, 20-series | 15 | `motor_mount`, `idler_mount`, `switch_mount`, `electronics_tray`, `cable_clip` |
 | M5 washer | 4 | under the `pivot_bridge` bolts' heads (slotted flanges) |
 
@@ -85,5 +86,5 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
 **To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
-"Before the first print"), and that the drawer holds the 15 T-nuts, the M5 x 50 idler axle
+"Before the first print"), and that the drawer holds the 15 T-nuts, the M4 x 50 idler axle
 and an 8 mm x 115 mm steel shaft.

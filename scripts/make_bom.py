@@ -56,7 +56,7 @@ EXTRA = """
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
 **To confirm before printing:** the frame's height and the belt's tooth count (`tracker.md`,
-"Before the first print"), and that the drawer holds the {TNUTS} T-nuts, the M5 x 50 idler axle
+"Before the first print"), and that the drawer holds the {TNUTS} T-nuts, the {AXLE} idler axle
 and an 8 mm x {SHAFT} mm steel shaft.
 """
 
@@ -88,8 +88,8 @@ def bought():
     rows = ["| Item | Qty | Notes |", "|---|---|---|"]
     rows += [f"| {label} | {count[label]} | {VIT_NOTES.get(label, '')} |" for label in order]
     rows.append(f"| HTD {P.BELT['pitch']:.0f}M belt, {P.BELT['width']:.0f} mm wide | 1 | yours: a closed loop of "
-                f"{P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm; the tensioner takes {lo:.0f}-{hi:.0f}); "
-                f"set `BELT_TEETH` to your count |")
+                f"{P.BELT_TEETH} teeth ({P.BELT_LOOP:.0f} mm, counted from your photos; the tensioner takes "
+                f"{lo:.0f}-{hi:.0f}); confirm the count and set `BELT_TEETH` if it differs |")
     return rows
 
 
@@ -128,7 +128,8 @@ def render():
            "\n## Bought parts (already on the machine)\n", *bought(),
            f"\n## Fasteners\n\n{total} pieces, each checked by the gate for length against what it clamps "
            f"(`scripts/hardware.py`, check `bolts`).\n", *frows,
-           EXTRA.replace("{TNUTS}", str(n_tnuts)).replace("{SHAFT}", f"{P.SHAFT_L:.0f}")]
+           EXTRA.replace("{TNUTS}", str(n_tnuts)).replace("{SHAFT}", f"{P.SHAFT_L:.0f}")
+           .replace("{AXLE}", f"M{P.AXLE_D:g} x 50")]
     return "\n".join(out)
 
 

@@ -142,16 +142,35 @@ def placed_mesh(name, x, y, angle):
 @lru_cache(maxsize=None)
 def layout(plate):
     """Placements on the bed: (part, copy, x, y, angle), copy counting from 1."""
+    return layout_items(tuple(PLATES[plate]), plate)
+
+
+def footprint_area(name):
+    return _area(_footprint(name)[0])
+
+
+def fits(items):
+    """Whether ((part, copies), ...) all go on one bed."""
+    try:
+        layout_items(tuple(items))
+        return True
+    except ValueError:
+        return False
+
+
+@lru_cache(maxsize=None)
+def layout_items(items, plate="plate"):
+    """layout() for any ((part, copies), ...)."""
     n = int(round(BED / RES))
     centres = (np.arange(n) + 0.5) * RES
     gx, gy = np.meshgrid(centres, centres)
     blocked = np.zeros((n, n), bool)
     size = 2 * n
-    items = [(name, k) for name, copies in PLATES[plate] for k in range(1, copies + 1)]
-    area = {name: _area(_footprint(name)[0]) for name, _ in PLATES[plate]}
-    items.sort(key=lambda it: (-area[it[0]], it[0], it[1]))
+    items_ = [(name, k) for name, copies in items for k in range(1, copies + 1)]
+    area = {name: _area(_footprint(name)[0]) for name, _ in items}
+    items_.sort(key=lambda it: (-area[it[0]], it[0], it[1]))
     placed = []
-    for name, k in items:
+    for name, k in items_:
         hull, base = _footprint(name)
         best = None
         for pref, turn in enumerate((0.0, 90.0, 45.0, 135.0)):

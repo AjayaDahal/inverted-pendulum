@@ -68,8 +68,10 @@ def bolts():
     out.append(_b("set_screw", "M3", 12, (P.X_MOTOR + 13.0, P.PULLEY_W / 2 - zc, P.Z_PULLEY), (-1, 0, 0), "motor_pulley",
                   "motor_pulley", 13.0 - 8.7 - 2.5, nut=True, note="M3 x 12 set screw, head sunk below the teeth, captive nut"))
     ya = -(P.CHEEK_Y[1] + 1.5)
-    out.append(_b("idler_axle", "M5", 50, (P.X_IDLER, ya, P.Z_PULLEY), (0, 1, 0), "frame", "idler_slider",
-                  2 * (P.CHEEK_T + 1.5) + 2 * P.CHEEK_Y[0], nut=True, note="M5 x 50 axle + nut: clamps sliders and sleeve"))
+    axle = f"M{P.AXLE_D:g}"
+    out.append(_b("idler_axle", axle, 50, (P.X_IDLER, ya, P.Z_PULLEY), (0, 1, 0), "frame", "idler_slider",
+                  2 * (P.CHEEK_T + 1.5) + 2 * P.CHEEK_Y[0], nut=True,
+                  note=f"{axle} x 50 axle + nut: clamps sliders and sleeve"))
     wx1 = S._window()[1]
     zs = P.Z_PULLEY - P.SLIDER["axle_dz"] + P.SLIDER["screw_dz"]
     for sy in (-1, 1):

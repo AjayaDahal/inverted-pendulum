@@ -1,7 +1,8 @@
 """Regenerate everything in order: parts, print orientation, assembly and STEP, slicing (every part
-and plate as a 3MF project and its G-code), the complete projects (each plate sliced again and
-checked), the simulation (it weighs the sliced parts), the firmware's config, the tracker, the BOM,
-the viewer manifest, then the gate. Renders: scripts/capture.py (headless Edge) after a geometry change.
+and plate as a 3MF project and its G-code), the complete projects and the to-print project (each
+plate sliced again and checked), the simulation (it weighs the sliced parts), the firmware's
+config, the tracker, the BOM, the viewer manifest, then the gate. Renders: scripts/capture.py
+(headless Edge) after a geometry change.
 
 Usage: python scripts/build_all.py [--no-slice]
 """
@@ -32,9 +33,11 @@ def main():
             args.append("--no-gcode")
         else:
             import make_projects
+            import make_to_print
             import slice_all
             slice_all.main()
             projects_ok = make_projects.main(check=True)
+            projects_ok = make_to_print.main(check=True) and projects_ok
     finally:
         sim.run()
         make_firmware.main()

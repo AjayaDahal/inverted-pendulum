@@ -2,11 +2,12 @@
 print order (open one, pick a plate, slice it, send it):
 - 3mf/complete_project_kobra_s1_pla.3mf
 - 3mf/complete_project_kobra_s1_petg.3mf
-A slicer project holds one filament setting, so there is one per material. Each is assembled
-from the plates' own 3MF projects (slice_all.py), whose G-code the gate checks: their objects,
-placements and settings are copied unchanged. The slicer's CLI cannot assemble such a project and
-crashes on any plate name, so `--verify` slices a copy with the names blanked, plate by plate,
-and checks each prints what its plate's G-code prints (the VTOL project's method).
+Each holds one material's presets, so every plate prints exactly what its own G-code prints (for
+one project with both materials and only the parts still to print, see make_to_print.py). Each
+is assembled from the plates' own 3MF projects (slice_all.py), whose G-code the gate checks: their
+objects, placements and settings are copied unchanged. The slicer's CLI cannot assemble such a
+project and crashes on any plate name, so `--verify` slices a copy with the names blanked, plate by
+plate, and checks each prints what its plate's G-code prints (the VTOL project's method).
 
 Run: python scripts/make_projects.py [--verify]
 """
@@ -92,16 +93,26 @@ def _shift(transform, dx, dy):
 
 def entries(material):
     plan = jobs(material)
+    title = f"Inverted pendulum - Kobra S1, {material.upper()} ({len(plan)} plates)"
+    desc = "One plate per print job, in print order (tracker.md): " + "; ".join(lab for lab, *_ in plan)
+    return assemble([(label, SA.path_3mf(gcode)) for label, _, gcode, _, _ in plan], title, desc,
+                    project_stamp(material))
+
+
+def assemble(plan, title, desc, stamp):
+    """One project from plate projects [(plate label, its 3MF)]: their objects, placements and
+    settings copied unchanged, one named plate each, in order. Every 3MF must carry the same
+    project settings (printer, process, filaments)."""
     origins = plate_grid(len(plan))
     out, rels, resources, items, blocks, plates = {}, [], [], [], [], []
     shared = header = settings = None
     k = 0
-    for p, ((label, job, gcode, _, _), (ox, oy)) in enumerate(zip(plan, origins), start=1):
-        objs, sh, hd, st = _read(SA.path_3mf(gcode))
+    for p, ((label, path), (ox, oy)) in enumerate(zip(plan, origins), start=1):
+        objs, sh, hd, st = _read(path)
         if settings is None:
             shared, header, settings = sh, hd, st
         elif st != settings:
-            raise RuntimeError(f"{job}: its 3MF's settings differ from the project's first plate")
+            raise RuntimeError(f"{label}: its 3MF's settings differ from the project's first plate")
         instances = []
         for o in objs:
             k += 1
@@ -127,12 +138,10 @@ def entries(material):
                       f'    <metadata key="plater_name" value="{escape(label, {chr(34): "&quot;"})}"/>\n'
                       f'    <metadata key="locked" value="false"/>\n' + "\n".join(instances) + "\n  </plate>")
     header = re.sub(r'\s*<metadata name="pendulum_stl_sha256">[^<]*</metadata>', "", header).replace("<resources>", "")
-    title = f"Inverted pendulum - Kobra S1, {material.upper()} ({len(plan)} plates)"
-    desc = "One plate per print job, in print order (tracker.md): " + "; ".join(lab for lab, *_ in plan)
     header = re.sub(r'<metadata name="Title">[^<]*</metadata>', f'<metadata name="Title">{escape(title)}</metadata>', header)
     header = re.sub(r'<metadata name="Description">[^<]*</metadata>',
                     f'<metadata name="Description">{escape(desc)}</metadata>', header)
-    header = header.rstrip() + f'\n <metadata name="{META}">{project_stamp(material)}</metadata>\n'
+    header = header.rstrip() + f'\n <metadata name="{META}">{stamp}</metadata>\n'
     out["3D/3dmodel.model"] = (header + " <resources>\n" + "\n".join(resources) + "\n </resources>\n"
                                ' <build p:UUID="2c7c17d8-22b5-4d84-8835-1976022ea369">\n' + "\n".join(items) +
                                "\n </build>\n</model>\n").encode()
@@ -150,8 +159,10 @@ def entries(material):
 
 
 def build(material):
-    files = entries(material)
-    dst = project_path(material)
+    return write(entries(material), project_path(material))
+
+
+def write(files, dst):
     tmp = dst + ".tmp"
     with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
         for name, data in files.items():

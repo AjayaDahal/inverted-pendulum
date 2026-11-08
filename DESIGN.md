@@ -13,8 +13,8 @@ frame's footprint.
 | Rails (yours) | 2 × 8 mm rods (680 mm or longer) on SK8 supports, 114 mm apart (calipers), axes 320 mm above the desk |
 | Carriage | 4 × SC8UU under a 150 × 160 × 8 mm printed plate; 0.90 kg moving, belt and spinning parts included |
 | Travel | ±241 mm to the bumpers (482 mm), limit switches trip at ±237, firmware keeps to ±231 |
-| Belt | yours: HTD 8M, 20 mm, a closed loop (175 teeth = 1400 mm assumed: count yours); both pulleys 20 teeth (pitch Ø 50.93 mm, 160 mm per turn), axles 223 mm up, 620 mm apart |
-| Belt length | the axles' spacing follows `BELT_TEETH`; the tensioner then takes 1380–1420 mm (±2.5 teeth); a loop over about 1500 mm (187 teeth) cannot fit inside the end frames |
+| Belt | yours: HTD 8M, 20 mm, a closed loop of 180 teeth (1440 mm, counted from your photos of the loop: confirm by hand); both pulleys 20 teeth (pitch Ø 50.93 mm, 160 mm per turn), axles 223 mm up, 640 mm apart |
+| Belt length | the axles' spacing follows `BELT_TEETH`; the tensioner then takes 1420–1460 mm (±2.5 teeth); a loop over about 1500 mm (187 teeth) cannot fit inside the end frames |
 | Motor | your NEMA 17 at 1.5 A and 19 V: 9.8 N at the cart up to 1 m/s (torque-speed model), 80 % of it relied on; 20.0 steps/mm at 1/16 microstep |
 | Friction | rails 0.8 N, belt 0.3 N, greased idler 0.7 N at 15 N belt tension: 1.8 N at the cart; pivot: goal 0.5 mN m |
 | Pivot | 8 mm × 115 mm shaft in 2 × KP08, 70 mm apart, axis 366 mm up; the arm turns 8 mm in front of the frame |
@@ -22,18 +22,19 @@ frame's footprint.
 | Sensor | AS5600 (12 bit) with a diametric magnet held 5 mm off the steel shaft's end, or a 600 P/R optical encoder |
 | Control (model) | kick, swing-up, catch, LQR with integral action: upright in 3.1 s (≤ 4.8 s over 48 robustness runs), cart within ±186 mm; balanced, it hunts 0.1° at the pivot's goal friction |
 | Firmware | `firmware/pendulum`: Arduino Uno / Nano or ESP32, FastAccelStepper, 200 Hz |
-| Prints | 21 part files, 6 plates: PLA 405 g / 16.2 h, PETG 202 g / 8.4 h |
+| Prints | 21 part files, 6 plates: PLA 366 g / 14.7 h, PETG 234 g / 9.4 h; only the parts you still need: `3mf/to_print_kobra_s1.3mf` |
 
 ## Measure first
 
 Your measuring photos (tape and calipers) gave the frame's length and width, the rods' spacing
-and the belt. Two numbers are still open: measure them, put them in `scripts/params.py`, then
-run `python scripts/build_all.py`; the gate re-checks every clearance:
+and the belt, and your photos of the loop gave its teeth. One number is still open and one is to
+confirm: put them in `scripts/params.py`, then run `python scripts/build_all.py`; the gate
+re-checks every clearance:
 
 | Name | What | Now | Source, and the slack in the design |
 |---|---|---|---|
 | `FRAME_H` | desk to the top of the top end bars | 300 | **estimate: measure it**; everything is placed from the bars |
-| `BELT_TEETH` | the closed belt's teeth: mark one with a pen, count round | 175 | **assumed: count them**; the axles' spacing follows, the tensioner takes ±2.5 teeth |
+| `BELT_TEETH` | the closed belt's teeth: mark one with a pen, count round | 180 | your photos of the loop laid flat (180.0–181.0 from two photos): **confirm by hand**; the axles' spacing follows, the tensioner takes ±2.5 teeth |
 | `FRAME_L` | length between the end frames' outer faces | 686 | tape; the stops and switches follow it |
 | `FRAME_W` | width across the posts' outer faces | 193 | tape; bridge slides ±10 mm: 173–213 wide fit |
 | `ROD_SPACING` | rod centre to rod centre | 114 | calipers (122 over the rods' outer faces); SC8UU holes slotted ±8 mm: 98–130 fit |
@@ -48,8 +49,8 @@ The belt is a vertical loop in **one plane, the frame's centre line (y = 0)**, r
 pulleys whose axles sit at the **same height (z 223)**, so both runs are level and parallel to the
 rails, and the clamp grips the upper run in that same plane, under the carriage's centre (no twist
 on the carriage). The pulleys hang from the 2040 top end bars, spaced for your closed loop:
-`BELT_TEETH` sets the axles' spacing (620 mm for 175 teeth), so each sits 23 mm inboard of its end
-frame, near where yours were.
+`BELT_TEETH` sets the axles' spacing (640 mm for 180 teeth), so each sits 13 mm inboard of its end
+frame's centre line, just inside the top end bar.
 
 **Motor end** (`motor_mount`, PETG). A saddle wraps the −x top end bar from below: a cheek on each
 of its 40 mm faces (two M5 + T-nuts each) and a web under it, reaching in to the motor. The motor
@@ -67,7 +68,8 @@ pressing the flange on. The idler turns on `idler_sleeve`.
 
 **Idler end** (`idler_mount`, `idler_slider` × 2, PETG). The same saddle on the +x top end bar, its
 web reaching in to two cheeks either side of the idler. Each cheek has a window in which a slider
-runs along x; the M5 × 50 axle passes slider – sleeve – slider. An M3 × 30 from an outboard lug
+runs along x; the M4 × 50 axle passes slider – sleeve – slider (an M5 × 50 fits too, once the
+sliders' holes and the sleeve's bore are drilled out to 5.2 mm). An M3 × 30 from an outboard lug
 into each slider pulls it out:
 
 1. Grease the sleeve (a drop of any grease or oil: it is a plain bearing). Leave the axle nut
@@ -161,7 +163,7 @@ back-off); then centre. Keep the controller within ±231 mm.
 
 ## Control
 
-The model (`scripts/sim.py`) is the cart-pole of this machine: cart 0.68 kg + belt 0.18 kg + motor
+The model (`scripts/sim.py`) is the cart-pole of this machine: cart 0.68 kg + belt 0.19 kg + motor
 rotor and pulleys 0.03 kg reflected = 0.90 kg; pendulum 112 g with its CG 70 mm from the axis and
 1.71 × 10⁻³ kg m² about it (sliced masses, steel shaft, screws). Natural frequency 6.7 rad/s. The
 firmware runs the same controller (`firmware/pendulum/controller.h`, line for line: the gate
@@ -170,7 +172,7 @@ replays simulated runs through it and requires the same commands).
 - **Input = cart acceleration,** at most 3.54 m/s², speed at most 1 m/s. A stepper sets motion,
   not force: the force each run needs (the motion plus 1.8 N of friction at the cart) is checked
   at every step against the motor's torque-speed curve at 1.5 A and 19 V (9.8 N up to 1 m/s),
-  80 % of it relied on. The margin never falls below 0.73 N.
+  80 % of it relied on. The margin never falls below 0.71 N.
 - **Start:** when the pendulum has rested near hanging for 0.25 s, a kick: 3.54 m/s² for 135 ms
   one way, then the other.
 - **Swing-up:** the cart's speed is set to
@@ -257,7 +259,7 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
 3. **Motor pulley.** M3 nut into its slot, pulley onto the shaft with the screw on the flat, axles
    flush; tighten; press on the front flange (a drop of CA).
 4. **Idler end.** Saddle on the +x bar as above. Idler: sleeve into the pulley, front flange on,
-   then slider – sleeve – slider on the M5 × 50, nut finger-tight; tension screws in from the lugs.
+   then slider – sleeve – slider on the M4 × 50, nut finger-tight; tension screws in from the lugs.
 5. **Carriage.** SC8UU blocks on the rods; plate on them (M4 × 10, loose), slide the cart end to end
    and tighten the screws with the blocks parallel. It must then run end to end with a light push
    and not tighten anywhere: if it binds near one end, the rods are not parallel; move an SK8

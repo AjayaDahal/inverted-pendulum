@@ -27,14 +27,17 @@ HEAD = """# Print tracker
 Kobra S1, one material per plate: open `3mf/s1_<material>_plates/<plate>.3mf` in Anycubic Slicer
 Next (or the complete project for that material, `3mf/complete_project_kobra_s1_<material>.3mf`,
 one plate per job), slice, send. Masses and times are the slicer's. Edit only the Status column.
+Only the parts you still need, both materials in one project: `3mf/to_print_kobra_s1.3mf`
+(`scripts/make_to_print.py` lists what it leaves out).
 
 ## Before the first print
 
 - [ ] Measure the frame's height (desk to the top of the end bars) and set `FRAME_H` in
       `scripts/params.py` (DESIGN.md, "Measure first"); length, width and the rods' spacing come
       from your measuring photos.
-- [ ] Count the belt's teeth (mark one with a pen, go round once) and set `BELT_TEETH` (now
-      {TEETH}, {LOOP} mm): the pulleys' spacing follows it. Then run `python scripts/build_all.py`.
+- [ ] Confirm the belt's teeth (mark one with a pen, go round once): your photos of the loop give
+      {TEETH} ({LOOP} mm), and `BELT_TEETH` is set to that. If yours differs by more than 2, set it
+      and run `python scripts/build_all.py`: the pulleys' spacing follows it.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
 - [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
