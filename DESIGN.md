@@ -70,17 +70,22 @@ pressing the flange on. The idler turns on `idler_sleeve`.
 web reaching in to two cheeks either side of the idler. Each cheek has a window in which a slider
 runs along x; the M4 × 50 axle passes slider – sleeve – slider (an M5 × 50 fits too, once the
 sliders' holes and the sleeve's bore are drilled out to 5.2 mm). An M3 × 30 from an outboard lug
-into each slider pulls it out:
+into each slider pulls it out. A closed loop cannot be tightened at the clamp: the idler does it,
+and every millimetre the sliders move out takes up 2 mm of belt. Their ±10 mm of travel takes
+loops of 1420–1460 mm (180 ± 2.5 teeth).
 
 1. Grease the sleeve (a drop of any grease or oil: it is a plain bearing). Leave the axle nut
-   finger-tight. Turn both tension screws evenly until the lower run sags about 10 mm when you
-   hang 100 g from its middle (200 g: 20 mm). That is 15 N: enough, as the belt only has to stay
-   taut under the motor's largest pull (~4 N each side); more only loads the idler's plain
-   bearing, which the motor then has to drag (REPORT.md, P2).
+   finger-tight. Turn both tension screws evenly, a quarter turn at a time once the slack is out,
+   until 100 g hung from the middle of the lower run pulls it down a further 10 mm (200 g: 21 mm).
+   Measure from where the run hangs without the weight: its own weight already sags it about 4 mm.
+   That is 15 N: enough, as the belt only has to stay taut under the motor's largest pull (~5 N
+   each side); more only loads the idler's plain bearing, which the motor then has to drag
+   (REPORT.md, P2).
 2. Run the cart by hand from end to end. If the belt creeps towards one flange, give that side's
    screw a quarter turn more (the axle squares itself to the belt) and repeat.
 3. Tighten the axle nut: it clamps the sliders' flanges against the cheeks. The sleeve takes the
-   clamping, so the pulley still turns freely.
+   clamping, so the pulley still turns freely. Check the 100 g test again after the first hour of
+   running, while the belt beds in.
 
 **Clamp** (`belt_clamp` PLA, `clamp_jaw` PETG). The upper run is 81 mm below the carriage plate, so
 the clamp is a box column (40 × 24 mm, 3 mm walls, flared 45° into the jaw seat) on four M3 × 16
@@ -257,16 +262,21 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
 2. **Motor end.** Drop four T-nuts into the −x top end bar's 40 mm faces, slide the saddle up under
    the bar, bolt it (M5 × 10). Motor into the U from behind, four M3 × 8 from the front.
 3. **Motor pulley.** M3 nut into its slot, pulley onto the shaft with the screw on the flat, axles
-   flush; tighten; press on the front flange (a drop of CA).
-4. **Idler end.** Saddle on the +x bar as above. Idler: sleeve into the pulley, front flange on,
-   then slider – sleeve – slider on the M4 × 50, nut finger-tight; tension screws in from the lugs.
+   flush; tighten. Leave its front flange off: the closed belt goes on over the front first.
+4. **Idler end.** Saddle on the +x bar as above. Sliders into the cheeks' windows, tension screws
+   in from the lugs a few turns only, so the sliders sit fully in (the most slack). Idler: sleeve
+   into the pulley, front flange on. Leave the axle out: the belt must go round the pulley first.
 5. **Carriage.** SC8UU blocks on the rods; plate on them (M4 × 10, loose), slide the cart end to end
    and tighten the screws with the blocks parallel. It must then run end to end with a light push
    and not tighten anywhere: if it binds near one end, the rods are not parallel; move an SK8
    (REPORT.md, P13). Bumpers on the rods against the SK8s.
-6. **Clamp.** Nuts into the column's flange pockets and side slots; column under the plate (4 × M3 ×
-   16 from the top). Belt round both pulleys, its upper run into the channel; jaw up from below
-   (4 × M3 × 12). An open belt: both ends in the channel, teeth in the seats.
+6. **Belt and clamp.** Nuts into the column's flange pockets and side slots; column under the plate
+   (4 × M3 × 16 from the top). The idler pulley inside the belt loop, held between the cheeks;
+   the M4 × 50 through slider – sleeve – slider, nut finger-tight (the cheeks, the web and the
+   axle make a ring the belt passes through, so the axle goes in after the belt). The loop's other
+   end onto the motor pulley from the front, then its front flange on (a drop of CA). Upper run
+   into the clamp's channel, teeth in the seats, jaw up from below (4 × M3 × 12). An open belt:
+   both ends in the channel.
 7. **Tension** (above).
 8. **Pivot.** M5 nuts into the bridge's pockets; KP08s on (M5 × 16); bridge on the plate (M5 × 20,
    washers), slid so the arm will turn 8 mm in front of the frame. Shaft through both KP08s, hub on
