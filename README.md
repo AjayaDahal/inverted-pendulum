@@ -46,7 +46,7 @@ could still make the machine fail, and what was changed or must be checked for e
 | **Sensor** | AS5600 magnetic encoder on the shaft's end, or a 600 P/R optical encoder |
 | **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 3 s from hanging, in simulation |
 | **Electronics** | Your stepper driver at 1.5 A and 19 V; an Arduino Uno / Nano or ESP32 runs [`firmware/pendulum`](firmware/pendulum), the simulated controller line for line |
-| **Prints** | 21 part files on 6 Kobra S1 plates: PLA ~400 g, PETG ~200 g, ~24 h |
+| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 364 g, PETG 248 g, about 25 h |
 | **To buy** | Nothing: the machine's own parts plus plain M3/M4/M5 screws and T-nuts |
 
 Exact numbers: [`DESIGN.md`](DESIGN.md#key-numbers). Plates, masses and times:
@@ -76,7 +76,7 @@ runs and how to tension it: [`DESIGN.md`](DESIGN.md#how-the-belt-runs-now).
 <tr>
 <td width="50%"><img src="renders/anim_swingup.gif" alt="Simulated swing-up: the cart pumps energy into the pendulum, which rises to upright and balances"><br>
 <b>Swing-up.</b> The simulated controller kicks the pendulum, pumps it up from hanging and
-catches it upright; the cart stays within ±144 mm (±186 mm over 48 runs with the model
+catches it upright; the cart stays within ±144 mm (±187 mm over 48 runs with the model
 off, slow reactions, pivot friction and a push).</td>
 <td width="50%"><img src="renders/anim_burst.gif" alt="Burst view: every part moves out along the way it goes together"><br>
 <b>Burst view.</b> Every part moves out along the way it goes together.</td>
@@ -138,8 +138,10 @@ branch → `main`, `/ (root)`*); the root `index.html` opens `viewer/`.
    (filament 1 PLA in blue, 2 PETG in orange, one material per bed: the PETG beds first, then the
    PLA ones; no part needs supports). It leaves out what you keep
    and takes one sensor's parts: set `HAVE`, `MAYBE` and `SENSOR` in `scripts/make_to_print.py`.
-   Every part: `3mf/complete_project_kobra_s1_petg.3mf` and `..._pla.3mf`
-   ([`tracker.md`](tracker.md), [`SLICING.md`](SLICING.md)).
+   Every part: `3mf/complete_project_kobra_s1.3mf`, the six plates in print order in one project
+   with the same two filaments ([`tracker.md`](tracker.md), [`SLICING.md`](SLICING.md)). Before
+   printing: [`REPORT.md`](REPORT.md#printing-audit-and-premortem) (how the prints could fail and
+   what was changed for each).
 3. **Assemble** in the order in [`DESIGN.md`](DESIGN.md#assembly-order): motor end, pulleys, idler
    and tensioner, carriage, clamp, tension, pivot (its bearings freed: the pivot's friction decides
    how still it balances), sensor, switches.

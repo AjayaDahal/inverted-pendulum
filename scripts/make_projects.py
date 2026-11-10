@@ -1,13 +1,14 @@
-"""Complete slicer projects, one per material, every plate of that material as a named plate in
-print order (open one, pick a plate, slice it, send it):
-- 3mf/complete_project_kobra_s1_pla.3mf
-- 3mf/complete_project_kobra_s1_petg.3mf
-Each holds one material's presets, so every plate prints exactly what its own G-code prints (for
-one project with both materials and only the parts still to print, see make_to_print.py). Each
-is assembled from the plates' own 3MF projects (slice_all.py), whose G-code the gate checks: their
-objects, placements and settings are copied unchanged. The slicer's CLI cannot assemble such a
-project and crashes on any plate name, so `--verify` slices a copy with the names blanked, plate by
-plate, and checks each prints what its plate's G-code prints (the VTOL project's method).
+"""The complete slicer project: every plate, PETG and PLA, as a named plate in print order in one
+project for the Kobra S1 (open it, pick a plate, slice it, send it): 3mf/complete_project_kobra_s1.3mf.
+
+Two filaments, 1 = PLA (blue) and 2 = PETG (orange), and no prime tower: each plate holds one
+material, every object on that material's filament, so it prints with that filament's temperatures
+and cooling. The process is the PLA one; every PETG object carries what the PETG process changes
+(its infill). Each plate's layout is the plate's own (plates.py), so it prints what that plate's own
+G-code (gcode/s1_<material>_plates/) prints. make_to_print.py builds the project of the parts still
+to print the same way. The slicer's CLI cannot assemble such a project and crashes on any plate
+name, so `--verify` slices a copy with the names blanked, plate by plate, and checks each against its
+plate's G-code: the same grams, the same bed and nozzle temperatures.
 
 Run: python scripts/make_projects.py [--verify]
 """
@@ -17,6 +18,7 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -28,33 +30,131 @@ import plates as PT
 import slice_all as SA
 from make_print_ready import PARTS
 
-PROJECTS = {"pla": "complete_project_kobra_s1_pla.3mf", "petg": "complete_project_kobra_s1_petg.3mf"}
+PATH = os.path.join(G.ROOT, "3mf", "complete_project_kobra_s1.3mf")
 META = "pendulum_jobs_sha256"
 GAP = 0.2            # the slicer lays plates out 1.2 bed widths apart
 DATE = (2026, 1, 1, 0, 0, 0)
+FIL = {"pla": 1, "petg": 2}             # the projects' filament slots
+COLOUR = {"pla": "#3A86FF", "petg": "#F2754E"}   # so the slicer shows PLA and PETG plates apart
 
 
-def project_path(material):
-    return os.path.join(G.ROOT, "3mf", PROJECTS[material])
+def _profile(name):
+    with open(os.path.join(SA.PROFILES, name)) as f:
+        return json.load(f)
 
 
-def jobs(material):
-    """[(plate label, plate, G-code path, stamp, object names)] in print order."""
-    out = []
-    for plate, items in PT.PLATES.items():
-        if PT.material(plate) != material:
-            continue
-        copies = dict(items)
-        objs = [PT.stl_name(n, k, copies[n]) + ".stl" for n, k, _, _, _ in PT.layout(plate)]
+def petg_overrides():
+    """What the PETG process changes against the PLA one: set on each PETG object."""
+    pla, petg = _profile(SA.PROCESS[("s1", "pla")]), _profile(SA.PROCESS[("s1", "petg")])
+    return {k: v for k, v in petg.items() if k != "name" and pla.get(k) != v}
+
+
+def plan():
+    """[(label, material, items, optional)]: every plate of plates.py in print order."""
+    total = {m: sum(PT.material(p) == m for p in PT.PLATES) for m in FIL}
+    seen, out = dict.fromkeys(FIL, 0), []
+    for i, (plate, items) in enumerate(PT.PLATES.items(), start=1):
+        mat = PT.material(plate)
+        seen[mat] += 1
+        n = sum(c for _, c in items)
         theme = re.sub(r"^(pla|petg)_\d+_", "", plate).replace("_", " ")
-        opt = any(PARTS[n]["optional"] for n, _ in items)
-        label = f"{material.upper()} {len(out) + 1} - {theme} ({len(objs)} parts)" + (" - OPTION" if opt else "")
-        out.append((label, plate, PT.gcode_path(plate), PT.plate_hash(plate), objs))
+        opt = any(PARTS[name]["optional"] for name, _ in items)
+        label = f"{i} {mat.upper()} {seen[mat]}/{total[mat]} - {theme} ({n} part{'s' * (n > 1)})"
+        out.append((label + (" - OPTION" if opt else ""), mat, tuple(items), opt))
     return out
 
 
-def project_stamp(material):
-    return hashlib.sha256("\n".join(f"{lab}:{st}" for lab, _, _, st, _ in jobs(material)).encode()).hexdigest()
+def stamp(beds):
+    """Hash of the presets (parsed, so line endings do not count), the colours, and each bed: its
+    label, material, and each copy's STL, place and own settings."""
+    h = hashlib.sha256()
+    for f in (SA.MACHINE["s1"], SA.PROCESS[("s1", "pla")], SA.PROCESS[("s1", "petg")], SA.FILAMENT["pla"],
+              SA.FILAMENT["petg"]):
+        h.update(json.dumps(_profile(f), sort_keys=True).encode())
+    h.update(json.dumps(COLOUR, sort_keys=True).encode())
+    for label, mat, items, _ in beds:
+        h.update(json.dumps([label, mat]).encode())
+        for name, k, x, y, a in PT.layout_items(tuple(items), label):
+            h.update(SA.stl_hash(name).encode())
+            h.update(json.dumps([name, k, x, y, a, SA.object_settings(name)], sort_keys=True).encode())
+    return h.hexdigest()
+
+
+def bed_files(items, label, tmp):
+    """Each copy's STL where it prints on the bed, its material, and its own slicer settings."""
+    copies = dict(items)
+    stls, mats, own = [], [], {}
+    for name, k, x, y, a in PT.layout_items(tuple(items), label):
+        obj = PT.stl_name(name, k, copies[name]) + ".stl"
+        path = os.path.join(tmp, obj)
+        G.write_stl(path, PT.placed_mesh(name, x, y, a))
+        stls.append(path)
+        mats.append(PARTS[name]["material"])
+        if SA.object_settings(name):
+            own[obj] = SA.object_settings(name)
+    return stls, mats, own
+
+
+def export(stls, process, filaments, ids, own, dst, tmp):
+    """The STLs, where they lie, as a project 3MF with these presets (ids: each object's filament),
+    the objects in `own` with their own settings."""
+    name3 = os.path.basename(dst)
+    cmd = [SA.SLICER, "--arrange", "0", "--orient", "0", "--ensure-on-bed", "--datadir", os.path.join(tmp, "cfg"),
+           "--load-settings", ";".join([os.path.join(SA.PROFILES, SA.MACHINE["s1"]), os.path.join(SA.PROFILES, process)]),
+           "--load-filaments", ";".join(os.path.join(SA.PROFILES, f) for f in filaments)]
+    if ids:
+        cmd += ["--load-filament-ids", ",".join(ids)]
+    _, log = SA._run(cmd + ["--export-3mf", name3, "--outputdir", tmp, *stls], f"{name3}: no 3MF written")
+    made = os.path.join(tmp, name3)
+    if not os.path.exists(made):
+        raise RuntimeError(log)
+    if own:
+        SA._set_object_settings(made, own)
+    shutil.move(made, dst)
+
+
+def bed_3mf(items, label, dst):
+    """One bed as a two-filament project: PLA objects on filament 1, PETG on 2 with the PETG process's
+    changes; each filament its own colour, no prime tower (no bed mixes the two)."""
+    over = petg_overrides()
+    with tempfile.TemporaryDirectory() as tmp:
+        stls, mats, own = bed_files(items, label, tmp)
+        for path, mat in zip(stls, mats):
+            if mat == "petg":
+                obj = os.path.basename(path)
+                own[obj] = {**over, **own.get(obj, {})}
+        export(stls, SA.PROCESS[("s1", "pla")], [SA.FILAMENT["pla"], SA.FILAMENT["petg"]],
+               [str(FIL[m]) for m in mats], own, dst, tmp)
+    with zipfile.ZipFile(dst) as z:
+        files = [(info, z.read(info.filename)) for info in z.infolist()]
+    with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in files:
+            if info.filename == "Metadata/project_settings.config":
+                ps = json.loads(data)
+                ps["filament_colour"] = [COLOUR[m] for m in sorted(FIL, key=FIL.get)]
+                ps["enable_prime_tower"] = "0"
+                data = json.dumps(ps, indent=4).encode()
+            z.writestr(info, data)
+
+
+def slice_plate(project, plate, out):
+    """Slice plate `plate` (from 1; 0 = all) of a project into the new folder `out`: the G-code's path."""
+    os.makedirs(out)
+    run = subprocess.run([SA.SLICER, "--slice", str(plate), "--datadir", os.path.join(out, "cfg"), "--outputdir", out,
+                          project], capture_output=True, text=True, timeout=3600)
+    found = glob.glob(os.path.join(out, "*.gcode"))
+    if len(found) != 1:
+        raise RuntimeError(f"{len(found)} G-code files (exit {run.returncode}): {(run.stdout + run.stderr)[-600:]}")
+    return found[0]
+
+
+def facts(gcode):
+    """(grams, minutes, the start line that sets the bed and nozzle temperatures) of a G-code file."""
+    with open(gcode, errors="replace") as f:
+        text = f.read()
+    g, mins, _ = SA.stats(gcode)
+    start = re.search(r"^G9111 .*$", text, re.M)
+    return g, mins, start.group(0) if start else None
 
 
 def plate_grid(count):
@@ -89,14 +189,6 @@ def _shift(transform, dx, dy):
     v = transform.split()
     v[9], v[10] = repr(float(v[9]) + dx), repr(float(v[10]) + dy)
     return " ".join(v)
-
-
-def entries(material):
-    plan = jobs(material)
-    title = f"Inverted pendulum - Kobra S1, {material.upper()} ({len(plan)} plates)"
-    desc = "One plate per print job, in print order (tracker.md): " + "; ".join(lab for lab, *_ in plan)
-    return assemble([(label, SA.path_3mf(gcode)) for label, _, gcode, _, _ in plan], title, desc,
-                    project_stamp(material))
 
 
 def assemble(plan, title, desc, stamp):
@@ -158,10 +250,6 @@ def assemble(plan, title, desc, stamp):
     return {n: out[n] for n in order}
 
 
-def build(material):
-    return write(entries(material), project_path(material))
-
-
 def write(files, dst):
     tmp = dst + ".tmp"
     with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
@@ -173,19 +261,76 @@ def write(files, dst):
     return dst
 
 
-def stale():
-    """Problems the gate reports: a project missing or not built from the current plates."""
+def build():
+    beds = plan()
+    with tempfile.TemporaryDirectory() as tmp:
+        parts = []
+        for i, (label, _, items, _) in enumerate(beds, start=1):
+            dst = os.path.join(tmp, f"plate{i}.3mf")
+            bed_3mf(items, label, dst)
+            parts.append((label, dst))
+        n = sum(c for _, _, items, _ in beds for _, c in items)
+        title = f"Inverted pendulum - Kobra S1, every part ({n} parts, {len(beds)} plates)"
+        desc = ("Filament 1 = PLA, 2 = PETG; one material per plate, in print order (tracker.md): " +
+                "; ".join(lab for lab, *_ in beds))
+        write(assemble(parts, title, desc, stamp(beds)), PATH)
+    return beds
+
+
+def audit(path, beds, want):
+    """A written two-filament project, plate by plate: one material, every object on that material's
+    filament with its own settings from the print table (and, PETG ones, the PETG process's changes),
+    each copy exactly once (want: {part: copies}); the filaments coloured apart, no prime tower."""
+    rel = f"3mf/{os.path.basename(path)}"
+    with zipfile.ZipFile(path) as z:
+        ms = z.read("Metadata/model_settings.config").decode(errors="replace")
+        ps = json.loads(z.read("Metadata/project_settings.config"))
+    order = sorted(FIL, key=FIL.get)
     bad = []
-    for material in PROJECTS:
-        path = project_path(material)
-        if not os.path.exists(path):
-            bad.append(f"3mf/{PROJECTS[material]} missing")
-            continue
-        with zipfile.ZipFile(path) as z:
-            model = z.read("3D/3dmodel.model").decode(errors="replace")
-        if project_stamp(material) not in model:
-            bad.append(f"3mf/{PROJECTS[material]} is stale: run make_projects.py")
+    if ps.get("filament_type") != [m.upper() for m in order]:
+        bad.append(f"{rel}: filaments {ps.get('filament_type')}, not {[m.upper() for m in order]}")
+    if ps.get("filament_colour") != [COLOUR[m] for m in order] or len(set(COLOUR.values())) != len(FIL):
+        bad.append(f"{rel}: filament colours {ps.get('filament_colour')}")
+    if str(ps.get("enable_prime_tower")) != "0":
+        bad.append(f"{rel}: prime tower on")
+    objs = {m.group(1): m.group(0) for m in re.finditer(r'<object id="(\d+)">.*?</object>', ms, re.S)}
+    plates = re.findall(r"<plate>(.*?)</plate>", ms, re.S)
+    if len(plates) != len(beds):
+        bad.append(f"{rel}: {len(plates)} plates, the plan has {len(beds)}")
+    over = petg_overrides()
+    count = {}
+    for p, ((label, mat, _, _), plate) in enumerate(zip(beds, plates), start=1):
+        name = re.search(r'plater_name" value="([^"]*)"', plate).group(1)
+        if name != escape(label, {'"': "&quot;"}):
+            bad.append(f"{rel} plate {p}: named '{name}'")
+        for oid in re.findall(r'object_id" value="(\d+)"', plate):
+            block = objs[oid]
+            stl = re.search(r'key="name" value="([^"]+)\.stl"', block).group(1)
+            part = stl if stl in PARTS else re.sub(r"_\d+$", "", stl)
+            count[part] = count.get(part, 0) + 1
+            fil = re.search(r'key="extruder" value="(\d+)"', block).group(1)
+            if PARTS.get(part, {}).get("material") != mat or fil != str(FIL[mat]):
+                bad.append(f"{rel} plate {p} ({mat.upper()}): {stl} is {PARTS.get(part, {}).get('material')} "
+                           f"on filament {fil}")
+            need = {**(over if mat == "petg" else {}), **(SA.object_settings(part) if part in PARTS else {})}
+            if any(f'key="{k}" value="{v}"' not in block for k, v in need.items()):
+                bad.append(f"{rel} plate {p}: {stl} lacks its own settings {need}")
+    if count != want:
+        bad.append(f"{rel}: copies {count} against {want}")
     return bad
+
+
+def stale():
+    """Problems the gate reports: the project missing, not built from the current plates, parts and
+    presets, or failing audit()."""
+    if not os.path.exists(PATH):
+        return [f"3mf/{os.path.basename(PATH)} missing"]
+    with zipfile.ZipFile(PATH) as z:
+        model = z.read("3D/3dmodel.model").decode(errors="replace")
+    beds = plan()
+    if stamp(beds) not in model:
+        return [f"3mf/{os.path.basename(PATH)} is stale: run make_projects.py"]
+    return audit(PATH, beds, {name: spec["qty"] for name, spec in PARTS.items()})
 
 
 def _unnamed(src, dst):
@@ -197,50 +342,42 @@ def _unnamed(src, dst):
             zo.writestr(info, data)
 
 
-def _mass(path):
-    with open(path, errors="replace") as f:
-        m = re.search(r"; total filament used \[g\] = ([\d.]+)", f.read())
-    return float(m.group(1)) if m else None
-
-
-def verify(material):
-    """Slice each plate of the project on its own (names blanked) and compare its filament mass
-    and layer count with the plate's G-code."""
-    plan = jobs(material)
-    bad, same = [], 0
+def verify(beds):
+    """Each plate of the project, sliced on its own (names blanked), against its plate's own G-code:
+    the same grams, the same bed and nozzle temperatures."""
+    bad, rows = [], []
     with tempfile.TemporaryDirectory() as tmp:
-        src = os.path.join(tmp, os.path.basename(project_path(material)))
-        _unnamed(project_path(material), src)
-        for p, (label, job, gcode, _, _) in enumerate(plan, start=1):
-            out = os.path.join(tmp, f"p{p}")
-            os.makedirs(out)
-            run = subprocess.run([SA.SLICER, "--slice", str(p), "--datadir", os.path.join(out, "cfg"),
-                                  "--outputdir", out, src], capture_output=True, text=True, timeout=3600)
-            found = glob.glob(os.path.join(out, "*.gcode"))
-            if len(found) != 1:
-                bad.append(f"plate {p} ({label}): {len(found)} G-code files (exit {run.returncode})")
+        src = os.path.join(tmp, "project.3mf")
+        _unnamed(PATH, src)
+        for p, ((label, mat, _, _), plate) in enumerate(zip(beds, PT.PLATES), start=1):
+            try:
+                g1, m1, t1 = facts(slice_plate(src, p, os.path.join(tmp, f"p{p}")))
+            except RuntimeError as exc:
+                bad.append(f"plate {p} ({label}): {exc}")
                 continue
-            a, b = _mass(found[0]), _mass(gcode)
-            if a is None or b is None or abs(a - b) > 0.01 * b + 0.1:
-                bad.append(f"plate {p} ({label}): {a} g against {b} g in its G-code")
+            g2, _, t2 = facts(PT.gcode_path(plate))
+            if g1 is None or g2 is None or abs(g1 - g2) > 0.01 * g2 + 0.1 or t1 != t2:
+                bad.append(f"plate {p} ({label}): {g1} g, '{t1}' in the project; {g2} g, '{t2}' in "
+                           f"{os.path.relpath(PT.gcode_path(plate), G.ROOT)}")
             else:
-                same += 1
-    return same, len(plan), bad
+                rows.append((p, mat, g1, m1, t1))
+    return rows, bad
 
 
 def main(check=False):
-    failed = []
-    for material in PROJECTS:
-        dst = build(material)
-        line = f"wrote {os.path.relpath(dst, G.ROOT)}: {len(jobs(material))} plates, {os.path.getsize(dst) // 1024} KB"
-        if check:
-            same, n, bad = verify(material)
-            line += f"; sliced on its own, {same}/{n} plates print what their G-code prints"
-            failed += bad
-        print(line)
-    for b in failed:
+    beds = build()
+    print(f"wrote {os.path.relpath(PATH, G.ROOT)}: {len(beds)} plates, {os.path.getsize(PATH) // 1024} KB")
+    for label, *_ in beds:
+        print("  ", label)
+    if not check:
+        return True
+    rows, bad = verify(beds)
+    for p, mat, g, mins, t in rows:
+        print(f"   plate {p} {mat.upper():4s} {g:6.1f} g {mins / 60:5.2f} h  {t}")
+    print(f"sliced on its own, {len(rows)}/{len(beds)} plates print what their own G-code prints")
+    for b in bad:
         print("FAILED", b)
-    return not failed
+    return not bad
 
 
 if __name__ == "__main__":

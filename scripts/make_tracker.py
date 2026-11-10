@@ -25,10 +25,11 @@ NOTES = {
 HEAD = """# Print tracker
 
 Kobra S1, one material per plate: open `3mf/s1_<material>_plates/<plate>.3mf` in Anycubic Slicer
-Next (or the complete project for that material, `3mf/complete_project_kobra_s1_<material>.3mf`,
-one plate per job), slice, send. Masses and times are the slicer's. Edit only the Status column.
+Next (or the complete project, `3mf/complete_project_kobra_s1.3mf`: every plate, PETG and PLA, one
+plate per job), slice, send. Masses and times are the slicer's. Edit only the Status column.
 Only the parts you still need, both materials in one project: `3mf/to_print_kobra_s1.3mf`
-(`scripts/make_to_print.py` lists what it leaves out).
+(`scripts/make_to_print.py` lists what it leaves out). In those two projects filament 1 is PLA and
+2 is PETG: a PETG plate selects filament 2, so map it to the PETG spool when you send it.
 
 ## Before the first print
 
@@ -78,21 +79,31 @@ def render():
     totals = (f"\n**Totals** (without the optional encoder coupler): PLA {tot['pla'][0]:.0f} g, {tot['pla'][1] / 60:.1f} h; "
               f"PETG {tot['petg'][0]:.0f} g, {tot['petg'][1] / 60:.1f} h; "
               f"{(tot['pla'][1] + tot['petg'][1]) / 60:.1f} h in all.\n")
+    brims = ", ".join(f"`{n}`" for n, spec in PARTS.items() if spec["brim"])
     tail = """
 ## Reminders for print time
 
-- PETG: dry spool, 75 C bed on the textured PEI plate; PLA: 60 C. The 3MFs carry these.
-- The tall parts (`idler_mount`, `belt_clamp`, `switch_mount`) carry a 5 mm brim in their 3MF.
-- No part needs supports. The idler mount prints upside down: its slider windows' tops bridge 32 mm.
+- PETG: dry the spool first (wet PETG strings into the nut pockets and holes), 75 C bed on the
+  textured PEI plate; PLA: 60 C. The 3MFs carry these.
+- PLA on the long plates: keep the chamber from warming up (the PLA preset runs the exhaust fan;
+  open the lid if it still gets warm): warm PLA softens and can clog the nozzle.
+- A 5 mm brim on each part that stands tall on a small first layer, carried in its 3MF:
+  {BRIMS}. Cut each brim off with a sharp blade held flat against the part: the sleeve's ends take
+  the axle's clamping, so leave no lip.
+- No part needs supports. The idler mount prints upside down: its slider windows' tops bridge 32 mm,
+  and the edge each slider rests on has 1 mm of room for that bridge's sag. Each slider must slide
+  end to end in its window: if one sticks, file the bridge flat.
 - Pulleys: print with the integral flange on the bed; press the separate front flange on after
   fitting the set-screw nut (motor pulley) and the sleeve (idler).
-- Before assembly: test-fit an M5 T-nut bolt through a saddle cheek, the 8 mm shaft in the hub,
-  and an M3 nut in the pulley's nut slot. Ream or file printed holes rather than forcing.
+- Before assembly, test-fit: an M5 T-nut bolt through a saddle cheek and each saddle on its bar,
+  the 8 mm shaft in the hub and the magnet cap, the motor's shaft in the pulley's D bore, the arm in
+  the hub's socket, an M3 nut in the pulley's nut slot, and each front flange on its boss (a press
+  fit: push it on square, a drop of CA). Ream or file printed holes rather than forcing.
 - Grease (or oil) the idler's sleeve before the pulley goes on: it is a plain bearing, and dry it
   takes a share of the motor's force (REPORT.md, P2).
 - Free the KP08 inserts before fitting them (seals off, grease out, a drop of light oil) and run
   the firmware's `f` test: the pivot's friction decides how still it balances (REPORT.md, P16).
-"""
+""".replace("{BRIMS}", brims)
     return head + "\n".join(table) + "\n" + totals + tail
 
 

@@ -5,7 +5,10 @@ Base files, committed: machine_kobra_s1.json, process_standard.json and filament
 from the VTOL project (Anycubic Slicer Next 2.0.0.3's Kobra S1 0.4 presets, proven with its CLI).
 This script derives the rest:
 - process_pla.json / process_petg.json: 4 walls, 5 top and bottom layers, gyroid infill (25 % PLA,
-  35 % PETG), no brim (parts that need one get it from the print table).
+  35 % PETG), no brim (parts that need one get it from the print table), inner walls before the
+  outer one and no precise wall, as in the installed slicer's own S1 preset (process_standard.json
+  prints the outer wall first: where a layer steps out over air, or a hole opens in a bridged
+  ceiling, that wall then goes down touching nothing; REPORT.md, R1).
 - filament_pla.json: the installed slicer's "Generic PLA @Anycubic Kobra S1 0.4 nozzle", resolved,
   bed 60 C on every plate type.
 - filament_petg.json: renamed, bed 75 C on every plate type (as in the VTOL project).
@@ -48,7 +51,8 @@ def write(name, data):
 def main():
     std = load(os.path.join(OUT, "process_standard.json"))
     common = {"wall_loops": "4", "top_shell_layers": "5", "bottom_shell_layers": "5", "sparse_infill_pattern": "gyroid",
-              "brim_type": "no_brim", "enable_support": "0", "detect_overhang_wall": "1"}
+              "brim_type": "no_brim", "enable_support": "0", "detect_overhang_wall": "1",
+              "wall_sequence": "inner wall/outer wall", "precise_outer_wall": "0"}
     for mat, infill in (("pla", "25%"), ("petg", "35%")):
         p = dict(std)
         p.update(common)

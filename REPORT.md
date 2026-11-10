@@ -30,6 +30,7 @@ laid flat and the idler off the machine on its axle (M5, M6).
 | M1-M6 | The measuring photos: frame, rods and belt not as modelled; the belt's teeth and the idler from the third set | major: the parts would not have fitted | fixed: design rebuilt to the measurements (below) |
 | O1-O4 | Open: to confirm on the real machine | | O1, O2 closed (the frame's height and the belt's teeth, measured); O3, O4 to confirm (below) |
 | P1-P16 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
+| R1-R11 | Printing: an audit of the 3MFs and G-code and a premortem of the prints, before the first one | P1 print: walls laid in mid-air (the thrust stand's crank fault) | R1-R5 fixed and gated, R11 done; R7-R10 are checks at print time (below) |
 
 ## As built (v0)
 
@@ -190,7 +191,7 @@ a typical 1 A gives 6.5 N (20-tooth 8M pulley), and at 12 V the force collapses 
 now has the motor's torque-speed curve at the driver's current and supply (`params.MOTOR`,
 `DRIVE`: 1.5 A, the 19 V laptop brick, 80 % of the torque relied on), against the motion plus
 the friction at the cart, in every run; the controller's acceleration limit (3.54 m/s² with the
-8M drive) comes out of that budget and every run keeps 0.74 N in hand. Setting the driver:
+8M drive) comes out of that budget and every run keeps 0.69 N in hand. Setting the driver:
 DESIGN.md, "Electronics and firmware".
 
 **P2. The idler drags.** The idler turns on its PETG sleeve, a plain bearing that both belt runs
@@ -244,7 +245,7 @@ AS5600's DIR pin tied to GND (floating on some boards, it flips the direction at
 **P10. A broken switch wire means no stop.** *Fix:* the firmware expects normally closed
 switches, so a broken wire reads as pressed and stops it.
 
-**P11. The frame walks on the desk.** The cart's pushes reach 5.3 N on the frame, about
+**P11. The frame walks on the desk.** The cart's pushes reach 5.4 N on the frame, about
 what a 3.6 kg frame on a smooth desk holds by friction. *Check:* clamp the frame to the desk.
 
 **P12. The T-nuts.** The saddles bolt into the 40 mm faces of the top end bars. Drop-in T-nuts go
@@ -280,3 +281,43 @@ position lightly lets the pivot stick less. With those gains it hunts 0.1 deg at
 at 1 and 4.1 at 2.5 (the first controller: 1.2, 2.8 and 7.2), and `tune_controller.py` now ranks
 candidates by it. *Check:* free the pivot (DESIGN.md, "Pendulum": seals off, grease out, a drop
 of oil, blocks in line) and run `f` before the first run.
+
+## Printing: audit and premortem
+
+Before the first print the owner asked for a deep audit of the 3MF files and a premortem of the
+prints: does any part need supports, do the settings make sense, how could a print fail? He
+remembered the thrust stand, whose crank printed the walls of a hole over its bearing seat and
+filled the seat with strands. Method: every extrusion of every part's G-code, whatever the slicer
+calls it, was checked against the layer below with a check written for it (the vtol-plane audit's
+method, now the gate's `air` check): each stretch over air is followed along its path (is it
+anchored at its ends? did a line of its own layer go down beside it first?), and the layers where
+it found something were drawn. The processes and filaments were compared key by key with the
+installed slicer's own Kobra S1 presets, the projects read plate by plate, each part's height
+measured against its first layer, and each fix tried on scratch slices before it was built in.
+
+**The answer: no part needs supports. But six printed the thrust stand's fault, a hole's walls
+laid in mid-air over a pocket (R1), and the gate could not see it (R2).** Both are fixed with the
+rest below, and every file is re-sliced.
+
+| | Finding | Fix | Status |
+|---|---|---|---|
+| R1 | **Walls laid in mid-air over pockets, as the thrust stand's crank failed, in six parts.** Where a hole runs up through a bridged ceiling, the slicer printed the hole's walls with nothing under them and nothing beside them yet. Worst: the hub's two arm screws, whose four loops each went down 10 mm above the floor of the socket the arm slides into. Also over the hub's nut pockets, the clamp's jaw-nut slots (0.3 mm of room over a 2.4 mm nut), the carriage plate's and the pivot bridge's M5 nut pockets (19 mm loops), the switch block's M5 counterbore and the motor mount's M3 counterbores: 29 runs that fail the rule in R2, and 1.1 m of wall laid in mid-air across all the parts. Cause: the process printed each outer wall first. It came from the VTOL project's preset, itself from an older Anycubic S1 preset; the installed slicer's own preset prints inner walls first. | Inner walls first and the precise wall off, as in the installed slicer's preset (`make_slicer_profiles.py`): a hole's walls now go down beside the bridge lines printed before them. Same grams, same times. The hub's socket is too deep for that alone (its holes' loops would hang 10 mm over the socket's floor), and the clamp's jaw-nut slots too tight for it (on its plate, turned, the loops round the jaw screws still lay 3.2 mm over the 0.3 mm of room above each nut): their holes now start over the socket or slot in two one-layer steps, a slot right across and then a square, so each layer bridges between held edges (`pendulum_hub`, `belt_clamp`). Tried and dropped: the slicer's own "partially bridged" hole bridging, which left loops crossing its slot, 11-20 mm long and held at one end. After: 134 mm of wall laid in mid-air across all the parts (from 1,087), all of it short, close to the layer below or anchored at both ends. | fixed, gated |
+| R2 | **The gate could not see R1.** The `overhang` check rasterises the mesh, and there a ring of hole walls over a pocket is part of a ledge or a bridge inside its limits: a 1.4-2.8 mm ledge over the nut pockets and counterbores, a 20 mm bridge over the hub's socket. | New `air` check: every part's and every plate's G-code, line by line against the layer below (a plate turns its parts and prints them together, and its lines differ a little from the part's own file). Any line more than 3 mm from the layer below, whatever the slicer calls it, spans at most 34 mm between two anchors; no wall is laid in mid-air unless it runs at most 1 mm, stays within 1 mm of the layer below, is a stub of at most 3 mm held at one end, or bridges between two anchors. The old files fail it in all six parts (29 runs); the new ones pass: spans over air up to 31.8 mm (the idler windows), no line held at one end or none more than 2.2 mm out (the switch block's counterbore), and the longest wall laid in mid-air a 20 mm edge of the hub's first step, anchored at both ends. It adds about two minutes to the gate. | fixed, gated |
+| R3 | **Bridged faces that are fits.** The idler mount prints upside down, so the edge each slider rests on is the last thing printed over its window: a 32 mm PETG bridge with 0.2 mm of room. Half a millimetre of sag, usual for PETG over that span, would jam the slider at mid-travel. The hub's arm socket the same way: its front face is a 20 mm bridge, 0.2 mm off the arm. | `BRIDGE_SAG`: room for 0.025 mm of sag per mm of span under each, the face on a layer boundary. The windows' lower edges sit 1.0 mm lower (the tension screws, threaded into the sliders, hold them at their height), the socket's front face 0.6 mm further out (the arm screws pull it onto the arm). | fixed |
+| R4 | **The saddles had no room on the bars.** Their cheeks stood exactly 20.0 mm apart for the 20 mm top end bars; a printed gap comes out a little small. | `SADDLE_FIT`: 0.1 mm each side; the bolts pull the cheeks onto the bar. | fixed |
+| R5 | **Slender parts without a brim.** The idler sleeve stands 26 mm tall on 33 mm² of first layer, the tip cap 26 mm on 367 mm², the magnet cap 16 mm on 186 mm²: levers the nozzle can pry off the bed. Only the three tallest parts had a brim. | A 5 mm brim on every part taller than the square root of its first layer's area (six; the gate's `bed` check holds the rule); the plates keep their 6 mm gap from the brims, and the brims 10 mm inside the bed. | fixed, gated |
+| R6 | **Does any part need supports?** | No. The longest bridges are the idler windows' 32 mm (anchored at both ends; at most 34), and nothing held at one end or none lies more than 2.2 mm out from the layer below, in the parts' files or on the plates. Every part's first layer sits on the bed, and nothing starts in mid-air. | verified |
+| R7 | **A two-material project selects filament 2 for PETG.** A PETG plate in the complete or the to-print project starts with `T1`. Sent with PLA mapped to filament 2 (or from a USB stick to a printer whose second spool is PLA), it prints the PETG plate in PLA at 255 °C, or the reverse. | `tracker.md` and `SLICING.md`: map filament 2 to the PETG spool when sending; the single-material plate files (`3mf/s1_<material>_plates/`) avoid the question. | check at print time |
+| R8 | **Wet PETG** strings into the nut pockets and holes and bridges badly. | `tracker.md`: dry the spool first. | check at print time |
+| R9 | **A warm chamber on the long PLA plates** (8.7 h for the second) softens PLA and can clog the nozzle. The PLA preset runs the S1's exhaust fan at 60 %. | `tracker.md`: open the lid if the chamber still warms. | check at print time |
+| R10 | **Fits only a print shows.** The front flanges press onto their pulleys' bosses (12.0 mm on 12.0, a press fit by design), the motor pulley's D bore is 5.15 mm for the 5 mm shaft, the magnet cap's bore 8.1 mm for the 8 mm shaft, and each saddle must slide onto its bar. | `tracker.md`: test-fit each before assembly; ream or file rather than force. | check at print time |
+| R11 | **One project per printer** (the owner's request): there were two complete projects, one per material. | `3mf/complete_project_kobra_s1.3mf`: every plate, PETG and PLA, in print order, with the to-print project's two filaments (1 PLA, 2 PETG) and each object's own settings (`make_projects.py`). `--verify` slices each plate of it and compares it with that plate's own G-code (grams, bed and nozzle temperatures); the gate audits it plate by plate. One difference, found on the way: in a two-filament project the slicer holds the PETG to the PLA's flow limit (8 mm³/s, not 10), so a PETG plate there prints the same lines about 9 % slower than its own file (6.6 h against 7.2 h for the belt drive): harmless, and `tracker.md` keeps the plates' own times. | done, gated |
+
+Checked and kept: the bed temperature is set for every plate type (PETG 75 °C, PLA 60 °C, the
+textured PEI plate selected); PETG at 255 °C and at most 10 mm³/s, fan 40-90 %, off for the first
+three layers; PLA 210 °C (220 °C first layer); 0.8 mm retraction, 1 mm wipe, 0.4 mm z-hop; bridges
+at 30 mm/s and 90 % flow; 4 walls, 5 top and bottom layers, gyroid infill (25 % PLA, 35 % PETG);
+no supports and no arc moves; every object labelled, so one failed part can be cancelled alone.
+The other differences from the installed slicer's preset (thin-wall detection, monotonic solid
+infill, 0.075 mm elephant-foot compensation among them) are the VTOL project's, proven on the
+thrust stand.

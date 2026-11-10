@@ -140,6 +140,13 @@ def _clamp_levels():
     return z_ceil, z_side, z_jaw0
 
 
+def _jaw_nut_z():
+    """The face of each jaw screw's nut slot towards the jaw, which the nut bears on: on a layer
+    boundary, as the clamp prints upside down (its top, z = Z_PLATE0, on the bed)."""
+    _, z_side, _ = _clamp_levels()
+    return P.Z_PLATE0 - math.ceil((P.Z_PLATE0 - (z_side + 3.8)) / P.LAYER - 1e-6) * P.LAYER
+
+
 def belt_clamp():
     """Stiff box column from the plate down to the upper run. The belt (open ends or a closed
     loop) lies in a channel 1 mm wider than it, under a flat ceiling; the jaw underneath seats its
@@ -166,13 +173,20 @@ def belt_clamp():
     for x, y in CLAMP_BOLTS:               # M3 from the plate's top, nuts in pockets under the flange
         body -= cyl_z(P.D_M3 / 2, x, y, z_top - ft - 1, z_top + 1)
         body -= hex_z(NUT3[0] + 0.3, x, y, z_top - ft - 1, z_top - ft + NUT3[1] + 0.3)
+    L, r, a = P.LAYER, P.D_M3 / 2, (NUT3[0] + 0.3) / 2
+    zn = _jaw_nut_z()
+    zf = zn + math.ceil((NUT3[1] + 0.3) / L - 1e-6) * L
     for sx in (-1, 1):                     # jaw screws: up into the side walls, nuts in side slots
         for sy in (-1, 1):
             x, y = sx * c["screw_x"], sy * c["screw_y"]
-            body -= cyl_z(P.D_M3 / 2, x, y, z_side - 1, z_side + 9.0)
-            zn = z_side + 3.8
             y0, y1 = sorted((y - sy * 3.0, sy * (hy + 1)))
-            body -= box(x - (NUT3[0] + 0.3) / 2, x + (NUT3[0] + 0.3) / 2, y0, y1, zn, zn + NUT3[1] + 0.3)
+            body -= box(x - a, x + a, y0, y1, zn, zf)
+            body -= cyl_z(r, x, y, zf - 0.01, z_side + 9.0)
+            # the slot's face towards the jaw prints last, as a bridge: the hole starts over it in two
+            # one-layer steps, a slot across and then a square, not as walls over the nut's slot
+            body -= box(x - a, x + a, y - r, y + r, zn - L, zn + 0.01)
+            body -= box(x - r, x + r, y - r, y + r, zn - 2 * L, zn - L + 0.01)
+            body -= cyl_z(r, x, y, z_side - 1, zn - 2 * L + 0.01)
     return body
 
 
@@ -194,8 +208,8 @@ def clamp_jaw():
 # ================================================================== motor end
 def _saddle(x_end_sign, y0, y1):
     """U round the top end bar from below: inner and outer cheeks on its 40 mm faces, web under it."""
-    xi = x_end_sign * P.X_BAR_IN
-    xo = x_end_sign * P.X_BAR_OUT
+    xi = x_end_sign * (P.X_BAR_IN - P.SADDLE_FIT)
+    xo = x_end_sign * (P.X_BAR_OUT + P.SADDLE_FIT)
     t = P.SADDLE_T
     zt = P.Z_BAR[1] - 4.0
     s = box(*sorted((xi, xi - x_end_sign * t)), y0, y1, P.SADDLE_WEB[0], zt)
@@ -206,7 +220,7 @@ def _saddle(x_end_sign, y0, y1):
 
 def _saddle_bolts(s, x_end_sign, bolts):
     t = P.SADDLE_T
-    for face, xf, d in (("in", P.X_BAR_IN, -1), ("out", P.X_BAR_OUT, 1)):
+    for face, xf, d in (("in", P.X_BAR_IN - P.SADDLE_FIT, -1), ("out", P.X_BAR_OUT + P.SADDLE_FIT, 1)):
         x = x_end_sign * xf
         xa = x + x_end_sign * d * t
         for y, z in bolts[face]:
@@ -290,10 +304,15 @@ def pulley_flange():
 
 # ================================================================== idler end
 def _window():
+    """The slider's window in each cheek. Its lower edge, which the slider rests on, prints last as a
+    bridge (the mount prints upside down, the saddle's top on the bed): it has room for that bridge's
+    sag and sits on a layer boundary."""
     sl = P.SLIDER
     zc = P.Z_PULLEY - sl["axle_dz"]
-    return (P.IDLER_TRAVEL[0] - sl["x"] / 2 - F, P.IDLER_TRAVEL[1] + sl["x"] / 2 + F,
-            zc - sl["z"] / 2 - F, zc + sl["z"] / 2 + F)
+    x0, x1 = P.IDLER_TRAVEL[0] - sl["x"] / 2 - F, P.IDLER_TRAVEL[1] + sl["x"] / 2 + F
+    z_bed = P.Z_BAR[1] - 4.0
+    z0 = zc - sl["z"] / 2 - F - P.BRIDGE_SAG * (x1 - x0)
+    return x0, x1, z_bed - math.ceil((z_bed - z0) / P.LAYER - 1e-6) * P.LAYER, zc + sl["z"] / 2 + F
 
 
 def idler_mount():
@@ -305,8 +324,8 @@ def idler_mount():
     wx0, wx1, wz0, wz1 = _window()
     cz0 = wz0 - 7.0
     lug = 8.0
-    xo = P.X_BAR_OUT + P.SADDLE_T
-    xg = P.X_BAR_IN - P.SADDLE_T                 # the saddle's inner cheek
+    xo = P.X_BAR_OUT + P.SADDLE_FIT + P.SADDLE_T
+    xg = P.X_BAR_IN - P.SADDLE_FIT - P.SADDLE_T  # the saddle's inner cheek
     xw = min(wx0 - 7.0, xg)
     s += box(xw, P.X_BAR_IN, y0, y1, *P.SADDLE_WEB)   # web out to the cheeks
     if xg - xw > 0.5:                          # 45 deg gusset over the web's reach: prints upside down unsupported
@@ -401,15 +420,26 @@ def pendulum_hub():
     hw = P.ARM_W / 2 + 3.0
     h = cyl_y(P.HUB["r"], 0, P.Z_SHAFT, y0, y1)
     h += box(-hw, hw, y0, y1, P.Z_SHAFT, zs1)
-    h -= box(-P.ARM_W / 2 - F, P.ARM_W / 2 + F, P.Y_ARM - P.ARM_T / 2 - F, P.Y_ARM + P.ARM_T / 2 + F, zs0, zs1 + 1)
+    # It prints on its back face, the socket on its side: the socket's front face prints last as a
+    # bridge, so it gets room for that bridge's sag and sits on a layer boundary, and each arm screw's
+    # hole starts over it in two one-layer steps (a slot right across the socket, then a square): each
+    # layer bridges between held edges instead of laying the hole's walls over the socket (REPORT R1).
+    L, w = P.LAYER, P.ARM_W + 2 * F
+    back = P.Y_ARM + P.ARM_T / 2 + F
+    front = y1 - math.ceil((y1 - (P.Y_ARM - P.ARM_T / 2 - F) + P.BRIDGE_SAG * w) / L - 1e-6) * L
+    h -= box(-w / 2, w / 2, front, back, zs0, zs1 + 1)
     h -= cyl_y((P.SHAFT_D + 0.15) / 2, 0, P.Z_SHAFT, y0 - 1, y1 + 1)
     h -= box(-0.75, 0.75, y0 - 1, y1 + 1, P.Z_SHAFT - P.HUB["r"] - 1, P.Z_SHAFT)
     zc = P.Z_SHAFT - 9.0
     h -= cyl_x(P.D_M3 / 2, (y0 + y1) / 2, zc, -P.HUB["r"] - 1, P.HUB["r"] + 1)
     h -= cyl_x(P.HEAD["M3"][0] / 2 + F, (y0 + y1) / 2, zc, -P.HUB["r"] - 1, -7.0)
     h -= hex_x(NUT3[0] + 0.3, (y0 + y1) / 2, zc, 9.4, P.HUB["r"] + 1)
+    r = P.D_M3 / 2
     for z in ARM_SCREWS_Z:                 # heads on the front face, nuts sunk in the back face
-        h -= cyl_y(P.D_M3 / 2, 0, z, y0 - 1, y1 + 1)
+        h -= cyl_y(r, 0, z, back - 0.01, y1 + 1)
+        h -= box(-w / 2, w / 2, front - L, front + 0.01, z - r, z + r)
+        h -= box(-r, r, front - 2 * L, front - L + 0.01, z - r, z + r)
+        h -= cyl_y(r, 0, z, y0 - 1, front - 2 * L + 0.01)
         h -= hex_y(NUT3[0] + 0.3, 0, z, y1 - NUT3[1] - 0.3, y1 + 1)
     return h
 

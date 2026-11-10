@@ -2340,7 +2340,7 @@
    ],
    "group": "cart",
    "part": "clamp_jaw",
-   "stack": 9.399999999999999,
+   "stack": 9.301209105296778,
    "nut": true,
    "tnut": false,
    "into": null,
@@ -2362,7 +2362,7 @@
    ],
    "group": "cart",
    "part": "clamp_jaw",
-   "stack": 9.399999999999999,
+   "stack": 9.301209105296778,
    "nut": true,
    "tnut": false,
    "into": null,
@@ -2384,7 +2384,7 @@
    ],
    "group": "cart",
    "part": "clamp_jaw",
-   "stack": 9.399999999999999,
+   "stack": 9.301209105296778,
    "nut": true,
    "tnut": false,
    "into": null,
@@ -2406,7 +2406,7 @@
    ],
    "group": "cart",
    "part": "clamp_jaw",
-   "stack": 9.399999999999999,
+   "stack": 9.301209105296778,
    "nut": true,
    "tnut": false,
    "into": null,
@@ -2505,7 +2505,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    -319.0,
+    -318.9,
     22.0,
     289.0
    ],
@@ -2516,7 +2516,7 @@
    ],
    "group": "frame",
    "part": "motor_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2527,7 +2527,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    -319.0,
+    -318.9,
     40.0,
     309.0
    ],
@@ -2538,7 +2538,7 @@
    ],
    "group": "frame",
    "part": "motor_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2549,7 +2549,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    -347.0,
+    -347.1,
     22.0,
     289.0
    ],
@@ -2560,7 +2560,7 @@
    ],
    "group": "frame",
    "part": "motor_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2571,7 +2571,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    -347.0,
+    -347.1,
     40.0,
     309.0
    ],
@@ -2582,7 +2582,7 @@
    ],
    "group": "frame",
    "part": "motor_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2593,7 +2593,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    347.0,
+    347.1,
     -19.0,
     289.0
    ],
@@ -2604,7 +2604,7 @@
    ],
    "group": "frame",
    "part": "idler_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2615,7 +2615,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    347.0,
+    347.1,
     19.0,
     289.0
    ],
@@ -2626,7 +2626,7 @@
    ],
    "group": "frame",
    "part": "idler_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2637,7 +2637,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    347.0,
+    347.1,
     -19.0,
     309.0
    ],
@@ -2648,7 +2648,7 @@
    ],
    "group": "frame",
    "part": "idler_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,
@@ -2659,7 +2659,7 @@
    "size": "M5",
    "length": 10.0,
    "p0": [
-    347.0,
+    347.1,
     19.0,
     309.0
    ],
@@ -2670,7 +2670,7 @@
    ],
    "group": "frame",
    "part": "idler_mount",
-   "stack": 4.0,
+   "stack": 4.1,
    "nut": false,
    "tnut": true,
    "into": null,

@@ -20,7 +20,7 @@ frame's footprint.
 | Pivot | 8 mm × 115 mm shaft in 2 × KP08, 70 mm apart, axis 385 mm up; the arm turns 8 mm in front of the frame |
 | Pendulum | 20 × 10 mm PLA arm, 300 mm from the axis to the tip; 112 g turning, CG 70 mm out, 1.71 × 10⁻³ kg m² about the axis |
 | Sensor | AS5600 (12 bit) with a diametric magnet held 5 mm off the steel shaft's end, or a 600 P/R optical encoder |
-| Control (model) | kick, swing-up, catch, LQR with integral action: upright in 3.1 s (≤ 4.8 s over 48 robustness runs), cart within ±186 mm; balanced, it hunts 0.1° at the pivot's goal friction |
+| Control (model) | kick, swing-up, catch, LQR with integral action: upright in 3.1 s (≤ 4.8 s over 48 robustness runs), cart within ±187 mm; balanced, it hunts 0.1° at the pivot's goal friction |
 | Firmware | `firmware/pendulum`: Arduino Uno / Nano or ESP32, FastAccelStepper, 200 Hz |
 | Prints | 21 part files, 6 plates, no supports: PLA 364 g / 14.6 h, PETG 248 g / 10.1 h; only the parts you still need: `3mf/to_print_kobra_s1.3mf` |
 
@@ -70,8 +70,10 @@ pressing the flange on. The idler turns on `idler_sleeve`.
 bolted through its outer cheek only (four M5 into T-nuts in the bar's outer slots). Its web reaches
 in 29 mm to two cheeks either side of the idler, held by a 45° gusset from the saddle's inner
 cheek, so the web prints (upside down) without supports. Each cheek has a window in which a slider
-runs along x; the M4 × 50 axle passes slider – sleeve – slider (an M5 × 50 fits too, once the
-sliders' holes and the sleeve's bore are drilled out to 5.2 mm). An M3 × 30 from an outboard lug
+runs along x (its lower edge, printed last as a 32 mm bridge, has 1 mm of room for the bridge's
+sag; the tension screw holds the slider at its height); the M4 × 50 axle passes slider – sleeve –
+slider (an M5 × 50 fits too, once the sliders' holes and the sleeve's bore are drilled out to
+5.2 mm). An M3 × 30 from an outboard lug
 into each slider pulls it out. A closed loop cannot be tightened at the clamp: the idler does it,
 and every millimetre the sliders move out takes up 2 mm of belt. Their ±10 mm of travel takes
 loops of 1380–1420 mm (175 ± 2.5 teeth).
@@ -118,7 +120,8 @@ SC8UU blocks stop on the bumpers first.
 
 - Shaft: 8 mm × 115 mm steel, through both KP08s (their set screws hold it) into the hub.
 - `pendulum_hub` (PETG): split below the bore, one M3 × 20 pinch screw; the arm in a 25 mm socket
-  with 2 × M3 × 20 through.
+  with 2 × M3 × 20 through. The socket's front face prints as a bridge, so it stands 0.8 mm off the
+  arm (0.2 elsewhere), room for that bridge's sag: the two screws pull it onto the arm.
 - `pendulum_arm` (PLA, prints diagonally): 20 × 10 mm, its 20 mm in the plane it swings in;
   `pendulum_tip` caps it (M3 × 20 pin; room for washers if you want more tip mass: re-run `sim.py`
   with the new mass).
@@ -180,7 +183,7 @@ replays simulated runs through it and requires the same commands).
 - **Input = cart acceleration,** at most 3.54 m/s², speed at most 1 m/s. A stepper sets motion,
   not force: the force each run needs (the motion plus 1.8 N of friction at the cart) is checked
   at every step against the motor's torque-speed curve at 1.5 A and 19 V (9.8 N up to 1 m/s),
-  80 % of it relied on. The margin never falls below 0.74 N.
+  80 % of it relied on. The margin never falls below 0.69 N.
 - **Start:** when the pendulum has rested near hanging for 0.25 s, a kick: 3.54 m/s² for 135 ms
   one way, then the other.
 - **Swing-up:** the cart's speed is set to
@@ -208,7 +211,7 @@ replays simulated runs through it and requires the same commands).
   It must work on 48 robustness runs: pendulum mass and inertia ±20 %, CG ±15 %, cart +20 %; delay
   from the angle reading to the motor 8–20 ms; pivot friction 0–2.5 mN m; upright error ±1°;
   AS5600 or the 600 P/R encoder; each run from hanging still, with a 0.7 rad/s push once it
-  balances. Every run swings up by 4.8 s, holds and recovers, the cart within ±186 mm of ±231. On
+  balances. Every run swings up by 4.8 s, holds and recovers, the cart within ±187 mm of ±231. On
   260 random scenarios none was tuned on, all 260 did (cart within ±190 mm).
 
 <img src="renders/52_sim_swingup.png" alt="Simulated run from hanging still: kick, swing-up, catch, push; pendulum angle, cart position, force needed and available">

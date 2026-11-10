@@ -50,7 +50,7 @@ def bolts():
         for sy in (-1, 1):
             out.append(_b(f"jaw_screw_{'lr'[sx > 0]}{'fb'[sy > 0]}", "M3", 12,
                           (sx * P.CLAMP["screw_x"], sy * P.CLAMP["screw_y"], z_jaw0), (0, 0, 1), "cart", "clamp_jaw",
-                          P.CLAMP["jaw_base"] + 0.6 + 3.8, nut=True, note="M3 x 12, nut in the clamp's side slot"))
+                          S._jaw_nut_z() - z_jaw0, nut=True, note="M3 x 12, nut in the clamp's side slot"))
     for sx in (-1, 1):
         for sz in (-1, 1):
             out.append(_b(f"motor_screw_{'lr'[sx > 0]}{'bt'[sz > 0]}", "M3", 8,
@@ -59,11 +59,12 @@ def bolts():
                           note="M3 x 8 (the motor's own screws), heads sunk under the pulley's flange"))
     t = P.SADDLE_T
     for end, sgn, bolts in (("motor", -1, S.MOTOR_BOLTS), ("idler", 1, S.IDLER_BOLTS)):
-        for face, xf, d in (("in", P.X_BAR_IN, -1), ("out", P.X_BAR_OUT, 1)):
+        for face, xf, d in (("in", P.X_BAR_IN - P.SADDLE_FIT, -1), ("out", P.X_BAR_OUT + P.SADDLE_FIT, 1)):
             xa = sgn * xf + sgn * d * t
             for j, (y, z) in enumerate(bolts[face]):
                 out.append(_b(f"{end}_saddle_{face}_{j + 1}", "M5", 10, (xa - sgn * d * 3.0, y, z), (-sgn * d, 0, 0), "frame",
-                              f"{end}_mount", t - 3.0, tnut=True, note="M5 x 10 into a T-nut in the top end bar's slot"))
+                              f"{end}_mount", t - 3.0 + P.SADDLE_FIT, tnut=True,
+                              note="M5 x 10 into a T-nut in the top end bar's slot"))
     zc = P.FLANGE_T + P.TOOTH_W / 2
     out.append(_b("set_screw", "M3", 12, (P.X_MOTOR + 13.0, P.PULLEY_W / 2 - zc, P.Z_PULLEY), (-1, 0, 0), "motor_pulley",
                   "motor_pulley", 13.0 - 8.7 - 2.5, nut=True, note="M3 x 12 set screw, head sunk below the teeth, captive nut"))

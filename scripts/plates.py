@@ -3,8 +3,8 @@ instead of one file per part. Optional parts (the coupler for an optical encoder
 of their own.
 
 Layout (from the VTOL project): each part keeps its print orientation (make_print_ready.py) and
-only turns about Z. Its footprint is the convex hull of its print-ready mesh, laid out on a 1 mm
-grid, GAP mm from every other footprint and MARGIN mm inside the bed. Parts go on largest first,
+only turns about Z. Its footprint is the convex hull of its print-ready mesh grown by its brim, laid
+out on a 1 mm grid, GAP mm from every other footprint and MARGIN mm inside the bed. Parts go on largest first,
 each at the lowest free spot, then the leftmost, trying its minimum-area orientation, that turned
 90 deg, then the two diagonals; the finished layout is centred on the bed. Deterministic, so the
 gate and the viewer recompute it. slice_all.py slices each plate with --arrange 0 and every copy
@@ -78,10 +78,16 @@ def _rot(pts, deg):
 
 @lru_cache(maxsize=None)
 def _footprint(name):
-    """Convex hull of the print-ready mesh seen from above, and the angle that lays its
+    """Convex hull of the print-ready mesh seen from above, grown by the part's brim (so the GAP is
+    kept from the brim's edge, and no brim reaches past the bed's MARGIN), and the angle that lays its
     minimum-area rectangle along the axes (long side along x); near-square parts stay square."""
     v = G.read_stl(os.path.join(G.PRINT, name + ".stl")).reshape(-1, 3)
     hull = _hull(v[:, :2])
+    brim = PARTS[name]["brim"]
+    if brim:
+        a = np.radians(np.arange(0.0, 360.0, 15.0))
+        ring = np.round(np.c_[np.cos(a), np.sin(a)] * brim, 6)
+        hull = _hull((hull[:, None, :] + ring[None, :, :]).reshape(-1, 2))
     best = None
     for p, q in zip(hull, np.roll(hull, -1, axis=0)):
         ang = -np.degrees(np.arctan2(q[1] - p[1], q[0] - p[0]))

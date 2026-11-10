@@ -24,10 +24,10 @@ def _p(name, brim=0, slicer=None, extra_rot=()):
 
 
 PARTS = {n: _p(n) for n in S.PARTS}
-# Tall on a small footprint: a brim keeps the first layer down.
-PARTS["idler_mount"] = _p("idler_mount", brim=BRIM)
-PARTS["belt_clamp"] = _p("belt_clamp", brim=BRIM)
-PARTS["switch_mount"] = _p("switch_mount", brim=BRIM)
+# Taller than the side of a square of its first layer, a lever the nozzle can pry off the bed: a brim
+# keeps the first layer down (the gate's bed check holds the rule). The sleeve stands 26 mm on 33 mm2.
+for _name in ("idler_mount", "belt_clamp", "switch_mount", "idler_sleeve", "magnet_cap", "pendulum_tip"):
+    PARTS[_name] = _p(_name, brim=BRIM)
 # 287 mm long: diagonal on the 250 mm bed.
 PARTS["pendulum_arm"] = _p("pendulum_arm", extra_rot=[("z", 45)])
 

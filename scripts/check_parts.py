@@ -2,7 +2,10 @@
 
 Rebuilds every part from the scripts and checks, with build123d solids and the committed files:
   parts      every printed part is a valid solid and its committed STLs match the scripts
-  bed        every print file and plate fits the Kobra S1; every copy is on exactly one plate
+  bed        every print file and plate fits the Kobra S1; every copy is on exactly one plate; a
+             part taller than the square root of its first layer's area has a brim
+  overhang   every print-ready part, cut into layers, prints without supports
+  air        the G-code lays nothing far over air and no wall in mid-air (touching nothing)
   clash      no two parts overlap at the home pose (shaft and magnet cap at 4 angles too)
   travel     the cart sweeps its whole travel without touching the frame, motor, idler or belt
              (the SC8UU blocks meet the bumpers at the stops; the switches trip 4 mm before)
@@ -19,7 +22,8 @@ Rebuilds every part from the scripts and checks, with build123d solids and the c
              controller's commands on replayed runs, and its f test finds the pivot's friction
              on simulated free swings (needs a C++ compiler: CI has one)
   files      G-code and 3MF stamps match the current STLs, presets and brims are what the print
-             table says, the complete projects, tracker, BOM, manifest and sim.json are current
+             table says, the complete project, the to-print project, tracker, BOM, manifest and
+             sim.json are current
 Usage: python check_parts.py [--no-gcode]
 """
 import glob
@@ -105,17 +109,32 @@ def check_parts(parts):
 
 
 # ------------------------------------------------------------------ bed
+def first_layer_area(tris):
+    """mm^2 of the print-ready part on the bed: its section in the first layer."""
+    zr = np.stack([tris[..., 2].min(1), tris[..., 2].max(1)], 1)
+    lo, hi = G.bounds(tris)
+    nx, ny = int((hi[0] - lo[0] + 4) / PIX) + 1, int((hi[1] - lo[1] + 4) / PIX) + 1
+    return float(_layer(tris, zr, LAYER / 2, lo[0] - 2, lo[1] - 2, nx, ny).sum()) * PIX * PIX
+
+
 def check_bed():
-    bad = []
+    bad, tall = [], []
     for name in PRINT:
         path = os.path.join(G.PRINT, name + ".stl")
         if not os.path.exists(path):
             bad.append(f"{name}: no print-ready STL")
             continue
-        lo, hi = G.bounds(G.read_stl(path))
+        tris = G.read_stl(path)
+        lo, hi = G.bounds(tris)
         ext = hi - lo
         if abs(lo[2]) > 1e-6 or ext[0] > P.BED - 10 or ext[1] > P.BED - 10 or ext[2] > P.BED - 10:
             bad.append(f"{name}: {ext.round(1)} mm, z0 {lo[2]:.3f}")
+        # taller than the side of a square of its first layer: a lever the nozzle can pry off the bed
+        area = first_layer_area(tris)
+        if ext[2] > math.sqrt(area):
+            tall.append(name)
+            if not PRINT[name]["brim"]:
+                bad.append(f"{name}: {ext[2]:.0f} mm tall on {area:.0f} mm2 of first layer and no brim")
     count = {}
     for plate, items in PT.PLATES.items():
         try:
@@ -133,7 +152,9 @@ def check_bed():
         if count.get(n, 0) != spec["qty"]:
             bad.append(f"{n}: {count.get(n, 0)} on plates, print table says {spec['qty']}")
     report("bed", not bad, "; ".join(bad) or f"{len(PRINT)} print files and {len(PT.PLATES)} plates fit; "
-                                            f"every copy on exactly one plate")
+                                            f"every copy on exactly one plate; the {len(tall)} parts taller than "
+                                            f"the square root of their first layer's area have a brim "
+                                            f"({', '.join(sorted(tall))})")
 
 
 # ------------------------------------------------------------------ overhang
@@ -217,6 +238,144 @@ def check_overhang():
     report("overhang", not bad, "; ".join(bad[:8]) or
            f"{len(PRINT)} parts print without supports: no islands, nothing held on one side reaches past "
            f"{CANTILEVER_MAX:g} mm, bridges up to {longest[0]:.0f} mm ({longest[1]}; at most {BRIDGE_MAX:g})")
+
+
+# ------------------------------------------------------------------ G-code over air
+AIR_RES, AIR_HALF = 0.2, 0.225   # mm: map resolution; half a line's width
+FREE_RUN, FREE_AIR = 1.0, 1.0    # mm: how far a wall laid in mid-air may run, or lie from the layer below
+WALLS = ("Outer wall", "Inner wall", "Overhang wall")
+
+
+def gcode_moves(path):
+    """Extrusions of a G-code file: (n, 5) [layer z, x0, y0, x1, y1] in print order, and each one's
+    feature type (relative E, as the Kobra S1's G-code is written; arcs are off)."""
+    rows, kinds = [], []
+    z, kind, x, y = 0.0, "", 0.0, 0.0
+    with open(path, errors="replace") as f:
+        for line in f:
+            if line[0] == ";":
+                if line.startswith(";Z:"):
+                    z = float(line[3:])
+                elif line.startswith(";TYPE:"):
+                    kind = line[6:].strip()
+                continue
+            if line.startswith(("G2 ", "G3 ")):
+                raise RuntimeError(f"{os.path.basename(path)}: arc moves (arc fitting must stay off)")
+            if not line.startswith(("G1 ", "G0 ")):
+                continue
+            nx, ny, e = x, y, 0.0
+            for tok in line.split(";", 1)[0].split()[1:]:
+                if tok[0] == "X":
+                    nx = float(tok[1:])
+                elif tok[0] == "Y":
+                    ny = float(tok[1:])
+                elif tok[0] == "E":
+                    e = float(tok[1:])
+            if e > 0 and (nx != x or ny != y):
+                rows.append((z, x, y, nx, ny))
+                kinds.append(kind)
+            x, y = nx, ny
+    return np.array(rows, float).reshape(-1, 5), np.array(kinds)
+
+
+def over_air(path):
+    """Every stretch of a line in one G-code file whose bead overlaps nothing in the layer below:
+    [(feature type, length, farthest from the layer below, ends anchored on material, z, laid in
+    mid-air)]. Lines are sampled every AIR_RES mm against a map of the layer below. A wall is laid in
+    mid-air where, besides nothing under it, no line of its own layer printed before its own path
+    began lies beside it: so the thrust stand's crank laid its hole's walls over its bearing seat."""
+    from PIL import Image, ImageDraw
+    from scipy import ndimage
+    from scipy.spatial import cKDTree
+    segs, kinds = gcode_moves(path)
+    keep = kinds != "Custom"                 # the purge line, off the bed's front
+    segs, kinds = segs[keep], kinds[keep]
+    zs, layer = np.unique(np.round(segs[:, 0], 3), return_inverse=True)
+    pts = np.concatenate([segs[:, 1:3], segs[:, 3:5]])
+    lo = pts.min(0) - 1.0
+    size = np.ceil((pts.max(0) + 1.0 - lo) / AIR_RES).astype(int) + 1
+    out = []
+    for li in range(1, len(zs)):             # the first layer lies on the bed
+        img = Image.new("1", (int(size[0]), int(size[1])), 0)
+        dr = ImageDraw.Draw(img)
+        for _, x0, y0, x1, y1 in segs[layer == li - 1].tolist():
+            dr.line(((x0 - lo[0]) / AIR_RES, (y0 - lo[1]) / AIR_RES, (x1 - lo[0]) / AIR_RES, (y1 - lo[1]) / AIR_RES),
+                    fill=1, width=max(1, round(2 * AIR_HALF / AIR_RES)))
+        air = ndimage.distance_transform_edt(~np.array(img, bool)) * AIR_RES
+        cur, k = segs[layer == li], kinds[layer == li]
+        ln = np.hypot(cur[:, 3] - cur[:, 1], cur[:, 4] - cur[:, 2])
+        n = np.maximum(2, (ln / AIR_RES).astype(int) + 1)
+        first = np.cumsum(n) - n
+        idx = np.repeat(np.arange(len(cur)), n)
+        t = (np.arange(n.sum()) - first[idx]) / (n - 1)[idx]
+        px = cur[idx, 1] + (cur[idx, 3] - cur[idx, 1]) * t
+        py = cur[idx, 2] + (cur[idx, 4] - cur[idx, 2]) * t
+        d = air[np.clip(((py - lo[1]) / AIR_RES).astype(int), 0, air.shape[0] - 1),
+                np.clip(((px - lo[0]) / AIR_RES).astype(int), 0, air.shape[1] - 1)]
+        over = d > AIR_HALF
+        if not over.any():
+            continue
+        # a path breaks where a line does not start where the previous one ended
+        brk = np.ones(len(cur), bool)
+        brk[1:] = np.hypot(cur[1:, 1] - cur[:-1, 3], cur[1:, 2] - cur[:-1, 4]) > 1e-3
+        new_path = np.zeros(len(px), bool)
+        new_path[first[brk]] = True
+        arc = np.repeat(np.cumsum(ln) - ln, n) + t * ln[idx]
+        alone = np.zeros(len(px), bool)
+        cand = np.flatnonzero(over & np.isin(k[idx], WALLS))
+        if len(cand):
+            path0 = first[np.maximum.accumulate(np.where(brk, np.arange(len(cur)), 0))][idx]
+            near = cKDTree(np.c_[px, py]).query_ball_point(np.c_[px[cand], py[cand]], r=2 * AIR_HALF + 0.05)
+            alone[cand] = [min(nb) >= p0 for nb, p0 in zip(near, path0[cand])]
+        for mask, free in ((over, False), (alone, True)):
+            edges = np.flatnonzero(np.diff(np.concatenate([[0], mask.astype(int), [0]])))
+            for a, b in zip(edges[::2], edges[1::2]):
+                cuts = [a, *(np.flatnonzero(new_path[a + 1:b]) + a + 1).tolist(), b]
+                for s0, s1 in zip(cuts, cuts[1:]):
+                    ends = int(s0 > 0 and not new_path[s0] and not mask[s0 - 1]) + \
+                        int(s1 < len(px) and not new_path[s1] and not mask[s1])
+                    out.append((str(k[idx[s0]]), float(arc[s1 - 1] - arc[s0]), float(d[s0:s1].max()), ends,
+                                float(zs[li]), free))
+    return out
+
+
+def check_air():
+    """What each part's and each plate's G-code lays over air, against the layer below (a plate turns
+    its parts and prints them together, so the slicer's lines differ a little from the part's own file):
+    a line lying more than CANTILEVER_MAX from the layer below must span at most BRIDGE_MAX between
+    two anchors, whatever the slicer calls it; and no wall is laid in mid-air, touching nothing as it
+    prints, beyond a short run (FREE_RUN), a run close to the layer below (FREE_AIR), a stub held at
+    one end no longer than CANTILEVER_MAX or a small bridge between two anchors. The raster check
+    (overhang) cannot see the last: a ring of hole walls over a pocket is a short ledge there
+    (REPORT.md, R1, R2)."""
+    import slice_all as SA
+    bad, span, ledge, freest, n = [], (0.0, ""), (0.0, ""), (0.0, ""), 0
+    jobs = [(name, SA.out_path(name)) for name in sorted(PRINT)] + \
+           [(f"plate {plate}", PT.gcode_path(plate)) for plate in PT.PLATES]
+    for name, path in jobs:
+        if not os.path.exists(path):
+            continue                         # reported by check_files
+        n += 1
+        for kind, ln, d, ends, z, free in over_air(path):
+            where = f"{name} at z {z:.1f}"
+            if free:
+                if ln > FREE_RUN and d > FREE_AIR and not (ends == 2 and ln <= BRIDGE_MAX) and \
+                        not (ends == 1 and ln <= CANTILEVER_MAX):
+                    bad.append((ln, f"{where}: a wall laid in mid-air for {ln:.1f} mm, {d:.1f} mm from the layer below, "
+                                    f"anchored at {ends} of its ends"))
+                elif ln > freest[0]:
+                    freest = (ln, f"{where}, {d:.1f} mm out, anchored at {ends} ends")
+            elif d > CANTILEVER_MAX:
+                if ends < 2 or ln > BRIDGE_MAX:
+                    bad.append((d, f"{where}: {kind} {d:.1f} mm out over air for {ln:.1f} mm, anchored at {ends} of its ends"))
+                elif ln > span[0]:
+                    span = (ln, f"{where}, {kind}")
+            elif ends < 2 and d > ledge[0]:
+                ledge = (d, f"{where}, {kind}")
+    report("air", not bad, "; ".join(m for _, m in sorted(bad, reverse=True)[:8]) or
+           f"{n} G-code files (parts and plates): spans over air up to {span[0]:.1f} mm ({span[1]}; at most {BRIDGE_MAX:g}), "
+           f"lines held at one end or none up to {ledge[0]:.1f} mm out ({ledge[1]}; at most {CANTILEVER_MAX:g}); longest "
+           f"wall laid in mid-air {freest[0]:.1f} mm ({freest[1]})")
 
 
 # ------------------------------------------------------------------ clash at home
@@ -504,10 +663,14 @@ def check_files(no_gcode):
             import make_projects as MP
             bad += MP.stale()
         except Exception as exc:
-            bad.append(f"complete projects: {exc}")
+            bad.append(f"complete project: {exc}")
         try:
             import make_to_print as MTP
             bad += MTP.stale()
+            projects = {os.path.normcase(os.path.abspath(p)) for p in (MP.PATH, MTP.PATH)}
+            for path in glob.glob(os.path.join(G.ROOT, "3mf", "*.3mf")):
+                if os.path.normcase(os.path.abspath(path)) not in projects:
+                    bad.append(f"stray {os.path.relpath(path, G.ROOT)}")
         except Exception as exc:
             bad.append(f"to-print project: {exc}")
     try:
@@ -529,7 +692,8 @@ def check_files(no_gcode):
     except Exception as exc:
         bad.append(f"viewer manifest: {exc}")
     report("files", not bad, "; ".join(bad[:12]) + (f" (+{len(bad) - 12} more)" if len(bad) > 12 else "") or
-           ("G-code checks skipped (--no-gcode); " if no_gcode else f"{n} G-code jobs and their 3MFs current; ")
+           ("G-code checks skipped (--no-gcode); " if no_gcode else f"{n} G-code jobs and their 3MFs current; the "
+                                                                    f"complete and to-print projects current; ")
            + "tracker.md, BOM.md and viewer/manifest.json current")
 
 
@@ -542,6 +706,8 @@ def main():
     check_parts(parts)
     check_bed()
     check_overhang()
+    if not no_gcode:
+        check_air()
     check_clash(parts, vit, belt_env)
     check_travel(parts, vit, belt_env)
     check_pendulum(parts, vit)

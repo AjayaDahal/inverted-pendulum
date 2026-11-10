@@ -171,9 +171,26 @@ def stats(path):
 
 
 def part_grams(name):
-    """Sliced mass of one copy of a part, if its G-code is current."""
-    g, _, stamp = stats(out_path(name))
-    return g if g and stamp == stl_hash(name) else None
+    """Sliced mass of one copy of a part, if its G-code is current: what the part keeps, so less the
+    brim and the purge line (their share of the extrusion moves)."""
+    path = out_path(name)
+    g, _, stamp = stats(path)
+    if not g or stamp != stl_hash(name):
+        return None
+    kept = waste = 0.0
+    kind = ""
+    with open(path, errors="replace") as f:
+        for line in f:
+            if line.startswith(";TYPE:"):
+                kind = line[6:].strip()
+            elif line.startswith("G1 ") and " E" in line and (" X" in line or " Y" in line):
+                e = float(re.search(r" E(-?[\d.]+)", line).group(1))
+                if e > 0:
+                    if kind in ("Brim", "Custom"):
+                        waste += e
+                    else:
+                        kept += e
+    return g * kept / (kept + waste) if kept else g
 
 
 def expected_files():

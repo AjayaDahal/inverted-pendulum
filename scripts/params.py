@@ -147,6 +147,9 @@ D_M3_TAP = 2.6                           # M3 screwed straight into printed plas
 NUT = {"M3": (5.5, 2.4), "M4": (7.0, 3.2), "M5": (8.0, 4.0)}     # across flats, thickness
 HEAD = {"M3": (5.6, 3.0), "M4": (7.0, 4.0), "M5": (8.5, 5.0)}    # socket head diameter, height
 FIT = 0.2                                # clearance on printed bores and pockets
+LAYER = 0.2                              # the slicer's layer height (first layer too): steps that must print as bridges sit on it
+SADDLE_FIT = 0.1                         # each saddle cheek off its top end bar's face: a 20.0 mm printed gap comes out tight
+BRIDGE_SAG = 0.025                       # mm per mm of span: extra room under a bridged face that is a fit (REPORT R3)
 DENSITY = {"pla": 1.24, "petg": 1.27}    # g/cm^3, solid
 
 # ---------------------------------------------------------------- dynamics (sim.py)

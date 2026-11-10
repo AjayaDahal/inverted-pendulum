@@ -1,5 +1,5 @@
 """Regenerate everything in order: parts, print orientation, assembly and STEP, slicing (every part
-and plate as a 3MF project and its G-code), the complete projects and the to-print project (each
+and plate as a 3MF project and its G-code), the complete project and the to-print project (each
 plate sliced again and checked), the simulation (it weighs the sliced parts), the firmware's
 config, the tracker, the BOM, the viewer manifest, then the gate. Renders: scripts/capture.py
 (headless Edge) after a geometry change.

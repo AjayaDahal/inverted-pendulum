@@ -14,6 +14,15 @@
 - Parts print without supports: the gate's `overhang` check slices each print-ready part and fails
   on anything that starts in mid-air, reaches more than 3 mm out held on one side, or bridges more
   than 34 mm. Fix the shape (45° gussets, chamfers) or the print orientation; don't turn supports on.
+  Its `air` check reads each part's and plate's G-code and fails a line far over air or a wall
+  laid in mid-air (nothing under it, nothing of its own layer beside it yet), as the thrust stand's
+  crank printed the walls of a hole over its bearing seat. Walls print inner ones first, as in the
+  slicer's stock S1 preset: outer first, every hole in a bridged ceiling did that (REPORT.md, R1).
+  A hole over a deep pocket starts in two one-layer steps (`pendulum_hub`, `belt_clamp`); a bridged
+  face that is a fit gets `BRIDGE_SAG` of room; a part taller than the square root of its first
+  layer's area gets a brim.
+- `3mf/complete_project_kobra_s1.3mf` is every plate, PETG and PLA, in one project for his one
+  printer (his choice: not one project per material).
 - `3mf/to_print_kobra_s1.3mf` is his print list: `scripts/make_to_print.py` leaves out the parts
   he keeps (`HAVE`), puts parts he may not need on OPTION beds (`MAYBE`: his own idler pulley may
   replace the printed one) and takes one sensor's parts (`SENSOR`). When he says what he has, edit
