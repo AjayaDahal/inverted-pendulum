@@ -32,11 +32,13 @@ BRIDGE_BOLTS = [(sx * (P.BRIDGE_X + 7.0), y) for sx in (-1, 1) for y in P.BRIDGE
 CLAMP_BOLTS = [(sx * 25.0, sy * 9.0) for sx in (-1, 1) for sy in (-1, 1)]
 CB3 = 3.2                                  # M3 head counterbore depth
 CB4 = 4.2                                  # M4 head counterbore depth
+MARK = 0.6                                 # depth of the orientation marks in the plate's top face
 
 
 def carriage_plate():
     """Rides on the four SC8UU blocks (holes slotted +-SC_SLOT in y, for the rods' spacing); the
-    pivot bridge bolts on top, the belt clamp underneath, both on nuts in pockets."""
+    pivot bridge bolts on top, the belt clamp underneath, both on nuts in pockets. Nearly square, so
+    its top face is marked: a line over each rod and an arrow to the front edge (REPORT R12)."""
     z0, z1 = P.Z_PLATE0, P.Z_PLATE1
     p = prism_xy(_chamfered_rect(-P.PLATE_X, P.PLATE_X, -P.PLATE_Y, P.PLATE_Y, 6.0), z0, z1)
     for x, y in SC_HOLES:
@@ -51,6 +53,10 @@ def carriage_plate():
     for sx in (-1, 1):                     # zip-tie bridges for the sensor cable at the back edge
         p -= box(sx * 8 - 2, sx * 8 + 2, P.PLATE_Y - 9, P.PLATE_Y - 6, z0 - 1, z1 + 1)
     p -= box(-10, 10, P.PLATE_Y - 9, P.PLATE_Y - 6, z0 - 1, z0 + 3)
+    x_line = P.BEARING_X - P.SC8UU["hole_l"] / 2 - P.HEAD["M4"][0] / 2 - F - 5.0
+    for sy in (-1, 1):
+        p -= box(-x_line, x_line, sy * P.Y_ROD - 0.75, sy * P.Y_ROD + 0.75, z1 - MARK, z1 + 1)
+    p -= prism_xy([(-8.0, -P.Y_ROD - 3.0), (8.0, -P.Y_ROD - 3.0), (0.0, -P.Y_ROD - 15.0)], z1 - MARK, z1 + 1)
     return p
 
 

@@ -29,7 +29,8 @@ frame's footprint.
 Your measuring photos (tape and calipers) gave the frame's length and width, the rods' spacing
 and the belt; you counted the belt's teeth and taped the frame's height. If any of it changes, put
 it in `scripts/params.py`, then run `python scripts/build_all.py`; the gate re-checks every
-clearance:
+clearance. The last four rows are catalogue sizes, not yet measured on your parts: measure them
+before printing the parts that bolt to them (REPORT.md, R13):
 
 | Name | What | Now | Source, and the slack in the design |
 |---|---|---|---|
@@ -40,6 +41,10 @@ clearance:
 | `ROD_SPACING` | rod centre to rod centre | 114 | calipers (122 over the rods' outer faces); SC8UU holes slotted ±8 mm: 98–130 fit |
 | `ROD_L` | rod length | 680 | at least this, to reach through both SK8s |
 | `BELT` | pitch and width | HTD 8M, 20 | calipers: 20.0–20.6 mm wide; its teeth 8 mm apart |
+| `SC8UU` | one block's screw holes, centre to centre: along the rod, across it | 18, 24 (M4) | catalogue; your old plate's photo agrees. `carriage_plate`: fixed along the rod, ±8 mm across |
+| `SK8`, `SC8UU` | rod centre above the end bar's top; the block's top face above the rod centre | 20, 11 | catalogue; they set the plate's height, so where the clamp's jaw meets the belt |
+| `KP08` | bolt holes centre to centre; base to shaft centre | 42, 15 | catalogue. `pivot_bridge`: fixed M5 holes; the KP08's own slotted feet take a little |
+| `ENDSTOP` | the limit-switch board's two holes, centre to centre | 19 | catalogue. `switch_mount`: ±1 mm |
 
 ## How the belt runs now
 
@@ -110,7 +115,8 @@ SC8UU blocks stop on the bumpers first.
 - `carriage_plate` (PLA, 8 mm): four SC8UU blocks underneath (16 × M4 × 10, heads sunk; holes
   slotted ±8 mm in y so the plate fits rods 98–130 mm apart without binding: set the blocks on the
   rods, then tighten). Four M5 nuts in pockets underneath take the bridge; four M3 counterbores take
-  the clamp. Two zip-tie bridges at the back edge hold the sensor lead.
+  the clamp. Two zip-tie bridges at the back edge hold the sensor lead. It is nearly square: the
+  lines engraved in its top face go over the rods and its arrow points to the front.
 - `pivot_bridge` (PLA): carries both KP08s in line (4 × M5 × 16, nuts in pockets underneath), the
   front one over the plate's front edge. Its side flanges are slotted ±10 mm (4 × M5 × 20): slide it
   until the arm turns 8 mm in front of the frame's front face. At its back end the 5 mm **sensor
@@ -183,7 +189,7 @@ replays simulated runs through it and requires the same commands).
 - **Input = cart acceleration,** at most 3.54 m/s², speed at most 1 m/s. A stepper sets motion,
   not force: the force each run needs (the motion plus 1.8 N of friction at the cart) is checked
   at every step against the motor's torque-speed curve at 1.5 A and 19 V (9.8 N up to 1 m/s),
-  80 % of it relied on. The margin never falls below 0.69 N.
+  80 % of it relied on. The margin never falls below 0.68 N.
 - **Start:** when the pendulum has rested near hanging for 0.25 s, a kick: 3.54 m/s² for 135 ms
   one way, then the other.
 - **Swing-up:** the cart's speed is set to
@@ -273,7 +279,8 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
    four M5 × 10 through its outer cheek. Sliders into the cheeks' windows, tension screws
    in from the lugs a few turns only, so the sliders sit fully in (the most slack). Idler: sleeve
    into the pulley, front flange on. Leave the axle out: the belt must go round the pulley first.
-5. **Carriage.** SC8UU blocks on the rods; plate on them (M4 × 10, loose), slide the cart end to end
+5. **Carriage.** SC8UU blocks on the rods; plate on them, its engraved lines over the rods and its
+   arrow to the front, so the slots run across the rods (M4 × 10, loose); slide the cart end to end
    and tighten the screws with the blocks parallel. It must then run end to end with a light push
    and not tighten anywhere: if it binds near one end, the rods are not parallel; move an SK8
    (REPORT.md, P13). Bumpers on the rods against the SK8s.

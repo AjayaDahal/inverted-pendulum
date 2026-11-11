@@ -39,6 +39,11 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
       and the T-nuts before printing the rest.
 - [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
       T-nuts go in from the side; slide-in ones mean loosening one end of each bar.
+- [ ] Before the carriage plate and the pivot bridge: measure your SC8UU's screw holes and the
+      KP08's bolt holes against DESIGN.md, "Measure first" (catalogue sizes, not yet measured), or
+      print the part's first 2 mm (the slicer's cut tool) and lay it on the blocks.
+- [ ] The carriage plate goes on with its engraved lines over the rods and its arrow to the front
+      (the pendulum's side): the slots then run across the rods.
 
 ## Plates
 

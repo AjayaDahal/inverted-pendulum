@@ -11,6 +11,10 @@
   his tape (`REPORT.md`, M5, O1, O2). If he re-measures anything, put it in `scripts/params.py`
   and run `python scripts/build_all.py`. Every other dimension follows from them. Don't count
   teeth from a photo: one read 180 for this belt (M5).
+- The rest of his hardware is in at catalogue sizes (`DESIGN.md`, "Measure first"): the SC8UU's
+  screw holes, the SK8's and KP08's heights, the KP08's bolts, the switch boards. Before he prints
+  a part that bolts to one, ask him to measure it with calipers, and mark a near-symmetric part
+  with which way it goes on: the first carriage plate did not go on its blocks (REPORT.md, R12, R13).
 - Parts print without supports: the gate's `overhang` check slices each print-ready part and fails
   on anything that starts in mid-air, reaches more than 3 mm out held on one side, or bridges more
   than 34 mm. Fix the shape (45° gussets, chamfers) or the print orientation; don't turn supports on.

@@ -10,7 +10,7 @@
   "cart_parts": {
    "screws": 40.0,
    "carriage_plate": {
-    "g": 106.5,
+    "g": 106.7,
     "how": "sliced"
    },
    "pivot_bridge": {
@@ -148,7 +148,7 @@
   "fails": [],
   "x_max_m": 0.1869,
   "swing_up_s": 4.83,
-  "force_margin_N": 0.69,
+  "force_margin_N": 0.68,
   "v_max_m_s": 0.856,
   "frame_push_N": 5.37,
   "step_rate_hz": 17130

@@ -36,8 +36,8 @@
     70
    ],
    "shared": false,
-   "grams": 106.5,
-   "minutes": 252.8
+   "grams": 106.7,
+   "minutes": 255.9
   },
   {
    "name": "pivot_bridge",
@@ -4236,8 +4236,8 @@
   {
    "name": "pla_1_carriage_plate",
    "material": "pla",
-   "grams": 106.5,
-   "minutes": 253.3,
+   "grams": 106.6,
+   "minutes": 256.5,
    "items": [
     {
      "part": "carriage_plate",
