@@ -280,10 +280,12 @@ a loose loop to the tray: allow 400 mm of slack for the full travel.
    in from the lugs a few turns only, so the sliders sit fully in (the most slack). Idler: sleeve
    into the pulley, front flange on. Leave the axle out: the belt must go round the pulley first.
 5. **Carriage.** SC8UU blocks on the rods; plate on them, its engraved lines over the rods and its
-   arrow to the front, so the slots run across the rods (M4 × 10, loose); slide the cart end to end
-   and tighten the screws with the blocks parallel. It must then run end to end with a light push
-   and not tighten anywhere: if it binds near one end, the rods are not parallel; move an SK8
-   (REPORT.md, P13). Bumpers on the rods against the SK8s.
+   arrow to the front, so the slots run across the rods (16 × M4 × 10, four per block, loose).
+   Until they are tight the plate slides ±8 mm across the rods: centre it, every screw in the
+   middle of its slot (each plate edge 23 mm past the nearer rod's centre), then slide the cart end
+   to end and tighten crosswise, a little at a time, holding the plate. It must then run end to end
+   with a light push and not tighten anywhere: if it binds near one end, the rods are not parallel;
+   move an SK8 (REPORT.md, P13). Bumpers on the rods against the SK8s.
 6. **Belt and clamp.** Nuts into the column's flange pockets and side slots; column under the plate
    (4 × M3 × 16 from the top). The idler pulley inside the belt loop, held between the cheeks;
    the M4 × 50 through slider – sleeve – slider, nut finger-tight (the cheeks, the web and the

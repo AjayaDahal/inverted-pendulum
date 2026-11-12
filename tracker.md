@@ -20,7 +20,8 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 - [ ] The KP08s, before fitting them to the pivot bridge (its M5 holes are fixed 42 mm apart):
       measure their bolt holes and their base-to-shaft height (DESIGN.md, "Measure first").
 - [ ] The carriage plate goes on with its engraved lines over the rods and its arrow to the front
-      (the pendulum's side): the slots then run across the rods.
+      (the pendulum's side): the slots then run across the rods. Until the screws are tight it slides
+      +-8 mm across the rods: centre it (every screw mid-slot), then tighten crosswise.
 
 ## Plates
 
