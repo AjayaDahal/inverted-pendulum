@@ -1,16 +1,16 @@
 <div align="center">
 
-<img src="renders/anim_turntable.gif" width="820" alt="The inverted pendulum on a turntable: 2020 frame, belt-driven carriage on two rods, pendulum in front of the frame">
+<img src="renders/anim_turntable.gif" width="820" alt="The inverted pendulum on a turntable: aluminium profile frame, belt-driven carriage on two rods, pendulum in front of the frame">
 
 # Inverted Pendulum
 
-### A cart-pole on a 2020 frame: the belt drive fixed and every missing part designed, all 3-D printed
+### A cart-pole on an aluminium profile frame: the belt drive fixed and every missing part designed, all 3-D printed
 
 [![Verification gate](https://github.com/AjayaDahal/inverted-pendulum/actions/workflows/gate.yml/badge.svg)](https://github.com/AjayaDahal/inverted-pendulum/actions/workflows/gate.yml)
 ![CAD](https://img.shields.io/badge/CAD-Python%20%2B%20build123d-3776ab?logo=python&logoColor=white)
 ![Printed](https://img.shields.io/badge/printed-PLA%20%2B%20PETG-e36209)
 ![Printer](https://img.shields.io/badge/printer-Kobra%20S1-6f42c1)
-![Travel](https://img.shields.io/badge/travel-%C2%B1231%20mm-2ea44f)
+![Travel](https://img.shields.io/badge/travel-%C2%B1228%20mm-2ea44f)
 ![Swing-up](https://img.shields.io/badge/swing--up-~3%20s%20(sim)-2ea44f)
 ![To buy](https://img.shields.io/badge/to%20buy-nothing-2ea44f)
 
@@ -39,14 +39,14 @@ could still make the machine fail, and what was changed or must be checked for e
 | | |
 |---|---|
 | **Machine** | Cart-pole: belt-driven carriage on two 8 mm rods, pendulum on a shaft in two KP08s |
-| **Frame** | The owner's 2020/2040 frame, 686 × 193 × 319 mm, from his measuring photos and tape ([measured](DESIGN.md#measure-first)) |
-| **Travel** | ±241 mm to the hard stops, limit switches at ±237 mm, firmware keeps to ±231 mm |
+| **Frame** | The owner's frame of 25.5 mm square profile, 686 × 193 × 319 mm, from his measuring photos, tape and calipers ([measured](DESIGN.md#measure-first)) |
+| **Travel** | ±238 mm to the hard stops, limit switches at ±234 mm, firmware keeps to ±228 mm |
 | **Drive** | NEMA 17, his closed HTD 8M 20 mm belt on two printed 20-tooth pulleys spaced for it: 160 mm per turn, 20 steps/mm |
 | **Pendulum** | 300 mm PLA arm, 112 g, turns a full circle in front of the frame at any cart position |
 | **Sensor** | AS5600 magnetic encoder on the shaft's end, or a 600 P/R optical encoder |
 | **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 3 s from hanging, in simulation |
 | **Electronics** | Your stepper driver at 1.5 A and 19 V; an Arduino Uno / Nano or ESP32 runs [`firmware/pendulum`](firmware/pendulum), the simulated controller line for line |
-| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 364 g, PETG 248 g, about 25 h |
+| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 369 g, PETG 237 g, about 25 h |
 | **To buy** | Nothing: the machine's own parts plus plain M3/M4/M5 screws and T-nuts |
 
 Exact numbers: [`DESIGN.md`](DESIGN.md#key-numbers). Plates, masses and times:
@@ -76,7 +76,7 @@ runs and how to tension it: [`DESIGN.md`](DESIGN.md#how-the-belt-runs-now).
 <tr>
 <td width="50%"><img src="renders/anim_swingup.gif" alt="Simulated swing-up: the cart pumps energy into the pendulum, which rises to upright and balances"><br>
 <b>Swing-up.</b> The simulated controller kicks the pendulum, pumps it up from hanging and
-catches it upright; the cart stays within ±144 mm (±187 mm over 48 runs with the model
+catches it upright; the cart stays within ±144 mm (±200 mm over 48 runs with the model
 off, slow reactions, pivot friction and a push).</td>
 <td width="50%"><img src="renders/anim_burst.gif" alt="Burst view: every part moves out along the way it goes together"><br>
 <b>Burst view.</b> Every part moves out along the way it goes together.</td>

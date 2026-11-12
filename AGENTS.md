@@ -1,9 +1,11 @@
 # Notes for agents
 
-- The owner's rule: **nothing new to buy**. Design around the parts on his machine (2020/2040
-  frame, 8 mm rods on SK8s, SC8UU blocks, KP08s, NEMA 17, a closed HTD 8M 20 mm belt, AS5600 or a 600 P/R
-  optical encoder, his own driver and controller) and plain M3/M4/M5 screws with 20-series
-  T-nuts. Everything else is printed. `BOM.md` lists it all.
+- The owner's rule: **nothing new to buy**. Design around the parts on his machine (a frame of
+  25.5 mm square profile with one slot a face, 8 mm rods on SK8s, SC8UU blocks, KP08s, NEMA 17, a
+  closed HTD 8M 20 mm belt, AS5600 or a 600 P/R optical encoder, his own driver and controller)
+  and plain M3/M4/M5 screws with M5 T-nuts for the frame's slots. Everything else is printed.
+  `BOM.md` lists it all. The frame was taken as 2020/2040 from photos until his calipers
+  (REPORT.md, M7): never take a profile's size from a photo.
 - His photos are in `git_ignore_this/` and stay private: the folder is in `.gitignore`; never
   commit or publish them, or any picture taken from them.
 - The frame's length and width, the rods' spacing and the belt come from his measuring photos;

@@ -1,6 +1,6 @@
-"""The owner's hardware, modelled for the assembly, the clash checks and the viewer: the 2020/2040
-frame, rods, SK8 and SC8UU, KP08 pillow blocks, NEMA 17, pivot shaft, sensors, limit switches,
-boards and the HTD belt. Catalogue sizes; envelopes where the detail does not matter.
+"""The owner's hardware, modelled for the assembly, the clash checks and the viewer: the 25 mm
+profile frame, rods, SK8 and SC8UU, KP08 pillow blocks, NEMA 17, pivot shaft, sensors, limit switches,
+boards and the HTD belt. Catalogue sizes unless measured; envelopes where the detail does not matter.
 
 Each item is built in the assembly frame at the home pose (cart at x = 0, pendulum upright).
 `items()` lists them with their motion group, colour and label.
@@ -18,7 +18,7 @@ STEEL, ALU, BLACK, DARK = "#9aa3ad", "#c7ccd2", "#26282b", "#3a3d42"
 
 # ---------------------------------------------------------------- frame
 def _profile_cuts(nx, ny, length, axis):
-    """Slots (6.2 x 6 deep) on every 20 mm module of every face, plus the centre bores, of an
+    """Slots (SLOT x 6 deep) on every module of every face, plus the centre bores, of an
     nx x ny module profile running along `axis` from 0 to length (local, centred section)."""
     w, h = nx * P.EXT, ny * P.EXT
     cuts = []
@@ -34,7 +34,7 @@ def _profile_cuts(nx, ny, length, axis):
 
 
 def extrusion(nx, ny, a0, a1, axis, c1, c2):
-    """A 20-series profile, nx x ny modules, from a0 to a1 along `axis`, section centred at
+    """A profile of nx x ny modules (EXT square each), from a0 to a1 along `axis`, section centred at
     (c1, c2) in the other two axes (x->(y, z), y->(x, z), z->(x, y))."""
     w, h = nx * P.EXT, ny * P.EXT
     lo, hi = min(a0, a1), max(a0, a1)
@@ -53,15 +53,16 @@ def extrusion(nx, ny, a0, a1, axis, c1, c2):
 
 
 def frame_parts():
-    """[(name, solid)]: 4 posts (2020), top end bars (2040 on edge) and bottom end bars between
-    them, and the two long bottom members (2020)."""
+    """[(name, solid)]: 4 posts, top end bars and bottom end bars between them, and the two long
+    bottom members, all of the one square profile (the top end bars BAR_H tall)."""
     out = []
     y_in = P.Y_POST - P.EXT / 2
     for sx in (-1, 1):
         end = "mp"[sx > 0]
         for sy in (-1, 1):
             out.append((f"post_{end}{'fb'[sy > 0]}", extrusion(1, 1, 0, P.FRAME_H, "z", sx * P.X_END, sy * P.Y_POST)))
-        out.append((f"top_bar_{end}", extrusion(1, 2, -y_in, y_in, "y", sx * P.X_END, sum(P.Z_BAR) / 2)))
+        out.append((f"top_bar_{end}", extrusion(1, round(P.BAR_H / P.EXT), -y_in, y_in, "y", sx * P.X_END,
+                                                sum(P.Z_BAR) / 2)))
         out.append((f"bottom_bar_{end}", extrusion(1, 1, -y_in, y_in, "y", sx * P.X_END, P.EXT / 2)))
     x_in = P.X_END - P.EXT / 2
     for sy in (-1, 1):
@@ -262,7 +263,7 @@ def belt_loop_length(x_idler=P.X_IDLER):
 def items(belt=True):
     """[(name, solid, group, colour, label)] of the owner's hardware at the home pose (belt=False
     leaves out the toothed belt, slow to build)."""
-    out = [(n, s, "frame", ALU, "2020 / 2040 aluminium profile") for n, s in frame_parts()]
+    out = [(n, s, "frame", ALU, "25 mm aluminium profile") for n, s in frame_parts()]
     for sy in (-1, 1):
         out.append((f"rod_{'fb'[sy > 0]}", rod(sy * P.Y_ROD), "frame", STEEL, "8 mm rod"))
         for sx in (-1, 1):

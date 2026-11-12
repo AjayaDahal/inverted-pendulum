@@ -17,7 +17,7 @@ static const float CTL_V_MAX = 1.0f;            // m/s
 static const float CTL_PUMP = 0.655f;           // swing-up: cart speed amplitude (m/s), sharpness on sin and energy
 static const float CTL_KS = 13.042f;
 static const float CTL_LEAD = 0.085f;           // s: the pump looks this far ahead
-static const float CTL_X_PUMP = 0.266805f;      // m: the pump fades to nothing here
+static const float CTL_X_PUMP = 0.2636288f;     // m: the pump fades to nothing here
 static const float CTL_KE = 3.323f;
 static const float CTL_KX = 22.704f;            // cart centring (1/s^2) and speed loop (1/s) while swinging
 static const float CTL_KV = 6.001f;
@@ -36,8 +36,8 @@ static const int CTL_STILL_N = 50;              // periods at rest before a kick
 
 // machine (scripts/params.py)
 static const float CFG_STEPS_PER_M = 20000.0f;  // 1/16 microstepping, 20-tooth HTD 8M pulley
-static const float CFG_X_SOFT = 0.231f;         // m: the controller stops past this
-static const float CFG_X_SWITCH = 0.237f;       // m: the limit switches trip here
+static const float CFG_X_SOFT = 0.22825f;       // m: the controller stops past this
+static const float CFG_X_SWITCH = 0.23425f;     // m: the limit switches trip here
 static const float CFG_HOME_BACKOFF = 0.005f;   // m: back off the switch after homing
 static const float CFG_HOME_SPEED = 0.03f;      // m/s
 static const int CFG_PLANNING_MS = 10;          // step planner look-ahead: part of the delay sim.py allows for

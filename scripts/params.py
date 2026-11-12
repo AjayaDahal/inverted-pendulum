@@ -5,27 +5,30 @@ Coordinates: x along the rails (+x = idler end, -x = motor end), y from the fron
 back (+), z up from the desk. The origin is the centre of the frame's footprint on the desk. The
 cart's home is x = 0; the pendulum angle is 0 upright and positive leaning towards +x.
 
-The frame, rails, bearings, motor and belt are the owner's own (no purchases). Their catalogue
-sizes are exact. The frame's length and width, the rod spacing and the belt (HTD 8M, 20 mm, a
-closed loop) were read from his measuring photos (tape and calipers, 2026-11-06); the belt's
-175 teeth are his own count (it is stamped 1400 mm), and the frame's height his tape from the desk
-(2026-11-08). Every printed part that touches the frame is adjustable over the remaining error.
+The frame, rails, bearings, motor and belt are the owner's own (no purchases). The frame's length
+and width, the rod spacing and the belt (HTD 8M, 20 mm, a closed loop) were read from his
+measuring photos (tape and calipers, 2026-11-06); the belt's 175 teeth are his own count (it is
+stamped 1400 mm), the frame's height his tape from the desk (2026-11-08), and its profile (25.5 mm
+square) and the SC8UU's holes his calipers (2026-11-11). The rest is at catalogue sizes, not
+measured (DESIGN.md, "Measure first"). Every printed part that touches the frame is adjustable
+over the remaining error.
 """
 import math
 
 # ---------------------------------------------------------------- frame (photos 9-15: tape)
 FRAME_L = 686.0          # outer length along the rails (end frames' outer faces)
 FRAME_W = 193.0          # outer width
-FRAME_H = 319.0          # top of the posts and of the 2040 top end bars: tape from the desk (2026-11-08)
-EXT = 20.0               # 20-series profile module
-SLOT = 6.2               # slot opening of the 20-series profile (B-type, 6 mm)
-BAR_H = 40.0             # top end bars: 2040 standing on edge
-X_END = FRAME_L / 2 - EXT / 2            # 333: centre plane of each end frame
-Y_POST = FRAME_W / 2 - EXT / 2           # 86.5: post centre lines
-Z_BAR = (FRAME_H - BAR_H, FRAME_H)       # 260..300: top end bars
-Z_BAR_SLOTS = (FRAME_H - 30.0, FRAME_H - 10.0)   # slot centres on the bars' 40 mm faces
-X_BAR_IN = X_END - EXT / 2               # 323: inner face of each top end bar
+FRAME_H = 319.0          # top of the posts and of the top end bars: tape from the desk (2026-11-08)
+EXT = 25.5               # profile: 25.5 mm square, one slot a face (his calipers, 2026-11-11; the design had 2020/2040)
+SLOT = 5.9               # slot opening (calipers 5.91)
+BAR_H = EXT              # top end bars: the same square profile
+X_END = FRAME_L / 2 - EXT / 2            # 330.25: centre plane of each end frame
+Y_POST = FRAME_W / 2 - EXT / 2           # 83.75: post centre lines
+Z_BAR = (FRAME_H - BAR_H, FRAME_H)       # 293.5..319: top end bars
+Z_BAR_SLOTS = (FRAME_H - BAR_H / 2,)     # slot centre on each side face of a top end bar
+X_BAR_IN = X_END - EXT / 2               # 317.5: inner face of each top end bar
 X_BAR_OUT = X_END + EXT / 2              # 343: outer face
+BRACKET = 25.0                           # corner brackets: the saddles keep this far from the posts along the bars
 Y_FRONT = -FRAME_W / 2                   # -96.5: the frame's front face
 
 # ---------------------------------------------------------------- linear guide (owner's)
@@ -35,7 +38,7 @@ Y_ROD = ROD_SPACING / 2
 SK8 = dict(w=42.0, h_total=32.8, t=14.0, h=20.0, bolt=32.0)
 Z_ROD = FRAME_H + SK8["h"]               # 320
 X_SK8_IN = X_END - SK8["t"] / 2          # 326: SK8 inner faces
-ROD_L = 2 * (X_END + SK8["t"] / 2)       # 680: at least this, to reach through both SK8s
+ROD_L = 2 * (X_END + SK8["t"] / 2)       # 674.5: at least this, to reach through both SK8s
 SC8UU = dict(l=30.0, w=34.0, h=22.0, h_axis=11.0, hole_l=18.3, hole_w=23.8,   # holes: his calipers (2026-11-11)
              thread=4.0)   # M4 thread depth: not measured; the old 6 mm plate's M4 x 10 went this deep and held
 BEARING_X = 60.0                         # SC8UU centres at x_cart +-60
@@ -68,8 +71,9 @@ X_MOTOR = -C_NOM / 2                     # -310: motor pulley
 X_IDLER = C_NOM / 2                      # 310: idler, nominal: the drawings use it
 IDLER_TRAVEL = (X_IDLER - 10.0, X_IDLER + 10.0)   # idler axle x range (belt tension)
 SADDLE_T = 7.0                           # saddle cheeks and web around each top end bar
-SADDLE_WEB = (Z_BAR[0] - 6.0, Z_BAR[0])  # 254..260: web under the bar
-Z_PULLEY = SADDLE_WEB[0] - 1.0 - R_FLANGE   # 223: flanges 1 mm under the saddles' webs
+SADDLE_WEB = (Z_BAR[0] - 6.0, Z_BAR[0])  # 287.5..293.5: web under the bar
+BELT_BELOW_ROD = 97.0                    # pulley axes under the rods, as on the 2040 bars: the printed belt clamp fits
+Z_PULLEY = Z_ROD - BELT_BELOW_ROD        # 242: the mounts reach down from their webs to it
 Z_RUN_LAND = Z_PULLEY + R_TIP            # upper run's tooth-side face (teeth hang below)
 Z_RUN_BACK = Z_PULLEY + R_BELT_BACK      # upper run's back
 Z_RUN_TIPS = Z_RUN_LAND - BELT["tooth_h"]

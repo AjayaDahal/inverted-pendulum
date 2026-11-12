@@ -1,6 +1,6 @@
 """Every screw, nut and T-nut, with where it goes (head position p0, unit vector u into the work)
 and what it clamps (stack, mm), so the gate can check each length and the viewer can draw it.
-All from the owner's stock: M3, M4 (the SC8UU screws) and M5 with 20-series T-nuts."""
+All from the owner's stock: M3, M4 (the SC8UU screws) and M5 with T-nuts for the frame's slots."""
 import numpy as np
 
 import params as P
@@ -124,7 +124,7 @@ def counts(bolt_list=None):
         if b["nut"]:
             c[f"{b['size']} nut"] = c.get(f"{b['size']} nut", 0) + 1
         if b["tnut"]:
-            c["T-nut M5 (20-series)"] = c.get("T-nut M5 (20-series)", 0) + 1
+            c["T-nut M5"] = c.get("T-nut M5", 0) + 1
     return dict(sorted(c.items()))
 
 

@@ -37,7 +37,7 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 - [x] The belt: {TEETH} teeth ({LOOP} mm), your count, and `BELT_TEETH` is set to it.
 - [ ] Print `petg_1_belt_drive` first: check the motor mount and idler mount on the top end bars
       and the T-nuts before printing the rest.
-- [ ] Check your T-nuts: the saddles bolt into the top end bars' 40 mm faces. Drop-in (roll-in)
+- [ ] Check your T-nuts: the saddles bolt into the top end bars' side slots. Drop-in (roll-in)
       T-nuts go in from the side; slide-in ones mean loosening one end of each bar.
 - [x] The SC8UU's screw holes: 18.3 mm along the rod, 23.8 across (your calipers); the carriage
       plate is drawn to them.

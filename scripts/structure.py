@@ -213,7 +213,7 @@ def clamp_jaw():
 
 # ================================================================== motor end
 def _saddle(x_end_sign, y0, y1):
-    """U round the top end bar from below: inner and outer cheeks on its 40 mm faces, web under it."""
+    """U round the top end bar from below: inner and outer cheeks on its side faces, web under it."""
     xi = x_end_sign * (P.X_BAR_IN - P.SADDLE_FIT)
     xo = x_end_sign * (P.X_BAR_OUT + P.SADDLE_FIT)
     t = P.SADDLE_T
@@ -235,7 +235,7 @@ def _saddle_bolts(s, x_end_sign, bolts):
     return s
 
 
-MOTOR_BOLTS = {face: [(22.0, P.Z_BAR_SLOTS[0]), (40.0, P.Z_BAR_SLOTS[1])] for face in ("in", "out")}
+MOTOR_BOLTS = {face: [(22.0, P.Z_BAR_SLOTS[0]), (38.0, P.Z_BAR_SLOTS[-1])] for face in ("in", "out")}
 # the idler saddle's inner face is under the web's gusset: all four through the outer face
 IDLER_BOLTS = {"in": [], "out": [(y, z) for z in P.Z_BAR_SLOTS for y in (-19.0, 19.0)]}
 
@@ -243,11 +243,11 @@ IDLER_BOLTS = {"in": [], "out": [(y, z) for z in P.Z_BAR_SLOTS for y in (-19.0, 
 def motor_mount():
     """Hangs the NEMA 17 under the -x top end bar, shaft along y, pulley on the belt plane (inboard
     of the bar when the belt is short: a web under the bar carries it). Saddle (4 x M5 into T-nuts
-    in the bar's 40 mm faces), motor plate with the screw heads sunk so the pulley's flange clears
-    them, and side walls either side of the motor body."""
+    in the bar's side faces, clear of the corner brackets), motor plate with the screw heads sunk so
+    the pulley's flange clears them, and side walls either side of the motor body."""
     m = P.NEMA17
     y0, y1 = P.MOTOR_PLATE_Y
-    yb = y1 + 32.0
+    yb = min(y1 + 32.0, P.Y_POST - P.EXT / 2 - P.BRACKET)
     a = m["side"] / 2
     x0, x1 = P.X_MOTOR - a - 0.8, P.X_MOTOR + a + 0.8
     zb = P.Z_PULLEY - a - 1.0
@@ -336,7 +336,9 @@ def idler_mount():
     s += box(xw, P.X_BAR_IN, y0, y1, *P.SADDLE_WEB)   # web out to the cheeks
     if xg - xw > 0.5:                          # 45 deg gusset over the web's reach: prints upside down unsupported
         zw = P.SADDLE_WEB[1] - 0.01
-        s += prism_xz([(xw, zw), (xg + 0.01, zw), (xg + 0.01, zw + xg - xw)], y0, y1)
+        h = min(xg - xw, P.Z_BAR[1] - 4.0 - zw)   # cut at the saddle's top, the face it prints on
+        top = [(xg + 0.01, zw + h)] + ([(xw + h, zw + h)] if h < xg - xw else [])
+        s += prism_xz([(xw, zw), (xg + 0.01, zw)] + top, y0, y1)
     for sy in (-1, 1):
         ya, yb = sorted((sy * P.CHEEK_Y[0], sy * P.CHEEK_Y[1]))
         cheek = box(wx0 - 7.0, wx1 + lug, ya, yb, cz0, P.SADDLE_WEB[0] + 0.01)
