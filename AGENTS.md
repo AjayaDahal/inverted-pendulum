@@ -38,7 +38,8 @@
   `python scripts/check_parts.py` must pass before anything is printed; CI runs it on every push.
 - Generated, never edit by hand: `parts/` (STLs, `assembly.json`, `sim.json`, the STEP), `3mf/`,
   `gcode/`, `BOM.md`, `viewer/manifest.json`, `renders/`. In `tracker.md` edit only the Status
-  column. The gate fails when any of them is stale.
+  column. The gate fails when any of them is stale. `fixes/` holds one-off printed fixes for parts
+  printed before a design change (`make_fixes.py`); it is not part of the machine or the gate.
 - The belt is the point of the redesign: pulleys and clamp in one plane (y = 0), both axles at one
   height, flanges on both sides, a toothed clamp, a tensioner that also squares the idler
   (`DESIGN.md`, "How the belt runs now"). The gate's `belt` check holds that; keep it passing

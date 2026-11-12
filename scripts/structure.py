@@ -31,7 +31,7 @@ SC_HOLES = [(sx * P.BEARING_X + dx * P.SC8UU["hole_l"] / 2, sy * P.Y_ROD + dy * 
 BRIDGE_BOLTS = [(sx * (P.BRIDGE_X + 7.0), y) for sx in (-1, 1) for y in P.BRIDGE_BOLT_Y]
 CLAMP_BOLTS = [(sx * 25.0, sy * 9.0) for sx in (-1, 1) for sy in (-1, 1)]
 CB3 = 3.2                                  # M3 head counterbore depth
-CB4 = 4.2                                  # M4 head counterbore depth
+CB4 = 2.0                                  # M4 head counterbore: an M4 x 10 goes 4 mm into the SC8UU's blind thread
 MARK = 0.6                                 # depth of the orientation marks in the plate's top face
 
 

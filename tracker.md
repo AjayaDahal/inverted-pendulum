@@ -22,6 +22,11 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 - [ ] The carriage plate goes on with its engraved lines over the rods and its arrow to the front
       (the pendulum's side): the slots then run across the rods. Until the screws are tight it slides
       +-8 mm across the rods: centre it (every screw mid-slot), then tighten crosswise.
+- [ ] The red carriage plate (printed 2026-11-11) has 4.2 mm counterbores: an M4 x 10 there goes
+      6.2 mm into the SC8UU and stops on the end of its thread before the head clamps, so the plate
+      still slides. Print `fixes/sc8uu_shims_pla.3mf` (20 shims, 2.4 mm, 8 min) and drop one into
+      each counterbore under its screw's head (REPORT.md, R15). A plate printed now has 2 mm
+      counterbores and needs none.
 
 ## Plates
 
@@ -29,12 +34,12 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 |---|---|---|---|---|---|---|
 | 1 | `petg_1_belt_drive` | PETG | motor_mount, idler_mount, clamp_jaw, 2 x idler_slider, idler_sleeve, 4 x rod_bumper, 3 x cable_clip (motor mount, idler mount and sliders, belt jaw, bumpers, clips) | 168 g | 6.6 h | to print |
 | 2 | `petg_2_pulleys_pivot` | PETG | motor_pulley, idler_pulley, 2 x pulley_flange, pendulum_hub, magnet_cap (both pulleys and their front flanges, pendulum hub, magnet cap) | 80 g | 3.5 h | to print |
-| 3 | `pla_1_carriage_plate` | PLA | carriage_plate (carriage plate) | 106 g | 4.3 h | to print |
+| 3 | `pla_1_carriage_plate` | PLA | carriage_plate (carriage plate) | 107 g | 4.3 h | to print |
 | 4 | `pla_2_bridge_clamp_tray` | PLA | pivot_bridge, belt_clamp, electronics_tray, 2 x switch_mount, as5600_mount (pivot bridge, belt clamp, electronics tray, switch blocks, AS5600 adapter) | 217 g | 8.7 h | to print |
 | 5 | `pla_3_arm` | PLA | pendulum_arm, pendulum_tip (pendulum arm (diagonal) and tip cap) | 41 g | 1.7 h | to print |
 | 6 | `petg_3_option_encoder` | PETG | coupler (only for a 600 P/R optical encoder instead of the AS5600) | 5 g | 0.3 h | optional |
 
-**Totals** (without the optional encoder coupler): PLA 364 g, 14.7 h; PETG 248 g, 10.1 h; 24.9 h in all.
+**Totals** (without the optional encoder coupler): PLA 365 g, 14.8 h; PETG 248 g, 10.1 h; 24.9 h in all.
 
 ## Reminders for print time
 

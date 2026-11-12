@@ -535,6 +535,7 @@ ENGAGE_MIN = {"M3": 3.0, "M4": 4.0, "M5": 4.0}
 def check_bolts():
     bad = []
     bl = H.bolts()
+    blind = {"SC8UU": P.SC8UU["thread"], "NEMA 17": H.HOLE_M3_FLAT}   # thread depths of the owner's parts
     for b in bl:
         nut_t = P.NUT[b["size"]][1]
         if b["nut"]:
@@ -545,9 +546,13 @@ def check_bolts():
             need, slack = b["stack"] + ENGAGE_MIN[b["size"]], 10.0
         if b["length"] < need - 0.3:
             bad.append(f"{b['name']} {b['size']}x{b['length']:.0f} short: needs {need:.1f}")
+        elif b["into"] in blind and b["length"] - b["stack"] > blind[b["into"]] + 0.2:
+            bad.append(f"{b['name']} {b['size']}x{b['length']:.0f} bottoms out: {b['length'] - b['stack']:.1f} mm into "
+                       f"the {b['into']}'s {blind[b['into']]:g} mm thread, so its head never clamps")
         elif b["length"] > need + slack:
             bad.append(f"{b['name']} {b['size']}x{b['length']:.0f} long for a {b['stack']:.1f} mm stack")
-    report("bolts", not bad, "; ".join(bad) or f"{len(bl)} fasteners: every one engages and none sticks far out "
+    report("bolts", not bad, "; ".join(bad) or f"{len(bl)} fasteners: every one engages, none bottoms out in a blind "
+                                               f"thread or sticks far out "
                                                f"({', '.join(f'{v} x {k}' for k, v in H.counts(bl).items())})")
 
 

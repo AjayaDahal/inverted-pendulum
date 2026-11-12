@@ -46,6 +46,11 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 - [ ] The carriage plate goes on with its engraved lines over the rods and its arrow to the front
       (the pendulum's side): the slots then run across the rods. Until the screws are tight it slides
       +-8 mm across the rods: centre it (every screw mid-slot), then tighten crosswise.
+- [ ] The red carriage plate (printed 2026-11-11) has 4.2 mm counterbores: an M4 x 10 there goes
+      6.2 mm into the SC8UU and stops on the end of its thread before the head clamps, so the plate
+      still slides. Print `fixes/sc8uu_shims_pla.3mf` (20 shims, 2.4 mm, 8 min) and drop one into
+      each counterbore under its screw's head (REPORT.md, R15). A plate printed now has 2 mm
+      counterbores and needs none.
 
 ## Plates
 

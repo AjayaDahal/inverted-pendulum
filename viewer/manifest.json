@@ -36,8 +36,8 @@
     70
    ],
    "shared": false,
-   "grams": 106.4,
-   "minutes": 256.4
+   "grams": 107.6,
+   "minutes": 259.6
   },
   {
    "name": "pivot_bridge",
@@ -2295,7 +2295,7 @@
    "p0": [
     -69.15,
     -68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2304,7 +2304,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2317,7 +2317,7 @@
    "p0": [
     -69.15,
     -45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2326,7 +2326,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2339,7 +2339,7 @@
    "p0": [
     -50.85,
     -68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2348,7 +2348,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2361,7 +2361,7 @@
    "p0": [
     -50.85,
     -45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2370,7 +2370,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2383,7 +2383,7 @@
    "p0": [
     -69.15,
     45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2392,7 +2392,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2405,7 +2405,7 @@
    "p0": [
     -69.15,
     68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2414,7 +2414,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2427,7 +2427,7 @@
    "p0": [
     -50.85,
     45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2436,7 +2436,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2449,7 +2449,7 @@
    "p0": [
     -50.85,
     68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2458,7 +2458,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2471,7 +2471,7 @@
    "p0": [
     50.85,
     -68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2480,7 +2480,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2493,7 +2493,7 @@
    "p0": [
     50.85,
     -45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2502,7 +2502,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2515,7 +2515,7 @@
    "p0": [
     69.15,
     -68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2524,7 +2524,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2537,7 +2537,7 @@
    "p0": [
     69.15,
     -45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2546,7 +2546,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2559,7 +2559,7 @@
    "p0": [
     50.85,
     45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2568,7 +2568,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2581,7 +2581,7 @@
    "p0": [
     50.85,
     68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2590,7 +2590,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2603,7 +2603,7 @@
    "p0": [
     69.15,
     45.1,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2612,7 +2612,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -2625,7 +2625,7 @@
    "p0": [
     69.15,
     68.9,
-    353.8
+    356.0
    ],
    "u": [
     0.0,
@@ -2634,7 +2634,7 @@
    ],
    "group": "cart",
    "part": "carriage_plate",
-   "stack": 3.8,
+   "stack": 6.0,
    "nut": false,
    "tnut": false,
    "into": "SC8UU",
@@ -4236,8 +4236,8 @@
   {
    "name": "pla_1_carriage_plate",
    "material": "pla",
-   "grams": 106.4,
-   "minutes": 257.4,
+   "grams": 107.5,
+   "minutes": 259.9,
    "items": [
     {
      "part": "carriage_plate",
@@ -6373,10 +6373,10 @@
    -3.743
   ],
   "masses": {
-   "cart_kg": 0.68,
+   "cart_kg": 0.681,
    "belt_kg": 0.182,
    "spinning_kg": 0.034,
-   "effective_kg": 0.896,
+   "effective_kg": 0.897,
    "pendulum_kg": 0.1121,
    "cg_m": 0.0695,
    "J_kgm2": 0.001709
