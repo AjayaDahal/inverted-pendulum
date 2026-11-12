@@ -36,7 +36,7 @@ SK8 = dict(w=42.0, h_total=32.8, t=14.0, h=20.0, bolt=32.0)
 Z_ROD = FRAME_H + SK8["h"]               # 320
 X_SK8_IN = X_END - SK8["t"] / 2          # 326: SK8 inner faces
 ROD_L = 2 * (X_END + SK8["t"] / 2)       # 680: at least this, to reach through both SK8s
-SC8UU = dict(l=30.0, w=34.0, h=22.0, h_axis=11.0, hole_l=18.0, hole_w=24.0)
+SC8UU = dict(l=30.0, w=34.0, h=22.0, h_axis=11.0, hole_l=18.3, hole_w=23.8)   # holes: his calipers (2026-11-11)
 BEARING_X = 60.0                         # SC8UU centres at x_cart +-60
 Z_PLATE0 = Z_ROD + SC8UU["h_axis"]       # 331: carriage plate underside (SC8UU mounting faces)
 PLATE_T = 8.0

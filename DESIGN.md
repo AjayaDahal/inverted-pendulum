@@ -29,7 +29,7 @@ frame's footprint.
 Your measuring photos (tape and calipers) gave the frame's length and width, the rods' spacing
 and the belt; you counted the belt's teeth and taped the frame's height. If any of it changes, put
 it in `scripts/params.py`, then run `python scripts/build_all.py`; the gate re-checks every
-clearance. The last four rows are catalogue sizes, not yet measured on your parts: measure them
+clearance. The last three rows are catalogue sizes, not yet measured on your parts: measure them
 before printing the parts that bolt to them (REPORT.md, R13):
 
 | Name | What | Now | Source, and the slack in the design |
@@ -41,7 +41,7 @@ before printing the parts that bolt to them (REPORT.md, R13):
 | `ROD_SPACING` | rod centre to rod centre | 114 | calipers (122 over the rods' outer faces); SC8UU holes slotted ±8 mm: 98–130 fit |
 | `ROD_L` | rod length | 680 | at least this, to reach through both SK8s |
 | `BELT` | pitch and width | HTD 8M, 20 | calipers: 20.0–20.6 mm wide; its teeth 8 mm apart |
-| `SC8UU` | one block's screw holes, centre to centre: along the rod, across it | 18, 24 (M4) | catalogue; your old plate's photo agrees. `carriage_plate`: fixed along the rod, ±8 mm across |
+| `SC8UU` | one block's screw holes, centre to centre: along the rod, across it | 18.3, 23.8 (M4) | your calipers (2026-11-11): the catalogue's 18 × 24 within 0.3 mm. `carriage_plate`: fixed along the rod, ±8 mm across |
 | `SK8`, `SC8UU` | rod centre above the end bar's top; the block's top face above the rod centre | 20, 11 | catalogue; they set the plate's height, so where the clamp's jaw meets the belt |
 | `KP08` | bolt holes centre to centre; base to shaft centre | 42, 15 | catalogue. `pivot_bridge`: fixed M5 holes; the KP08's own slotted feet take a little |
 | `ENDSTOP` | the limit-switch board's two holes, centre to centre | 19 | catalogue. `switch_mount`: ±1 mm |
@@ -189,7 +189,7 @@ replays simulated runs through it and requires the same commands).
 - **Input = cart acceleration,** at most 3.54 m/s², speed at most 1 m/s. A stepper sets motion,
   not force: the force each run needs (the motion plus 1.8 N of friction at the cart) is checked
   at every step against the motor's torque-speed curve at 1.5 A and 19 V (9.8 N up to 1 m/s),
-  80 % of it relied on. The margin never falls below 0.68 N.
+  80 % of it relied on. The margin never falls below 0.69 N.
 - **Start:** when the pendulum has rested near hanging for 0.25 s, a kick: 3.54 m/s² for 135 ms
   one way, then the other.
 - **Swing-up:** the cart's speed is set to
