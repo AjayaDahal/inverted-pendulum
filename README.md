@@ -46,7 +46,7 @@ could still make the machine fail, and what was changed or must be checked for e
 | **Sensor** | AS5600 magnetic encoder on the shaft's end, or a 600 P/R optical encoder |
 | **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 3 s from hanging, in simulation |
 | **Electronics** | Your stepper driver at 1.5 A and 19 V; an Arduino Uno / Nano or ESP32 runs [`firmware/pendulum`](firmware/pendulum), the simulated controller line for line |
-| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 369 g, PETG 237 g, about 25 h |
+| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 369 g, PETG 234 g, about 25 h |
 | **To buy** | Nothing: the machine's own parts plus plain M3/M4/M5 screws and T-nuts |
 
 Exact numbers: [`DESIGN.md`](DESIGN.md#key-numbers). Plates, masses and times:

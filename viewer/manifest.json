@@ -221,8 +221,8 @@
     -50
    ],
    "shared": false,
-   "grams": 54.3,
-   "minutes": 114.0
+   "grams": 51.8,
+   "minutes": 109.4
   },
   {
    "name": "motor_pulley",
@@ -3108,7 +3108,7 @@
    "length": 10.0,
    "p0": [
     -313.4,
-    38.0,
+    36.0,
     306.25
    ],
    "u": [
@@ -3152,7 +3152,7 @@
    "length": 10.0,
    "p0": [
     -347.1,
-    38.0,
+    36.0,
     306.25
    ],
    "u": [
@@ -4022,8 +4022,8 @@
   {
    "name": "petg_1_belt_drive",
    "material": "petg",
-   "grams": 156.5,
-   "minutes": 370.9,
+   "grams": 154.0,
+   "minutes": 366.1,
    "items": [
     {
      "part": "cable_clip",

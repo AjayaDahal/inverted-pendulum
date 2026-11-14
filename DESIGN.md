@@ -22,7 +22,7 @@ frame's footprint.
 | Sensor | AS5600 (12 bit) with a diametric magnet held 5 mm off the steel shaft's end, or a 600 P/R optical encoder |
 | Control (model) | kick, swing-up, catch, LQR with integral action: upright in 3.1 s (≤ 4.8 s over 48 robustness runs), cart within ±200 mm; balanced, it hunts 0.1° at the pivot's goal friction |
 | Firmware | `firmware/pendulum`: Arduino Uno / Nano or ESP32, FastAccelStepper, 200 Hz |
-| Prints | 21 part files, 6 plates, no supports: PLA 369 g / 14.9 h, PETG 237 g / 9.7 h; only the parts you still need: `3mf/to_print_kobra_s1.3mf` |
+| Prints | 21 part files, 6 plates, no supports: PLA 369 g / 14.9 h, PETG 234 g / 9.6 h; only the parts you still need: `3mf/to_print_kobra_s1.3mf` |
 
 ## Measure first
 
@@ -41,7 +41,7 @@ are catalogue or typical sizes: measure them before printing the parts that bolt
 | `FRAME_W` | width across the posts' outer faces | 193 | tape; bridge slides ±10 mm: 173–213 wide fit |
 | `EXT`, `SLOT` | the profile; its slots' opening | 25.5 square, 5.9 | your calipers (2026-11-11); the saddles and the slot keys follow them |
 | — | the slot's lip (face to its underside) and depth (face to its floor); your T-nuts' thickness | about 2, 7, 4 | not measured: they set each M5's length (× 10 in the saddles, the tray and the clips, × 12 in the switch blocks). Too long, and it stops on the slot's floor before it clamps |
-| `BRACKET` | how far the top corner brackets reach along the end bars from the posts, and on which face | 25 | not measured: the motor saddle keeps this far from the post |
+| `BRACKET` | the top corner brackets' legs, along the end bars and down the posts | 25 × 25 | yours (2026-11-13): the motor saddle ends `BRACKET_CLEAR` (2 mm) short of them, 27 mm from the post |
 | `X_SK8_IN` | the SK8s' inner faces apart, along a rod | 646.5 | from the frame, not measured: the bumpers sit against them, and the stops and switches follow |
 | `ROD_SPACING` | rod centre to rod centre | 114 | calipers (122 over the rods' outer faces); SC8UU holes slotted ±8 mm: 98–130 fit |
 | `ROD_L` | rod length | 675 | at least this, to reach through both SK8s |
@@ -67,7 +67,7 @@ frame's centre line, near where yours were.
 
 **Motor end** (`motor_mount`, PETG). A saddle wraps the −x top end bar from below: a cheek on each
 of its side faces (two M5 + T-nuts each, in its one slot) and a web under it, reaching in to the
-motor; it keeps 25 mm clear of the posts for the corner brackets. The motor
+motor; it ends 27 mm from the back post, 2 mm short of your 25 mm corner bracket. The motor
 hangs under the web, its
 face on a 7 mm plate with the four M3 heads sunk 3.2 mm so the pulley's back flange (1 mm away)
 clears them, between two side walls and on a floor: it cannot twist under belt pull. The shaft

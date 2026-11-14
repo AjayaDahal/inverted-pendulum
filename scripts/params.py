@@ -28,7 +28,8 @@ Z_BAR = (FRAME_H - BAR_H, FRAME_H)       # 293.5..319: top end bars
 Z_BAR_SLOTS = (FRAME_H - BAR_H / 2,)     # slot centre on each side face of a top end bar
 X_BAR_IN = X_END - EXT / 2               # 317.5: inner face of each top end bar
 X_BAR_OUT = X_END + EXT / 2              # 343: outer face
-BRACKET = 25.0                           # corner brackets: the saddles keep this far from the posts along the bars
+BRACKET = 25.0                           # corner brackets: 25 x 25 legs, along the bars from the posts (his, 2026-11-13)
+BRACKET_CLEAR = 2.0                      # the motor saddle's end to the bracket's end
 Y_FRONT = -FRAME_W / 2                   # -96.5: the frame's front face
 
 # ---------------------------------------------------------------- linear guide (owner's)

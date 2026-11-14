@@ -235,7 +235,10 @@ def _saddle_bolts(s, x_end_sign, bolts):
     return s
 
 
-MOTOR_BOLTS = {face: [(22.0, P.Z_BAR_SLOTS[0]), (38.0, P.Z_BAR_SLOTS[-1])] for face in ("in", "out")}
+MOTOR_SADDLE_Y = (P.MOTOR_PLATE_Y[0],
+                  min(P.MOTOR_PLATE_Y[1] + 32.0, P.Y_POST - P.EXT / 2 - P.BRACKET - P.BRACKET_CLEAR))
+MOTOR_BOLTS = {face: [(MOTOR_SADDLE_Y[0] + 8.5, P.Z_BAR_SLOTS[0]), (MOTOR_SADDLE_Y[1] - 8.0, P.Z_BAR_SLOTS[-1])]
+               for face in ("in", "out")}
 # the idler saddle's inner face is under the web's gusset: all four through the outer face
 IDLER_BOLTS = {"in": [], "out": [(y, z) for z in P.Z_BAR_SLOTS for y in (-19.0, 19.0)]}
 
@@ -246,8 +249,8 @@ def motor_mount():
     in the bar's side faces, clear of the corner brackets), motor plate with the screw heads sunk so
     the pulley's flange clears them, and side walls either side of the motor body."""
     m = P.NEMA17
-    y0, y1 = P.MOTOR_PLATE_Y
-    yb = min(y1 + 32.0, P.Y_POST - P.EXT / 2 - P.BRACKET)
+    y0, yb = MOTOR_SADDLE_Y
+    y1 = P.MOTOR_PLATE_Y[1]
     a = m["side"] / 2
     x0, x1 = P.X_MOTOR - a - 0.8, P.X_MOTOR + a + 0.8
     zb = P.Z_PULLEY - a - 1.0

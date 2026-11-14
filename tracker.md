@@ -32,14 +32,14 @@ Only the parts you still need, both materials in one project: `3mf/to_print_kobr
 
 | # | Plate | Material | Parts | Filament | Time | Status |
 |---|---|---|---|---|---|---|
-| 1 | `petg_1_belt_drive` | PETG | motor_mount, idler_mount, clamp_jaw, 2 x idler_slider, idler_sleeve, 4 x rod_bumper, 3 x cable_clip (motor mount, idler mount and sliders, belt jaw, bumpers, clips) | 157 g | 6.2 h | to print |
+| 1 | `petg_1_belt_drive` | PETG | motor_mount, idler_mount, clamp_jaw, 2 x idler_slider, idler_sleeve, 4 x rod_bumper, 3 x cable_clip (motor mount, idler mount and sliders, belt jaw, bumpers, clips) | 154 g | 6.1 h | to print |
 | 2 | `petg_2_pulleys_pivot` | PETG | motor_pulley, idler_pulley, 2 x pulley_flange, pendulum_hub, magnet_cap (both pulleys and their front flanges, pendulum hub, magnet cap) | 80 g | 3.5 h | to print |
 | 3 | `pla_1_carriage_plate` | PLA | carriage_plate (carriage plate) | 107 g | 4.3 h | to print |
 | 4 | `pla_2_bridge_clamp_tray` | PLA | pivot_bridge, belt_clamp, electronics_tray, 2 x switch_mount, as5600_mount (pivot bridge, belt clamp, electronics tray, switch blocks, AS5600 adapter) | 221 g | 8.8 h | to print |
 | 5 | `pla_3_arm` | PLA | pendulum_arm, pendulum_tip (pendulum arm (diagonal) and tip cap) | 41 g | 1.7 h | to print |
 | 6 | `petg_3_option_encoder` | PETG | coupler (only for a 600 P/R optical encoder instead of the AS5600) | 5 g | 0.3 h | optional |
 
-**Totals** (without the optional encoder coupler): PLA 369 g, 14.9 h; PETG 237 g, 9.7 h; 24.6 h in all.
+**Totals** (without the optional encoder coupler): PLA 369 g, 14.9 h; PETG 234 g, 9.6 h; 24.5 h in all.
 
 ## Reminders for print time
 
