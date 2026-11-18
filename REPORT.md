@@ -29,8 +29,8 @@ laid flat and the idler off the machine on its axle (M5, M6).
 | A9 | Loose electronics and leads | minor | fixed in v1 (tray, clips, strain relief) |
 | G1-G9 | Found by the gate while designing v1, and by the owner's slicer | | all fixed (below) |
 | M1-M7 | The measuring photos: frame, rods and belt not as modelled; the belt's teeth and the idler from the third set; then the frame's profile, by calipers | major: the parts would not have fitted | fixed: design rebuilt to the measurements (below) |
-| O1-O4 | Open: to confirm on the real machine | | O1, O2 closed (the frame's height and the belt's teeth, measured); O3, O4 to confirm (below) |
-| P1-P16 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
+| O1-O4 | Open: to confirm on the real machine | | O1, O2 closed (the frame's height and the belt's teeth, measured); O4 closed (a printed shaft); O3 to confirm (below) |
+| P1-P17 | Premortem: how the finished machine could still fail | | fixed in the design, controller or firmware; P3, P9-P16 also need a check on the machine (below) |
 | R1-R15 | Printing: an audit of the 3MFs and G-code and a premortem of the prints, before the first one; then the first carriage plate, which did not go on its blocks and then would not clamp | P1 print: walls laid in mid-air (the thrust stand's crank fault); a printed plate that did not fit | R1-R5 fixed and gated, R11 done; R7-R10 are checks at print time; R12, R13 open: measurements from the owner; R14 a check at assembly; R15 fixed, shims for the printed plate (below) |
 
 ## As built (v0)
@@ -157,8 +157,14 @@ fit inside the end frames (over about 185 teeth: then cut it once and clamp both
 **O3. The angle sensor.** The design takes an AS5600 board (corner holes 18-26 mm apart) and its
 6 x 2.5 mm diametric magnet, or a 600 P/R optical encoder (38 mm, 6 mm shaft, M3 on 28-32 mm).
 
-**O4. The shaft.** An 8 mm x 115 mm steel rod (or the plain part of an M8 bolt). Printed is not
-an option through KP08 set screws.
+**O4. The shaft.** Closed: printed (`pivot_shaft`, PLA, 2026-11-17; he wanted no metal part to
+find). This note had said printing was not an option through the KP08s' set screws. A flat along
+the shaft answers that: it is the print face, the set screws bear on it and key the shaft instead
+of crushing a round, and printed lying down with all walls, every filament runs the shaft's length.
+7.9 mm, 0.1 under the bearings' bore: snug, sand it if it will not go in. In use it is barely
+loaded: the pendulum's weight and swing stress it about 1 MPa. What breaks it is a push across the
+pendulum's plane: 6.7 MPa per newton at the tip, so about 8 N against some 50 MPa along PLA's
+filaments (a steel shaft takes about 40 N). Hold the pendulum by its hub. A steel 8 mm rod still fits.
 
 ## Premortem: how it could still fail
 
@@ -185,6 +191,7 @@ rest on paper. The first version of the controller failed most of them in simula
 | P14 | The driver overheats or a supply spike kills it | wiring review | check: heatsink, capacitor |
 | P15 | The pendulum hits something or someone | geometry | check: keep-out zone |
 | P16 | Balanced, the pendulum hunts | settled state in the sim | fixed: pivot goal, `f` test, gate bound; check: free the pivot |
+| P17 | A robustness run on a knife edge | the gate, after the printed shaft | fixed: narrower catch, checked on unseen and nudged runs |
 
 **P1. The motor runs out of force.** The old check took half the holding torque (8.4 N at the
 belt) against what the motion asks plus 1 N of friction, and the worst case already asked
@@ -194,7 +201,7 @@ a typical 1 A gives 6.5 N (20-tooth 8M pulley), and at 12 V the force collapses 
 now has the motor's torque-speed curve at the driver's current and supply (`params.MOTOR`,
 `DRIVE`: 1.5 A, the 19 V laptop brick, 80 % of the torque relied on), against the motion plus
 the friction at the cart, in every run; the controller's acceleration limit (3.54 m/s² with the
-8M drive) comes out of that budget and every run keeps 0.73 N in hand. Setting the driver:
+8M drive) comes out of that budget and every run keeps 0.88 N in hand. Setting the driver:
 DESIGN.md, "Electronics and firmware".
 
 **P2. The idler drags.** The idler turns on its PETG sleeve, a plain bearing that both belt runs
@@ -284,6 +291,16 @@ position lightly lets the pivot stick less. With those gains it hunts 0.1 deg at
 at 1 and 4.1 at 2.5 (the first controller: 1.2, 2.8 and 7.2), and `tune_controller.py` now ranks
 candidates by it. *Check:* free the pivot (DESIGN.md, "Pendulum": seals off, grease out, a drop
 of oil, blocks in line) and run `f` before the first run.
+
+**P17. A robustness run sat on a knife edge.** The printed shaft (O4) left the pendulum the same
+for the controller: the steel shaft's 45 g sat on the axis, so m l and J moved 0.02 %. Yet run 34
+of the 48 failed: caught 35 deg from the top, the balance law drove the cart into its 1 m/s limit
+and lost it. The old masses rebuilt to the same digits failed it too: the steel shaft had passed
+it by luck, and the frame's shorter travel (M7) had already taken its worst cart excursion from
+187 to 200 mm. The catch let in states too far from the top. *Fix:* catch narrowed from 37.6 deg
+and 0.145 rad to 35 deg and 0.12 rad. It passes all 48, all 260 random scenarios none was tuned
+on, and the 48 again with J, m and the cart's mass nudged by up to 0.5 % (a re-slice's worth), the
+cart within 181 mm. A local re-tune that passed the 48 did worse on the 260 (258) and was dropped.
 
 ## Printing: audit and premortem
 

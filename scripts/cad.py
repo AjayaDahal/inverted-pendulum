@@ -1,7 +1,7 @@
 """build123d helpers: boxes, cylinders, slots, nut pockets, prisms, the HTD pulley and rack."""
 import math
 
-from build123d import Box, Circle, Cylinder, Face, Plane, Pos, Rectangle, Rot, Vector, Wire, export_stl, extrude
+from build123d import Box, Circle, Cone, Cylinder, Face, Plane, Pos, Rectangle, Rot, Vector, Wire, export_stl, extrude
 
 import params as P
 
@@ -16,6 +16,12 @@ def cyl_z(r, x, y, z0, z1):
 
 def cyl_y(r, x, z, y0, y1):
     return Pos(x, (y0 + y1) / 2, z) * Rot(90, 0, 0) * Cylinder(r, abs(y1 - y0))
+
+
+def cone_y(r0, r1, x, z, y0, y1):
+    """Cone along y, radius r0 at y0 and r1 at y1."""
+    lo, hi = (r0, r1) if y0 < y1 else (r1, r0)
+    return Pos(x, (y0 + y1) / 2, z) * Rot(90, 0, 0) * Cone(hi, lo, abs(y1 - y0))
 
 
 def cyl_x(r, y, z, x0, x1):

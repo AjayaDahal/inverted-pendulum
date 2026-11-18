@@ -611,6 +611,35 @@
    "qty": 1
   },
   {
+   "name": "pivot_shaft",
+   "part": "pivot_shaft",
+   "kind": "printed",
+   "file": "assembly/pivot_shaft.stl",
+   "matrix": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "pendulum",
+   "material": "pla",
+   "colour": "#e2873a",
+   "label": "pivot shaft, 115 mm: through both KP08s, the hub on its front end, the magnet cap on its back end (the set screws on its flat)",
+   "qty": 1
+  },
+  {
    "name": "pendulum_arm",
    "part": "pendulum_arm",
    "kind": "printed",
@@ -1435,33 +1464,6 @@
    "group": "cart",
    "colour": "#3a3d42",
    "label": "KP08 pillow block"
-  },
-  {
-   "name": "pivot_shaft",
-   "part": "pivot_shaft",
-   "kind": "vitamin",
-   "file": "vitamins/pivot_shaft.stl",
-   "matrix": [
-    1.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-    0.0,
-    0.0,
-    0.0,
-    0.0,
-    1.0
-   ],
-   "group": "pendulum",
-   "colour": "#9aa3ad",
-   "label": "8 mm pivot shaft, 115 mm"
   },
   {
    "name": "magnet",

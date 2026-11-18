@@ -7,7 +7,7 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 
 ## Printed parts
 
-21 part files, 29 pieces, on 6 plates (`coupler` only with the optical encoder).
+22 part files, 30 pieces, on 7 plates (`coupler` only with the optical encoder).
 
 | Part | Qty | Material | Plate | What it does |
 |---|---|---|---|---|
@@ -26,10 +26,11 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | `rod_bumper` | 4 | PETG | 1 `petg_1_belt_drive` | rod collar: hard stop for the SC8UU blocks |
 | `switch_mount` | 2 | PLA | 4 `pla_2_bridge_clamp_tray` | limit-switch block on each top end bar |
 | `pendulum_hub` | 1 | PETG | 2 `petg_2_pulleys_pivot` | pendulum hub: clamps the shaft, holds the arm |
+| `pivot_shaft` | 1 | PLA | 6 `pla_4_pivot_shaft` | pivot shaft, 115 mm: through both KP08s, the hub on its front end, the magnet cap on its back end (the set screws on its flat) |
 | `pendulum_arm` | 1 | PLA | 5 `pla_3_arm` | pendulum arm, 300 mm from the pivot to the tip |
 | `pendulum_tip` | 1 | PLA | 5 `pla_3_arm` | tip cap (room for washers as tip mass) |
 | `magnet_cap` | 1 | PETG | 2 `petg_2_pulleys_pivot` | magnet cap: AS5600 magnet on the shaft's axis |
-| `coupler` | 1 | PETG | 6 `petg_3_option_encoder` | option: flexible coupling to a 600 P/R optical encoder (instead of the magnet cap) |
+| `coupler` | 1 | PETG | 7 `petg_3_option_encoder` | option: flexible coupling to a 600 P/R optical encoder (instead of the magnet cap) |
 | `electronics_tray` | 1 | PLA | 4 `pla_2_bridge_clamp_tray` | electronics tray behind the frame |
 | `cable_clip` | 3 | PETG | 1 `petg_1_belt_drive` | cable clip for any slot of the frame |
 
@@ -42,7 +43,6 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 | SK8 rod support | 4 | on the top end bars, as built |
 | SC8UU bearing block | 4 | under the carriage plate, 4 x M4 x 10 each |
 | KP08 pillow block | 2 | on the pivot bridge, in line, 70 mm apart |
-| 8 mm pivot shaft, 115 mm | 1 | steel: an offcut of 8 mm rod or the plain shank of an M8 bolt (the KP08 set screws need steel) |
 | 6 x 2.5 mm diametric magnet | 1 | diametrically magnetised; most AS5600 boards come with one |
 | AS5600 magnetic encoder board | 1 | corner holes 18-26 mm apart |
 | optional: 600 P/R optical encoder | 1 | instead of the AS5600: 38 mm body, 6 mm shaft, M3 on a 28-32 mm circle |
@@ -85,5 +85,5 @@ print times are in [`tracker.md`](tracker.md); where each part goes, in [`DESIGN
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** that the drawer holds the 13 T-nuts, the M4 x 50 idler axle
-and an 8 mm x 115 mm steel shaft.
+**To confirm before printing:** that the drawer holds the 13 T-nuts and the M4 x 50 idler
+axle.

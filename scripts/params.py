@@ -124,6 +124,9 @@ BRIDGE_X = 32.0                                     # half-width of the pivot br
 Z_BRIDGE1 = Z_PLATE1 + BRIDGE_T                     # 351
 Z_SHAFT = Z_BRIDGE1 + KP08["h"]                     # 366: pivot axis
 SHAFT_D = 8.0
+# the pivot shaft is printed (PLA): 0.1 under the KP08s' 8 mm bore; a flat along it is its print face
+# and takes the set screws
+PIVOT_SHAFT = dict(d=7.9, flat=0.5, chamfer=0.6)
 TOWER_T = 5.0
 Y_SHAFT_END = Y_KP_R + KP08["ring_w"] / 2 + 9.0      # -1: 9 mm behind the rear KP08 for the cap's grip
 SHAFT_L = 115.0
@@ -131,7 +134,7 @@ Y_SHAFT_START = Y_SHAFT_END - SHAFT_L               # -116
 ARM_L = 300.0                                       # pivot axis to the arm's tip
 TIP = dict(len=24.0, wall=2.4)                      # tip cap over the arm's end
 AS5600 = dict(board=23.0, pcb=1.6, chip=1.5, standoff=6.0, magnet_d=6.0, magnet_t=2.5, gap=1.5)   # adapter 3 + pads 3
-MAGNET_SPACER = 5.0                                 # plastic between the steel shaft's end and the magnet
+MAGNET_SPACER = 5.0                                 # plastic between the shaft's end and the magnet (needed with a steel shaft)
 Y_MAGNET = Y_SHAFT_END + MAGNET_SPACER + AS5600["magnet_t"]                                   # magnet face
 Y_TOWER = Y_MAGNET + AS5600["gap"] + AS5600["chip"] + AS5600["pcb"] + AS5600["standoff"]   # 17.1
 Y_BRIDGE = (Y_KP_F - KP08["a"] / 2 - 1.5, Y_TOWER + TOWER_T)   # -97.5..22.1

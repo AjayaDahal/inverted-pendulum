@@ -36,6 +36,7 @@ PLATES = {
     "pla_2_bridge_clamp_tray": [("pivot_bridge", 1), ("belt_clamp", 1), ("electronics_tray", 1), ("switch_mount", 2),
                                 ("as5600_mount", 1)],
     "pla_3_arm": [("pendulum_arm", 1), ("pendulum_tip", 1)],
+    "pla_4_pivot_shaft": [("pivot_shaft", 1)],
     "petg_3_option_encoder": [("coupler", 1)],
 }
 

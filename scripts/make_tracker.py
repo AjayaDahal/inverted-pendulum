@@ -108,9 +108,12 @@ def render():
 - Pulleys: print with the integral flange on the bed; press the separate front flange on after
   fitting the set-screw nut (motor pulley) and the sleeve (idler).
 - Before assembly, test-fit: an M5 T-nut bolt through a saddle cheek and each saddle on its bar,
-  the 8 mm shaft in the hub and the magnet cap, the motor's shaft in the pulley's D bore, the arm in
-  the hub's socket, an M3 nut in the pulley's nut slot, and each front flange on its boss (a press
-  fit: push it on square, a drop of CA). Ream or file printed holes rather than forcing.
+  the printed shaft in each KP08's bore (snug, no play you can feel; sand it if it will not go in),
+  in the hub and in the magnet cap, the motor's shaft in the pulley's D bore, the arm in the hub's
+  socket, an M3 nut in the pulley's nut slot, and each front flange on its boss (a press fit: push
+  it on square, a drop of CA). Ream or file printed holes rather than forcing.
+- The printed shaft takes the pendulum's swing, not a push across it: pressed sideways at the tip
+  with about 8 N (a firm push), it breaks. Hold the pendulum by its hub when you move the machine.
 - Grease (or oil) the idler's sleeve before the pulley goes on: it is a plain bearing, and dry it
   takes a share of the motor's force (REPORT.md, P2).
 - Free the KP08 inserts before fitting them (seals off, grease out, a drop of light oil) and run

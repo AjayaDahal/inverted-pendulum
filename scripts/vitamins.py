@@ -1,5 +1,5 @@
 """The owner's hardware, modelled for the assembly, the clash checks and the viewer: the 25 mm
-profile frame, rods, SK8 and SC8UU, KP08 pillow blocks, NEMA 17, pivot shaft, sensors, limit switches,
+profile frame, rods, SK8 and SC8UU, KP08 pillow blocks, NEMA 17, sensors, limit switches,
 boards and the HTD belt. Catalogue sizes unless measured; envelopes where the detail does not matter.
 
 Each item is built in the assembly frame at the home pose (cart at x = 0, pendulum upright).
@@ -114,10 +114,6 @@ def kp08(y):
     for sx in (-1, 1):
         body -= slot_z(k["slot"] / 2, sx * (k["j"] / 2 - 1.5), y, sx * (k["j"] / 2 + 1.5), y, z0 - 1, z0 + 8)
     return body
-
-
-def shaft():
-    return cyl_y(P.SHAFT_D / 2, 0, P.Z_SHAFT, P.Y_SHAFT_START, P.Y_SHAFT_END)
 
 
 def magnet():
@@ -272,7 +268,6 @@ def items(belt=True):
                         "SC8UU bearing block"))
     out.append(("kp08_front", kp08(P.Y_KP_F), "cart", DARK, "KP08 pillow block"))
     out.append(("kp08_rear", kp08(P.Y_KP_R), "cart", DARK, "KP08 pillow block"))
-    out.append(("pivot_shaft", shaft(), "pendulum", STEEL, f"8 mm pivot shaft, {P.SHAFT_L:.0f} mm"))
     out.append(("magnet", magnet(), "pendulum", "#b0473a", "6 x 2.5 mm diametric magnet"))
     out.append(("as5600", as5600_board(), "cart", "#5b2a86", "AS5600 magnetic encoder board"))
     out.append(("lpd3806", lpd3806(), "cart_opt", DARK, "optional: 600 P/R optical encoder"))

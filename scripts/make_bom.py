@@ -33,8 +33,6 @@ VIT_NOTES = {
     "SK8 rod support": "on the top end bars, as built",
     "SC8UU bearing block": "under the carriage plate, 4 x M4 x 10 each",
     "KP08 pillow block": "on the pivot bridge, in line, 70 mm apart",
-    f"8 mm pivot shaft, {P.SHAFT_L:.0f} mm": "steel: an offcut of 8 mm rod or the plain shank of an M8 bolt "
-                                              "(the KP08 set screws need steel)",
     "6 x 2.5 mm diametric magnet": "diametrically magnetised; most AS5600 boards come with one",
     "AS5600 magnetic encoder board": "corner holes 18-26 mm apart",
     "optional: 600 P/R optical encoder": f"instead of the AS5600: {P.LPD3806['d']:.0f} mm body, "
@@ -57,8 +55,8 @@ EXTRA = """
 - A 47-100 uF electrolytic capacitor across the driver's motor supply, if the carrier has none.
 - Arduino IDE (or arduino-cli) with the FastAccelStepper library, to load `firmware/pendulum`.
 
-**To confirm before printing:** that the drawer holds the {TNUTS} T-nuts, the {AXLE} idler axle
-and an 8 mm x {SHAFT} mm steel shaft.
+**To confirm before printing:** that the drawer holds the {TNUTS} T-nuts and the {AXLE} idler
+axle.
 """
 
 
@@ -129,8 +127,7 @@ def render():
            "\n## Bought parts (already on the machine)\n", *bought(),
            f"\n## Fasteners\n\n{total} pieces, each checked by the gate for length against what it clamps "
            f"(`scripts/hardware.py`, check `bolts`).\n", *frows,
-           EXTRA.replace("{TNUTS}", str(n_tnuts)).replace("{SHAFT}", f"{P.SHAFT_L:.0f}")
-           .replace("{AXLE}", f"M{P.AXLE_D:g} x 50")]
+           EXTRA.replace("{TNUTS}", str(n_tnuts)).replace("{AXLE}", f"M{P.AXLE_D:g} x 50")]
     return "\n".join(out)
 
 

@@ -21,7 +21,7 @@
 </div>
 
 A NEMA 17 pulls a printed carriage along two 8 mm rods with a closed HTD 8M belt. On the carriage, a
-300 mm pendulum turns on an 8 mm shaft in two KP08 pillow blocks, in front of the frame, and an
+300 mm pendulum turns on a printed 8 mm shaft in two KP08 pillow blocks, in front of the frame, and an
 AS5600 reads its angle. The controller swings it up from hanging and balances it upright.
 
 The machine as built (frame, rods, bearings, motor, belt, sensors and boards) is kept: this
@@ -42,11 +42,11 @@ could still make the machine fail, and what was changed or must be checked for e
 | **Frame** | The owner's frame of 25.5 mm square profile, 686 × 193 × 319 mm, from his measuring photos, tape and calipers ([measured](DESIGN.md#measure-first)) |
 | **Travel** | ±238 mm to the hard stops, limit switches at ±234 mm, firmware keeps to ±228 mm |
 | **Drive** | NEMA 17, his closed HTD 8M 20 mm belt on two printed 20-tooth pulleys spaced for it: 160 mm per turn, 20 steps/mm |
-| **Pendulum** | 300 mm PLA arm, 112 g, turns a full circle in front of the frame at any cart position |
+| **Pendulum** | 300 mm PLA arm, 73 g, turns a full circle in front of the frame at any cart position |
 | **Sensor** | AS5600 magnetic encoder on the shaft's end, or a 600 P/R optical encoder |
 | **Control** | Kick, energy swing-up, catch, then LQR with integral action: upright in about 3 s from hanging, in simulation |
 | **Electronics** | Your stepper driver at 1.5 A and 19 V; an Arduino Uno / Nano or ESP32 runs [`firmware/pendulum`](firmware/pendulum), the simulated controller line for line |
-| **Prints** | 21 part files on 6 Kobra S1 plates, no supports: PLA 369 g, PETG 234 g, about 25 h |
+| **Prints** | 22 part files on 7 Kobra S1 plates, no supports: PLA 376 g, PETG 234 g, about 25 h |
 | **To buy** | Nothing: the machine's own parts plus plain M3/M4/M5 screws and T-nuts |
 
 Exact numbers: [`DESIGN.md`](DESIGN.md#key-numbers). Plates, masses and times:
@@ -76,7 +76,7 @@ runs and how to tension it: [`DESIGN.md`](DESIGN.md#how-the-belt-runs-now).
 <tr>
 <td width="50%"><img src="renders/anim_swingup.gif" alt="Simulated swing-up: the cart pumps energy into the pendulum, which rises to upright and balances"><br>
 <b>Swing-up.</b> The simulated controller kicks the pendulum, pumps it up from hanging and
-catches it upright; the cart stays within ±144 mm (±200 mm over 48 runs with the model
+catches it upright; the cart stays within ±144 mm (±169 mm over 48 runs with the model
 off, slow reactions, pivot friction and a push).</td>
 <td width="50%"><img src="renders/anim_burst.gif" alt="Burst view: every part moves out along the way it goes together"><br>
 <b>Burst view.</b> Every part moves out along the way it goes together.</td>

@@ -28,7 +28,8 @@ PATH = os.path.join(G.ROOT, "3mf", "to_print_kobra_s1.3mf")
 
 SENSOR = "as5600"                       # or "encoder": the coupler instead of the magnet cap and AS5600 adapter
 SENSOR_PARTS = {"as5600": ("magnet_cap", "as5600_mount"), "encoder": ("coupler",)}
-HAVE = {}                               # parts already printed and kept, with how many: e.g. {"pendulum_arm": 1}
+# parts already printed and kept, with how many: all of them but the shaft, printed and fitted (2026-11-17)
+HAVE = {n: s["qty"] for n, s in PARTS.items() if n != "pivot_shaft"}
 # The owner's own idler pulley (20-tooth 8M, two flanges; photos of 2026-11-08) can replace these if
 # it measures at most 25.5 mm over its flanges and its bore is drilled out to 8.5 mm for the sleeve.
 MAYBE = {"idler_pulley": 1, "pulley_flange": 1}

@@ -134,7 +134,7 @@ const pickable = [];
 function holder(parent, burst) {
   const h = new THREE.Group(); h.userData.burst = new THREE.Vector3(...(burst || [0, 0, 0])); parent.add(h); movers.push(h); return h;
 }
-const metalish = n => /^(rod_|pivot_shaft|sk8|sc8uu|post_|top_bar|bottom_bar|long_)/.test(n);
+const metalish = n => /^(rod_|sk8|sc8uu|post_|top_bar|bottom_bar|long_)/.test(n);
 await Promise.all(man.items.map(async it => {
   const g = await geo(it.url);
   const m = new THREE.Mesh(g, mat(it.colour, metalish(it.name)));

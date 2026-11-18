@@ -30,6 +30,8 @@ for _name in ("idler_mount", "belt_clamp", "switch_mount", "idler_sleeve", "magn
     PARTS[_name] = _p(_name, brim=BRIM)
 # 287 mm long: diagonal on the 250 mm bed.
 PARTS["pendulum_arm"] = _p("pendulum_arm", extra_rot=[("z", 45)])
+# Solid walls through and through: every filament runs the shaft's length, where it bends.
+PARTS["pivot_shaft"] = _p("pivot_shaft", slicer={"wall_loops": "10"})
 
 
 def print_mesh(name):

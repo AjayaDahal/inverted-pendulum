@@ -13,7 +13,7 @@ from build123d import Pos, Rot
 
 import geom as G
 import params as P
-from cad import (box, cyl_x, cyl_y, cyl_z, export, hex_x, hex_y, hex_z, prism_xy, prism_xz, prism_yz,
+from cad import (box, cone_y, cyl_x, cyl_y, cyl_z, export, hex_x, hex_y, hex_z, prism_xy, prism_xz, prism_yz,
                  pulley_teeth_face, rack_grooves, slot_x, slot_y, slot_z)
 from build123d import extrude
 
@@ -418,6 +418,18 @@ def switch_mount():
 
 
 # ================================================================== pendulum
+def pivot_shaft():
+    """Through both KP08s, the hub clamped on its front end, the magnet cap (or the coupler) on its
+    back end. Printed lying on the flat along its underside: its filaments run its length, and the
+    KP08s' and the cap's set screws bear on the flat, so they key it. Chamfered ends to start it
+    into the bearings."""
+    s = P.PIVOT_SHAFT
+    r, c, y0, y1 = s["d"] / 2, s["chamfer"], P.Y_SHAFT_START, P.Y_SHAFT_END
+    sh = cyl_y(r, 0, P.Z_SHAFT, y0 + c - 0.01, y1 - c + 0.01)
+    sh += cone_y(r - c, r, 0, P.Z_SHAFT, y0, y0 + c) + cone_y(r, r - c, 0, P.Z_SHAFT, y1 - c, y1)
+    return sh - box(-r - 1, r + 1, y0 - 1, y1 + 1, P.Z_SHAFT - r - 1, P.Z_SHAFT - r + s["flat"])
+
+
 def _hub_levels():
     z_sock0 = P.Z_SHAFT + 13.0
     return z_sock0, z_sock0 + P.HUB["socket"]
@@ -602,6 +614,9 @@ PARTS = {
                          print=[("x", 180)], role="limit-switch block on each top end bar"),
     "pendulum_hub": dict(fn=pendulum_hub, material=PETG, group="pendulum", copies=[I4], print=[("x", -90)],
                          role="pendulum hub: clamps the shaft, holds the arm"),
+    "pivot_shaft": dict(fn=pivot_shaft, material=PLA, group="pendulum", copies=[I4], print=[],
+                        role=f"pivot shaft, {P.SHAFT_L:.0f} mm: through both KP08s, the hub on its front end, "
+                             "the magnet cap on its back end (the set screws on its flat)"),
     "pendulum_arm": dict(fn=pendulum_arm, material=PLA, group="pendulum", copies=[I4], print=[("x", 90)],
                          role=f"pendulum arm, {P.ARM_L:.0f} mm from the pivot to the tip"),
     "pendulum_tip": dict(fn=pendulum_tip, material=PLA, group="pendulum", copies=[I4], print=[("x", 180)],

@@ -101,7 +101,7 @@ def mass_model():
     import hardware as H
     zc = P.Z_SHAFT
     pend = dict(m=0.0, mz=0.0, J=0.0, parts={})
-    for name in ("pendulum_hub", "pendulum_arm", "pendulum_tip", "magnet_cap"):
+    for name in ("pendulum_hub", "pendulum_arm", "pendulum_tip", "magnet_cap", "pivot_shaft"):
         grams, how = printed_grams(name)
         tris = G.read_stl(os.path.join(G.ASSEMBLY, name + ".stl"))
         vol, cen, m2 = A.mesh_props(tris)
@@ -111,14 +111,14 @@ def mass_model():
         pend["mz"] += grams / 1000.0 * (cen[2] - zc) / 1000.0
         pend["J"] += J
         pend["parts"][name] = dict(g=round(grams, 1), how=how)
-    for name, dens in (("pivot_shaft", P.STEEL), ("magnet", 7.5)):
+    for name, dens in (("magnet", 7.5),):
         tris = G.read_stl(os.path.join(G.VITAMINS, name + ".stl"))
         vol, cen, m2 = A.mesh_props(tris)
         m = vol * dens / 1e6
         pend["m"] += m
         pend["mz"] += m * (cen[2] - zc) / 1000.0
         pend["J"] += dens / 1e6 * (m2["xx"] + m2["zz"] - 2 * zc * cen[2] * vol + zc * zc * vol) * 1e-6
-        pend["parts"][name] = dict(g=round(m * 1000, 1), how="steel" if name == "pivot_shaft" else "magnet")
+        pend["parts"][name] = dict(g=round(m * 1000, 1), how="magnet")
     cart = dict(m=0.0, parts={})
     for b in H.bolts():
         g = bolt_grams(b) / 1000.0
@@ -433,10 +433,14 @@ def hunting(m, g):
 # rate filter. For the HTD 8M drive: tune_controller.py, then a local search scoring 60 more random
 # runs and the balanced hunting; of six that passed all, this one did best on 260 random scenarios
 # none was tuned on (same bounds): with the sliced masses all 260 swung up, held and took the push;
-# cart within +-190 mm.
+# cart within +-190 mm. The printed shaft (2026-11-17; m l and J the same to 0.02 %) then failed run
+# 34, caught at 35 deg and run into the 1 m/s limit: it had been on a knife edge. Catch narrowed
+# from (37.6 deg, 0.145 rad) to (35, 0.12): all 48, all 260 unseen, and the 48 again with J, m and
+# the cart's mass nudged by up to 0.5 % (REPORT.md, P17). A local re-tune passing the 48 did worse
+# on the unseen (258 of 260).
 CANDIDATES = [
     dict(q=(24.448, 373.58, 379.009, 4.503, 3.825), r=0.273, a_max=3.54, pump=0.655, ks=13.042, lead=0.085, xp=1.155,
-         kx=22.704, kv=6.001, ke=3.323, catch=(37.588, 0.145), e_ref=0.102, kick=(3.54, 0.136), pred=4, alpha=0.552),
+         kx=22.704, kv=6.001, ke=3.323, catch=(35.0, 0.12), e_ref=0.102, kick=(3.54, 0.136), pred=4, alpha=0.552),
 ]
 
 
